@@ -10,16 +10,7 @@
 ;;
 ;;; License: GPLv3
 
-(defconst pelm-org-packages
-  '(
-    org
-    org-ac
-    gnuplot
-    ox-reveal
-    )
-  "List of all packages to install and/or initialize. Built-in packages
-which require an initialization must be listed explicitly in the list.")
-
+(defconst pelm-org-packages '(org org-ac gnuplot ox-reveal) )
 (defvar pelm-org-excluded-packages '())
 
 (defun pelm-org/init-org-ac()
@@ -55,7 +46,6 @@ which require an initialization must be listed explicitly in the list.")
       ;; set org agenda global
       (spacemacs/declare-prefix "o" "org")
       (spacemacs/set-leader-keys
-        "oa" 'pelm-org/agenda-dwim
         "oo" 'org-agenda
         "ob" 'org-iswitchb
         "og" 'org-clock-goto
@@ -66,10 +56,8 @@ which require an initialization must be listed explicitly in the list.")
         "ow" 'pelm-org/goto-work
         "ot" 'pelm-org/todo-list
         "ov" 'pelm-org/tags-list
-
-        ;; set punch in and out keys
-         "oI" 'pelm-org/punch-in
-         "oO" 'pelm-org/punch-out))
+        "oI" 'pelm-org/punch-in
+        "oO" 'pelm-org/punch-out))
     :config
     (progn
       ;; set org specific keybindings
@@ -102,42 +90,18 @@ which require an initialization must be listed explicitly in the list.")
 
       (add-hook 'org-babel-after-execute-hook 'update-results)
 
-
-      ;; Agenda clock report parameters
-      (setq org-agenda-clockreport-parameter-plist
-            (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80)))
-
-      (setq org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el"))
-      (setq org-startup-with-inline-images t)
-      (setq org-src-fontify-natively t)
-      (setq org-ellipsis "⤵")
-      (setq org-ditaa-jar-path "~/.emacs.d/private/pelm-org/vendor/ditaa.jar")
-      (setq org-plantuml-jar-path "~/.emacs.d/private/pelm-org/vendor/plantuml.jar")
-
-      (setq org-log-done t)
-
-      (eval-after-load 'org-indent
+            (eval-after-load 'org-indent
         '(spacemacs|hide-lighter org-indent-mode))
-      (setq org-startup-indented t)
 
       (let ((dir (configuration-layer/get-layer-property 'pelm-org :dir)))
         (setq org-export-async-init-file (concat dir "org-async-init.el")))
 
-
-      (setq org-export-backends '(ascii beamer html latex md rss reveal))
-      (setq org-directory "~/.org-files"
-            org-default-notes-files (list (concat org-directory "/inbox.org"))
-            org-mobile-directory "~/Dropbox/org"
-            org-mobile-inbox-for-pull "~/.org-files/inbox.org")
-
       (defvar org-gtd-other-files '("~/src/personal/scrum/scrum.org"
                                     "~/src/personal/yep8.org/blog/index.org"))
       (setf org-agenda-files (cons "~/.org-files" org-gtd-other-files))
+
       ;; auto save org files
       (run-at-time "00:55" 3600 'org-save-all-org-buffers)
-
-      (setq org-show-entry-below (quote ((default))))
-
 
       (defmacro spacemacs|org-emphasize (fname char)
         "Make function for setting the emphasis in org mode"
@@ -151,55 +115,76 @@ which require an initialization must be listed explicitly in the list.")
            (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
            (define-key org-agenda-mode-map (kbd "SPC") spacemacs-default-map)))
 
-      ;; options
-      (setq org-log-done (quote time)
-            org-log-into-drawer "LOGBOOK"
-            org-alphabetical-lists t
-            org-agenda-span 'day
-            org-src-fontify-natively t
-            org-use-fast-todo-selection t
-            org-treat-S-cursor-todo-selection-as-state-change nil
-            org-habit-preceding-days 7
-            org-habit-graph-column 102
-            org-habit-following-days 1
-            org-habit-show-habits-only-for-today t
-            org-habit-show-all-today t
-            org-refile-use-outline-path nil
-            org-outline-path-complete-in-steps nil
-            org-refile-allow-creating-parent-nodes (quote confirm) ;
-            org-completion-use-ido t
-            ido-everywhere t
-            org-agenda-todo-ignore-with-date nil
-            org-agenda-todo-ignore-deadlines nil
-            org-agenda-todo-ignore-scheduled nil
-            org-agenda-todo-ignore-timestamp nil
-            org-agenda-skip-deadline-if-done t
-            org-agenda-skip-scheduled-if-done t
-            org-agenda-skip-timestamp-if-done t
-            org-remove-highlights-with-change nil
-            org-tags-match-list-sublevels t
-            org-agenda-persistent-filter t
-            org-agenda-skip-additional-timestamps-same-entry t
-            org-clone-delete-id t
-            org-agenda-window-setup 'current-window
-            org-enable-priority-commands nil
-            org-src-preserve-indentation nil
-            org-html-coding-system 'utf-8
-            org-html-head-include-default-style nil
-            org-html-head-include-scripts nil
-            org-tags-exclude-from-inheritance (quote ("crypt"))
-            org-startup-folded 'content
-            ido-max-directory-size 100000
-            org-list-demote-modify-bullet (quote (("+" . "-")
-                                                  ("*" . "-")
-                                                  ("1." . "-")
-                                                  ("1)" . "-")))
-            org-refile-targets (quote ((nil :maxlevel . 9)
-                                       (org-agenda-files :maxlevel . 9))))
+      ;; setq options
+      (setq
+       ;; mobile org options
+       org-directory "~/.org-files"
+       org-default-notes-files (list (concat org-directory "/inbox.org"))
+       org-mobile-directory "~/Dropbox/org"
+       org-mobile-inbox-for-pull "~/.org-files/inbox.org"
+
+       org-export-backends '(ascii beamer html latex md rss reveal)
+       org-show-entry-below (quote ((default)))
+       org-startup-indented t
+       org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
+       org-startup-with-inline-images t
+       org-src-fontify-natively t
+       org-ellipsis "⤵"
+       org-ditaa-jar-path "~/.emacs.d/private/pelm-org/vendor/ditaa.jar"
+       org-plantuml-jar-path "~/.emacs.d/private/pelm-org/vendor/plantuml.jar"
+       org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80))
+
+       org-log-done (quote time)
+       org-log-into-drawer "LOGBOOK"
+       org-alphabetical-lists t
+       org-agenda-span 'day
+       org-src-fontify-natively t
+       org-use-fast-todo-selection t
+       org-treat-S-cursor-todo-selection-as-state-change nil
+       org-habit-preceding-days 7
+       org-habit-graph-column 102
+       org-habit-following-days 1
+       org-habit-show-habits-only-for-today t
+       org-habit-show-all-today t
+       org-refile-use-outline-path nil
+       org-outline-path-complete-in-steps nil
+       org-refile-allow-creating-parent-nodes (quote confirm) ;
+       org-completion-use-ido t
+       ido-everywhere t
+       org-agenda-todo-ignore-with-date nil
+       org-agenda-todo-ignore-deadlines nil
+       org-agenda-todo-ignore-scheduled nil
+       org-agenda-todo-ignore-timestamp nil
+       org-agenda-skip-deadline-if-done t
+       org-agenda-skip-scheduled-if-done t
+       org-agenda-skip-timestamp-if-done t
+       org-remove-highlights-with-change nil
+       org-tags-match-list-sublevels t
+       org-agenda-persistent-filter t
+       org-agenda-skip-additional-timestamps-same-entry t
+       org-clone-delete-id t
+       org-agenda-window-setup 'current-window
+       org-enable-priority-commands nil
+       org-src-preserve-indentation nil
+       org-html-coding-system 'utf-8
+       org-html-head-include-default-style nil
+       org-html-head-include-scripts nil
+       org-tags-exclude-from-inheritance (quote ("crypt"))
+       org-startup-folded 'content
+       ido-max-directory-size 100000
+       pelm-org-diary-file "~/.org-files/diary.org"
+       pelm-org-note-file "~/.org-files/notes.org"
+       pelm-org-work-file "~/.org-files/work.org"
+       pelm-org-life-file "~/.org-files/life.org"
+
+       org-list-demote-modify-bullet (quote (("+" . "-")
+                                             ("*" . "-")
+                                             ("1." . "-")
+                                             ("1)" . "-")))
+       org-refile-targets (quote ((nil :maxlevel . 9)
+                                  (org-agenda-files :maxlevel . 9))))
 
       ;; org-todo-keywords
-
-
       (setq org-todo-keywords
             (quote ((sequence "TODO(t)" "INPROGRESS(i)" "|" "DONE(d!/!)")
                     (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" )))
@@ -229,15 +214,13 @@ which require an initialization must be listed explicitly in the list.")
                     ("L" "Protocol Link" entry (file+headline (concat org-directory "/bookmarks.org") "Links") "* %? [[%:link][%:description]] \nCaptured On: %U")
                     ("c" "Contacts" entry (file "~/.org-files/contacts.org") "* %(org-contacts-template-name)
  :PROPERTIES:
- :EMAIL: %(org-contacts-template-email)
+ :NAME:
  :PHONE:
- :ALIAS:
+ :EMAIL: %(org-contacts-template-email)
+ :BIRTHDAY:
  :NICKNAME:
- :IGNORE:
- :ICON:
  :NOTE:
  :ADDRESS:
- :BIRTHDAY:
  :END:"))))
 
       ;; Enable habit tracking (and a bunch of other modules)
@@ -260,259 +243,39 @@ which require an initialization must be listed explicitly in the list.")
                     org-wl
                     org-w3m)))
 
-      ;; Custom agenda command definitions
-      (setq org-agenda-custom-commands
-            (quote (
-                    ("h" "Habits" tags-todo "STYLE=\"habit\""
-                     ((org-agenda-overriding-header "Habits")
-                      (org-agenda-sorting-strategy
-                       '(todo-state-down effort-up category-keep))))
-                    (" " "Agenda"
-                     ((agenda "" nil)
-                      (tags "REFILE"
-                            ((org-agenda-overriding-header "Tasks to Refile")
-                             (org-tags-match-list-sublevels nil)))
-                      (tags-todo "-CANCELLED/!"
-                                 ((org-agenda-overriding-header "Stuck Projects")
-                                        ;(org-tags-match-list-sublevels 'indented)
-                                  (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects)))
-                      (tags-todo "-INPROGRESS"
-                                 ((org-agenda-overriding-header "Next Tasks")
-                                  (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
-                                  (org-agenda-todo-ignore-scheduled t)
-                                  (org-agenda-todo-ignore-deadlines t)
-                                  (org-tags-match-list-sublevels t)
-                                  (org-agenda-sorting-strategy
-                                   '(todo-state-down effort-up category-keep))))
-                      (tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
-                                 ((org-agenda-overriding-header "Backlogs")
-                                  (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
-                                  (org-agenda-todo-ignore-scheduled t)
-                                  ;;(org-agenda-skip-function 'pelm-org/skip-habits)
-                                  (org-agenda-todo-ignore-deadlines t)
-                                  (org-agenda-sorting-strategy
-                                   '(category-keep))))
-                      (tags-todo "-CANCELLED/!"
-                                 ((org-agenda-overriding-header "Projects")
-                                  (org-agenda-skip-function 'pelm-org/skip-non-projects)
-                                  (org-agenda-todo-ignore-scheduled 'future)
-                                  (org-agenda-todo-ignore-deadlines 'future)
-                                  (org-agenda-sorting-strategy
-                                   '(category-keep))))
-                      (tags-todo "-CANCELLED/!WAITING|HOLD"
-                                 ((org-agenda-overriding-header "Waiting and Postponed Tasks")
-                                  (org-agenda-skip-function 'pelm-org/skip-stuck-projects)
-                                  (org-tags-match-list-sublevels nil)
-                                  (org-agenda-todo-ignore-scheduled 'future)
-                                  (org-agenda-todo-ignore-deadlines 'future)))
-                      (tags "-ARCHIVE/"
-                            ((org-agenda-overriding-header "Tasks to Archive")
-                             (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
-                     nil)
-                    ("r" "Tasks to Refile" tags "REFILE"
-                     ((org-agenda-overriding-header "Tasks to Refile")
-                      (org-tags-match-list-sublevels nil)))
-                    ("#" "Stuck Projects" tags-todo "-CANCELLED/!"
-                     ((org-agenda-overriding-header "Stuck Projects")
-                      (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects)))
-                    ("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!INPROGRESS"
-                     ((org-agenda-overriding-header "Next Tasks")
-                      (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
-                      (org-agenda-todo-ignore-scheduled t)
-                      (org-agenda-todo-ignore-deadlines t)
-                      (org-tags-match-list-sublevels t)
-                      (org-agenda-sorting-strategy
-                       '(todo-state-down effort-up category-keep))))
-                    ("R" "Tasks" tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
-                     ((org-agenda-overriding-header "Tasks")
-                      (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
-                      (org-agenda-sorting-strategy
-                       '(category-keep))))
-                    ("p" "Projects" tags-todo "-CANCELLED/!"
-                     ((org-agenda-overriding-header "Projects")
-                      (org-agenda-skip-function 'pelm-org/skip-non-projects)
-                      (org-agenda-todo-ignore-scheduled 'future)
-                      (org-agenda-todo-ignore-deadlines 'future)
-                      (org-agenda-sorting-strategy
-                       '(category-keep))))
-                    ("w" "Waiting Tasks" tags-todo "-CANCELLED/!WAITING|HOLD"
-                     ((org-agenda-overriding-header "Waiting and Postponed tasks"))
-                     (org-agenda-skip-function 'pelm-org/skip-projects-and-habits)
-                     (org-agenda-todo-ignore-scheduled 'future)
-                     (org-agenda-todo-ignore-deadlines 'future))
-                    ("A" "Tasks to Archive" tags "-ARCHIVE/"
-                     ((org-agenda-overriding-header "Tasks to Archive")
-                      (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))))
+      ;; Custom agenda command definitions -- start with a clean state
+      (setq org-agenda-custom-commands nil)
 
+      (add-to-list 'org-agenda-custom-commands
+                   '("c" . "COLLECT...") t)
 
-      ;; some functions
-      ;; TODO: move out ??
       (defun pelm-org/goto-diary ()
         (interactive)
-        (find-file org-agenda-diary-file))
+        (find-file pelm-org-diary-file))
 
       (defun pelm-org/goto-notes ()
         (interactive)
-        (find-file org-default-notes-file))
+        (find-file pelm-org-note-file))
 
       (defun pelm-org/goto-work ()
         (interactive)
-        (find-file org-work-file))
+        (find-file pelm-org-work-file))
 
       (defun pelm-org/todo-list ()
         "Show the todo list."
         (interactive)
         (org-agenda prefix-arg "t")
-        (org-agenda-filter-apply '("-someday") 'tag))
+        (org-agenda-filter-apply '("-SOMEDAY") 'tag))
 
       (defun pelm-org/tags-list ()
         "Show all tagged items."
         (interactive)
         (org-tags-view nil))
 
-      (defun pelm-org/narrow-to-subtree-content ()
-        "Narrow to the content of the subtree.  Excludes the heading line."
-        (widen)
-        (unless (org-at-heading-p) (org-back-to-heading))
-        (org-narrow-to-subtree)
-        (forward-line)
-        (narrow-to-region (line-beginning-position) (point-max)))
-
-      (defun pelm-org/subtree-content ()
-        "Return the content of the subtree at point as a string."
-        (save-excursion
-          (save-restriction
-            (org-narrow-to-subtree)
-            (buffer-substring-no-properties (point-min) (point-max)))))
-
-      (defun pelm-org/write-subtree-content (dest)
-        "Write the contents of the subtree at point to a file at DEST."
-        (interactive (list (ido-read-file-name "Write subtree to: " nil nil nil ".org")))
-        (f-write-text (pelm-org/subtree-content) 'utf-8 dest)
-        (when (called-interactively-p nil)
-          (message "Subtree written to %s" dest)))
-
-      (defun pelm-org/copy-subtree-to ()
-        "Create a duplicate of the current subtree at the given heading."
-        (interactive "*")
-        (atomic-change-group
-          (org-copy-subtree)
-          (org-clone-subtree-with-time-shift 1 '(16))
-          (call-interactively 'org-refile)))
-
+      ;; TODO: maybe need enable it back.
+      ;;(autoload 'appt-check "appt")
       
-;;; Custom keyboard commands
-
-      (defun pelm-org/ctrl-c-ctrl-k (&optional n)
-        "Kill subtrees, unless we're in a special buffer where it should cancel."
-        (interactive "p")
-        (if (s-starts-with? "*Org" (buffer-name))
-            (org-kill-note-or-show-branches)
-          (org-cut-subtree n)))
-
-      (defun pelm-org/ctrl-c-ret ()
-        "Call `org-table-hline-and-move' or `org-insert-todo-heading' dep. on context."
-        (interactive)
-        (cond
-         ((org-at-table-p) (call-interactively 'org-table-hline-and-move))
-         (t (call-interactively 'org-insert-todo-heading))))
-
-      (defun pelm-org/agenda-dwim ()
-        "Show the work agenda view if at work, otherwise the standard agenda."
-        (interactive)
-        (if (and (boundp 'org-work--at-work?) org-work--at-work?)
-            (org-agenda current-prefix-arg "w")
-          (org-agenda current-prefix-arg "A"))
-        (delete-other-windows))
-
-      
-;;; Diary utils
-
-      (defun calendar-nearest-to (target-dayname target-day target-month)
-        "Non-nil if the current date is a certain weekday close to an anniversary.
-
-TARGET-DAYNAME is the day of the week that we want to match,
- while TARGET-DAY and TARGET-MONTH are the anniversary."
-        (let* ((dayname (calendar-day-of-week date))
-               (target-date (list target-month target-day (calendar-extract-year date)))
-               (days-diff (abs (- (calendar-day-number date)
-                                  (calendar-day-number target-date)))))
-          (and (= dayname target-dayname)
-               (< days-diff 4))))
-
-      (defun calendar-mondayised (target-day target-month)
-        "Given anniversary with DAY and MONTH, return non-nil if:
-
-- the given date is a weekday, or
-
-- it is the Monday after the given date if it falls on a weekend."
-        (if (memq (calendar-day-of-week date) '(6 0)) ; Sat or Sun
-            (calendar-nearest-to 1 target-day target-month)
-
-          (let ((m (calendar-extract-month date))
-                (d (calendar-extract-day date)))
-            (and (equal d target-day)
-                 (equal m target-month)))) )
-
-      (defun diary-limited-cyclic (recurrences interval m d y)
-        "For use in emacs diary. Cyclic item with limited number of recurrences.
-Occurs every INTERVAL days, starting on YYYY-MM-DD, for a total of
-RECURRENCES occasions."
-        (let ((startdate (calendar-absolute-from-gregorian (list m d y)))
-              (today (calendar-absolute-from-gregorian date)))
-          (and (not (cl-minusp (- today startdate)))
-               (zerop (% (- today startdate) interval))
-               (< (floor (- today startdate) interval) recurrences))))
-
-      (defun calendar-easter-date (year)
-        "Calculate the date for Easter Sunday in YEAR. Returns the date in the
-Gregorian calendar, ie (MM DD YY) format."
-        (let* ((century (1+ (/ year 100)))
-               (shifted-epact (% (+ 14 (* 11 (% year 19))
-                                    (- (/ (* 3 century) 4))
-                                    (/ (+ 5 (* 8 century)) 25)
-                                    (* 30 century))
-                                 30))
-               (adjusted-epact (if (or (= shifted-epact 0)
-                                       (and (= shifted-epact 1)
-                                            (< 10 (% year 19))))
-                                   (1+ shifted-epact)
-                                 shifted-epact))
-               (paschal-moon (- (calendar-absolute-from-gregorian
-                                 (list 4 19 year))
-                                adjusted-epact)))
-          (calendar-dayname-on-or-before 0 (+ paschal-moon 7))))
-
-      (defun calendar-days-from-easter ()
-        "When used in a diary sexp, this function will calculate how many days
-are between the current date (DATE) and Easter Sunday."
-        (- (calendar-absolute-from-gregorian date)
-           (calendar-easter-date (calendar-extract-year date))))
-
-      (autoload 'appt-check "appt")
-
-      (defun pelm-org/diary-update-appt-on-save ()
-        (save-restriction
-          (save-window-excursion
-            (org-agenda-to-appt t)
-            (appt-check 'force))))
-
-      
-;;; Config support
-
-      (defun pelm-org/display-links ()
-        (interactive)
-        (let ((bufname "*Org Links*"))
-          (-if-let (buf (get-buffer bufname))
-              (display-buffer buf)
-            (with-current-buffer (find-file-noselect org-default-notes-file)
-              (-when-let (mark (save-excursion (org-find-exact-headline-in-buffer "Links")))
-                (clone-indirect-buffer bufname t)
-                (goto-char (marker-position mark))
-                (org-narrow-to-subtree)
-                (org-content))))))
-
-
+      ;; Config support
       (defun pelm-org/narrow-to-org-project ()
         (widen)
         (save-excursion
@@ -525,25 +288,6 @@ are between the current date (DATE) and Easter Sunday."
             (org-with-point-at (org-get-at-bol 'org-hd-marker)
               (pelm-org/narrow-to-org-project))
           (pelm-org/narrow-to-org-project)))
-
-
-      (defun pelm-org/set-agenda-restriction-lock (arg)
-        "Set restriction lock to current task subtree or file if prefix is specified"
-        (interactive "p")
-        (let* ((pom (or (org-get-at-bol 'org-hd-marker)
-                        org-agenda-restrict-begin))
-               (tags (org-with-point-at pom (org-get-tags-at))))
-          (let ((restriction-type (if (equal arg 4) 'file 'subtree)))
-            (save-restriction
-              (cond
-               ((equal major-mode 'org-agenda-mode)
-                (org-with-point-at pom
-                  (org-agenda-set-restriction-lock restriction-type)))
-               ((and (equal major-mode 'org-mode) (org-before-first-heading-p))
-                (org-agenda-set-restriction-lock 'file))
-               (t
-                (org-with-point-at pom
-                  (org-agenda-set-restriction-lock restriction-type))))))))
 
       (defun pelm-org/mark-next-parent-tasks-todo ()
         "Visit each parent task and change INPROGRESS states to TODO"
@@ -1271,11 +1015,6 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
 
       (add-hook 'org-agenda-mode-hook
                 '(lambda () (org-defkey org-agenda-mode-map "U" 'pelm-org/narrow-up-one-level))
-                'append)
-
-
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "\C-c\C-x<" 'pelm-org/set-agenda-restriction-lock))
                 'append)
 
       (add-hook 'org-agenda-mode-hook
