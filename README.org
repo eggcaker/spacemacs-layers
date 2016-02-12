@@ -18,7 +18,8 @@ For this to work, you need at least Spacemacs version 0.103.
 
 The fact that my =init.el= is present should not cause a problem.
 
-If you are lazy guy, you can link the the ~init.el~ as =.spacemacs= file to get start.
+If you are lazy guy, you can clone this repo to =.spacemacs.d= and then link 
+the ~init.el~ as =.spacemacs= file to get start.
 
 ** Contents
 
