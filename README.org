@@ -1,0 +1,25 @@
+* spacemacs-layers
+
+My Spacemacs configuration. This includes dotfile (=init.el=) plus
+layers.
+
+Layers prefixed with =pelm= are opinionated personal
+configuration layers. All others are /intended/ to be generally useful
+for others (although in reality they may of course not be).
+
+** Installation
+
+To install these layers, clone this repository into your
+=.emacs.d/private= directory. Then add the layers you want to enable to
+=dotspacemacs-configuration-layers= in your dotfile.
+
+for snippets work, you should link the =private= folder  to =~/.spacemacs.d=.
+For this to work, you need at least Spacemacs version 0.103.
+
+The fact that my =init.el= is present should not cause a problem.
+
+If you are lazy guy, you can link the the ~init.el~ as =.spacemacs= file to get start.
+
+** Contents
+
+TBD

@@ -1,0 +1,22 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: post
+# key: post
+# binding: direct-keybinding
+# --
+
+#+TITLE:       ${1:Hello, 2016}
+#+AUTHOR:      eggcaker
+#+EMAIL:       eggcaker@gmail.com
+#+DATE:        `(format-time-string  "%Y-%m-%d %a ")`
+#+KEYWORDS:        ${2:Life}
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t c:t date:t author:nil tags:t d:t
+#+DESCRIPTION: ${3: Hello, 2016}
+
+
+
+#+BEGIN_HTML
+<div id="meta">
+发布:  `(format-time-string  "%Y-%m-%d %a ")` by eggcaker <span class="tag">#${2:$(capitalize yas-text)}</span>
+</div>
+#+END_HTML

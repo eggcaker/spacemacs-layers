@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: time
+# key: time
+# binding: direct-keybinding
+# --
+console.log($1, new Date().getTime());
+$0
