@@ -49,13 +49,8 @@
         "oo" 'org-agenda
         "ob" 'org-iswitchb
         "og" 'org-clock-goto
-        "od" 'pelm-org/goto-diary
         "oc" 'org-capture
         "os" 'org-search-view
-        "on" 'pelm-org/goto-notes
-        "ow" 'pelm-org/goto-work
-        "ot" 'pelm-org/todo-list
-        "ov" 'pelm-org/tags-list
         "oI" 'pelm-org/punch-in
         "oO" 'pelm-org/punch-out))
     :config
@@ -110,7 +105,6 @@
 
       (eval-after-load "org-agenda"
         '(progn
-           (define-key org-agenda-mode-map "P" 'pelm-org/narrow-to-project)
            (define-key org-agenda-mode-map "j" 'org-agenda-next-line)
            (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
            (define-key org-agenda-mode-map (kbd "SPC") spacemacs-default-map)))
@@ -780,47 +774,10 @@
                  ((org-agenda-overriding-header "Projects (High Level)")
                   (org-agenda-sorting-strategy nil))) t)
 
-
-      (defun pelm-org/goto-diary ()
-        (interactive)
-        (find-file pelm-org-diary-file))
-
-      (defun pelm-org/goto-notes ()
-        (interactive)
-        (find-file pelm-org-note-file))
-
-      (defun pelm-org/goto-work ()
-        (interactive)
-        (find-file pelm-org-work-file))
-
-      (defun pelm-org/todo-list ()
-        "Show the todo list."
-        (interactive)
-        (org-agenda prefix-arg "t")
-        (org-agenda-filter-apply '("-SOMEDAY") 'tag))
-
-      (defun pelm-org/tags-list ()
-        "Show all tagged items."
-        (interactive)
-        (org-tags-view nil))
-
       ;; TODO: maybe need enable it back.
       ;;(autoload 'appt-check "appt")
       
       ;; Config support
-      (defun pelm-org/narrow-to-org-project ()
-        (widen)
-        (save-excursion
-          (pelm-org/find-project-task)
-          (pelm-org/narrow-to-org-subtree)))
-
-      (defun pelm-org/narrow-to-project ()
-        (interactive)
-        (if (equal major-mode 'org-agenda-mode)
-            (org-with-point-at (org-get-at-bol 'org-hd-marker)
-              (pelm-org/narrow-to-org-project))
-          (pelm-org/narrow-to-org-project)))
-
       (defun pelm-org/mark-next-parent-tasks-todo ()
         "Visit each parent task and change INPROGRESS states to TODO"
         (let ((mystate (or (and (fboundp 'state)
@@ -1294,14 +1251,6 @@ Callers of this function already widen the buffer view."
 
       (add-hook 'org-agenda-mode-hook
                 '(lambda () (org-defkey org-agenda-mode-map "W" 'pelm-org/widen))
-                'append)
-
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "N" 'pelm-org/narrow-to-subtree))
-                'append)
-
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "U" 'pelm-org/narrow-up-one-level))
                 'append)
 
       (add-hook 'org-agenda-mode-hook
