@@ -249,6 +249,104 @@
       (add-to-list 'org-agenda-custom-commands
                    '("c" . "COLLECT...") t)
 
+      (add-to-list 'org-agenda-custom-commands
+                   ("h" "Habits" tags-todo "STYLE=\"habit\""
+                    ((org-agenda-overriding-header "Habits")
+                     (org-agenda-sorting-strategy
+                      '(todo-state-down effort-up category-keep)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '(" " "Agenda"
+                     ((agenda "" nil)
+                      (tags "INBOX"
+                            ((org-agenda-overriding-header "Tasks to Refile")
+                             (org-tags-match-list-sublevels nil)))
+                      (tags-todo "-CANCELLED/!"
+                                 ((org-agenda-overriding-header "Stuck Projects")
+                                        ;(org-tags-match-list-sublevels 'indented)
+                                  (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects)))
+                      (tags-todo "-INPROGRESS"
+                                 ((org-agenda-overriding-header "Next Tasks")
+                                  (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
+                                  (org-agenda-todo-ignore-scheduled t)
+                                  (org-agenda-todo-ignore-deadlines t)
+                                  (org-tags-match-list-sublevels t)
+                                  (org-agenda-sorting-strategy
+                                   '(todo-state-down effort-up category-keep))))
+                      (tags-todo "-INBOX-CANCELLED-HABIT/!-HOLD-WAITING"
+                                 ((org-agenda-overriding-header "Backlogs")
+                                  (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
+                                  (org-agenda-todo-ignore-scheduled t)
+                                  (org-agenda-todo-ignore-deadlines t)
+                                  (org-agenda-sorting-strategy
+                                   '(category-keep))))
+                      (tags-todo "-CANCELLED/!"
+                                 ((org-agenda-overriding-header "Projects")
+                                  (org-agenda-skip-function 'pelm-org/skip-non-projects)
+                                  (org-agenda-todo-ignore-scheduled 'future)
+                                  (org-agenda-todo-ignore-deadlines 'future)
+                                  (org-agenda-sorting-strategy
+                                   '(category-keep))))
+                      (tags-todo "-CANCELLED/!WAITING|HOLD"
+                                 ((org-agenda-overriding-header "Waiting and Postponed Tasks")
+                                  (org-agenda-skip-function 'pelm-org/skip-stuck-projects)
+                                  (org-tags-match-list-sublevels nil)
+                                  (org-agenda-todo-ignore-scheduled 'future)
+                                  (org-agenda-todo-ignore-deadlines 'future)))
+                      (tags "-ARCHIVE/"
+                            ((org-agenda-overriding-header "Tasks to Archive")
+                             (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
+                     nil))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("r" "Tasks to Refile" tags "INBOX"
+                     ((org-agenda-overriding-header "Tasks to Refile")
+                      (org-tags-match-list-sublevels nil))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("#" "Stuck Projects" tags-todo "-CANCELLED/!"
+                     ((org-agenda-overriding-header "Stuck Projects")
+                      (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!INPROGRESS"
+                     ((org-agenda-overriding-header "Next Tasks")
+                      (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
+                      (org-agenda-todo-ignore-scheduled t)
+                      (org-agenda-todo-ignore-deadlines t)
+                      (org-tags-match-list-sublevels t)
+                      (org-agenda-sorting-strategy
+                       '(todo-state-down effort-up category-keep)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("R" "Tasks" tags-todo "-INBOX-CANCELLED/!-HOLD-WAITING"
+                     ((org-agenda-overriding-header "Tasks")
+                      (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
+                      (org-agenda-sorting-strategy
+                       '(category-keep)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("p" "Projects" tags-todo "-CANCELLED/!"
+                     ((org-agenda-overriding-header "Projects")
+                      (org-agenda-skip-function 'pelm-org/skip-non-projects)
+                      (org-agenda-todo-ignore-scheduled 'future)
+                      (org-agenda-todo-ignore-deadlines 'future)
+                      (org-agenda-sorting-strategy
+                       '(category-keep)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("w" "Waiting Tasks" tags-todo "-CANCELLED/!WAITING|HOLD"
+                     ((org-agenda-overriding-header "Waiting and Postponed tasks"))
+                     (org-agenda-skip-function 'pelm-org/skip-projects-and-habits)
+                     (org-agenda-todo-ignore-scheduled 'future)
+                     (org-agenda-todo-ignore-deadlines 'future)))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("A" "Tasks to Archive" tags "-ARCHIVE/"
+                     ((org-agenda-overriding-header "Tasks to Archive")
+                      (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
+
+
       (defun pelm-org/goto-diary ()
         (interactive)
         (find-file pelm-org-diary-file))
@@ -301,13 +399,6 @@
                   (org-todo "TODO")))))))
 
 
-      (defun pelm-org/show-org-agenda ()
-        (interactive)
-        (switch-to-buffer "*Org Agenda*")
-        (delete-other-windows)
-        (org-agenda-redo))
-
-
       (defun pelm-org/narrow-up-one-org-level ()
         (widen)
         (save-excursion
@@ -351,6 +442,7 @@
           (org-narrow-to-org-subtree)
           (org-show-todo-tree nil)))
 
+      (setq org-agenda-cmp-user-defined 'pelm-org/agenda-sort)
 
       (defun pelm-org/agenda-sort (a b)
         "Sorting strategy for agenda items.
@@ -570,17 +662,6 @@ Callers of this function already widen the buffer view."
                     nil
                   subtree-end)))
           (org-end-of-subtree t)))
-
-      (defun pelm-org/skip-habits ()
-        "Skip the habits"
-        (save-restriction
-          (widen)
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (cond
-             ((org-is-habit-p)
-              subtree-end)
-             (t
-              nil)))))
 
       (defun pelm-org/skip-project-trees-and-habits ()
         "Skip trees that are projects"
