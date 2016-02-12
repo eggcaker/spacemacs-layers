@@ -1,0 +1,6 @@
+[submodule "pelm-org/extensions/emacs-scrum"]
+	path = pelm-org/extensions/emacs-scrum
+	url = https://github.com/yimacs/emacs-scrum
+[submodule "pelm-org/extensions/restclient"]
+	path = pelm-org/extensions/restclient
+	url = https://github.com/yimacs/restclient.el
