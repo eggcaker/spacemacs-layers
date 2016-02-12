@@ -171,6 +171,7 @@
        org-tags-exclude-from-inheritance (quote ("crypt"))
        org-startup-folded 'content
        ido-max-directory-size 100000
+       org-clock-in-switch-to-state 'pelm-org/clock-in-to-next
        pelm-org-diary-file "~/.org-files/diary.org"
        pelm-org-note-file "~/.org-files/notes.org"
        pelm-org-work-file "~/.org-files/work.org"
@@ -1068,106 +1069,6 @@ Callers of this function already widen the buffer view."
           (setq org-tags-match-list-sublevels nil))
         nil)
 
-      (defun pelm-org/skip-non-stuck-projects ()
-        "Skip trees that are not stuck projects"
-        (save-restriction
-          (widen)
-          (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-            (if (pelm-org/is-project-p)
-                (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                       (has-next (save-excursion
-                                   (forward-line 1)
-                                   (and (< (point) subtree-end)
-                                        (re-search-forward "^\\*+ \\(INPROGRESS\\) " subtree-end t)))))
-                  (if has-next
-                      next-headline
-                    nil)) ; a stuck project, has subtasks but no next task
-              next-headline))))
-
-      (defun pelm-org/skip-non-projects ()
-        "Skip trees that are not projects"
-        (pelm-org/list-sublevels-for-projects-indented)
-        (if (save-excursion (pelm-org/skip-non-stuck-projects))
-            (save-restriction
-              (widen)
-              (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-                (if (pelm-org/is-project-p)
-                    nil
-                  subtree-end)))
-          (org-end-of-subtree t)))
-
-      (defun pelm-org/skip-project-trees-and-habits ()
-        "Skip trees that are projects"
-        (save-restriction
-          (widen)
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (cond
-             ((pelm-org/is-project-p)
-              subtree-end)
-             ((org-is-habit-p)
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-projects-and-habits-and-single-tasks ()
-        "Skip trees that are projects, tasks that are habits, single non-project tasks"
-        (save-restriction
-          (widen)
-          (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-            (cond
-             ((org-is-habit-p)
-              next-headline)
-             ((pelm-org/is-project-p)
-              next-headline)
-             ((and (pelm-org/is-task-p) (not (pelm-org/is-project-subtree-p)))
-              next-headline)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-project-tasks-maybe ()
-        "Show tasks related to the current restriction.
-When restricted to a project, skip project and sub project tasks, habits, INPROGRESS tasks, and loose tasks.
-When not restricted, skip project and sub-project tasks, habits, and project related tasks."
-        (save-restriction
-          (widen)
-          (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                 (next-headline (save-excursion (or (outline-next-heading) (point-max))))
-                 (limit-to-project (marker-buffer org-agenda-restrict-begin)))
-            (cond
-             ((pelm-org/is-project-p)
-              next-headline)
-             ((org-is-habit-p)
-              subtree-end)
-             ((and (not limit-to-project)
-                   (pelm-org/is-project-subtree-p))
-              subtree-end)
-             ((and limit-to-project
-                   (pelm-org/is-project-subtree-p)
-                   (member (org-get-todo-state) (list "INPROGRESS")))
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-projects-and-habits ()
-        "Skip trees that are projects and tasks that are habits"
-        (save-restriction
-          (widen)
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (cond
-             ((pelm-org/is-project-p)
-              subtree-end)
-             ((org-is-habit-p)
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-non-subprojects ()
-        "Skip trees that are not projects."
-        (let ((next-headline (save-excursion (outline-next-heading))))
-          (if (pelm-org/is-subproject-p)
-              nil
-            next-headline)))
-
       (defun pelm-org/remove-empty-drawer-on-clock-out ()
         "Remove empty LOGBOOK drawers on clock out."
         (interactive)
@@ -1180,25 +1081,6 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
         "Exclude todo keywords with a done state from refile targets."
         (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-      (defun pelm-org/skip-stuck-projects ()
-        "Skip trees that are not stuck projects."
-        (save-restriction
-          (widen)
-          (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-            (if (pelm-org/is-project-p)
-                (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                       (has-next ))
-                  (save-excursion
-                    (forward-line 1)
-                    (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ INPROGRESS" subtree-end t))
-                      (unless (member "WAITING" (org-get-tags-at))
-                        (setq has-next t))))
-                  (if has-next
-                      nil
-                    next-headline)) ; a stuck project, has subtasks but no next task
-              nil))))
-
-
       (defun pelm-org/org-auto-exclude-function (tag)
         "Automatic task exclusion in the agenda with / RET"
         (and (cond
@@ -1208,16 +1090,6 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
              (concat "-" tag)))
 
       (setq org-agenda-auto-exclude-function 'pelm-org/org-auto-exclude-function)
-
-
-
-      (defun pelm-org/hide-other ()
-        (interactive)
-        (save-excursion
-          (org-back-to-heading 'invisible-ok)
-          (org-shifttab)
-          (org-reveal)
-          (org-cycle)))
 
       (defun pelm-org/set-truncate-lines ()
         "Toggle value of truncate-lines and refresh window display."
@@ -1411,105 +1283,6 @@ Callers of this function already widen the buffer view."
           (setq org-tags-match-list-sublevels nil))
         nil)
 
-      (defun pelm-org/skip-non-stuck-projects ()
-        "Skip trees that are not stuck projects"
-        (save-restriction
-          (widen)
-          (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-            (if (pelm-org/is-project-p)
-                (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                       (has-next (save-excursion
-                                   (forward-line 1)
-                                   (and (< (point) subtree-end)
-                                        (re-search-forward "^\\*+ \\(INPROGRESS\\) " subtree-end t)))))
-                  (if has-next
-                      next-headline
-                    nil)) ; a stuck project, has subtasks but no next task
-              next-headline))))
-
-      (defun pelm-org/skip-non-projects ()
-        "Skip trees that are not projects"
-        (pelm-org/list-sublevels-for-projects-indented)
-        (if (save-excursion (pelm-org/skip-non-stuck-projects))
-            (save-restriction
-              (widen)
-              (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-                (if (pelm-org/is-project-p)
-                    nil
-                  subtree-end)))
-          (org-end-of-subtree t)))
-
-      (defun pelm-org/skip-project-trees-and-habits ()
-        "Skip trees that are projects"
-        (save-restriction
-          (widen)
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (cond
-             ((pelm-org/is-project-p)
-              subtree-end)
-             ((org-is-habit-p)
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-projects-and-habits-and-single-tasks ()
-        "Skip trees that are projects, tasks that are habits, single non-project tasks"
-        (save-restriction
-          (widen)
-          (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-            (cond
-             ((org-is-habit-p)
-              next-headline)
-             ((pelm-org/is-project-p)
-              next-headline)
-             ((and (pelm-org/is-task-p) (not (pelm-org/is-project-subtree-p)))
-              next-headline)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-project-tasks-maybe ()
-        "Show tasks related to the current restriction.
-When restricted to a project, skip project and sub project tasks, habits, INPROGRESS tasks, and loose tasks.
-When not restricted, skip project and sub-project tasks, habits, and project related tasks."
-        (save-restriction
-          (widen)
-          (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                 (next-headline (save-excursion (or (outline-next-heading) (point-max))))
-                 (limit-to-project (marker-buffer org-agenda-restrict-begin)))
-            (cond
-             ((pelm-org/is-project-p)
-              next-headline)
-             ((org-is-habit-p)
-              subtree-end)
-             ((and (not limit-to-project)
-                   (pelm-org/is-project-subtree-p))
-              subtree-end)
-             ((and limit-to-project
-                   (pelm-org/is-project-subtree-p)
-                   (member (org-get-todo-state) (list "INPROGRESS")))
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-projects-and-habits ()
-        "Skip trees that are projects and tasks that are habits"
-        (save-restriction
-          (widen)
-          (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-            (cond
-             ((pelm-org/is-project-p)
-              subtree-end)
-             ((org-is-habit-p)
-              subtree-end)
-             (t
-              nil)))))
-
-      (defun pelm-org/skip-non-subprojects ()
-        "Skip trees that are not projects."
-        (let ((next-headline (save-excursion (outline-next-heading))))
-          (if (pelm-org/is-subproject-p)
-              nil
-            next-headline)))
       (setq org-agenda-clock-consistency-checks
             (quote (:max-duration "10:30"
                                   :min-duration 0
