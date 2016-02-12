@@ -250,10 +250,15 @@
                    '("c" . "COLLECT...") t)
 
       (add-to-list 'org-agenda-custom-commands
-                   ("h" "Habits" tags-todo "STYLE=\"habit\""
-                    ((org-agenda-overriding-header "Habits")
-                     (org-agenda-sorting-strategy
-                      '(todo-state-down effort-up category-keep)))))
+                   '("cb" "Collect Box" tags "INBOX"
+                     ((org-agenda-overriding-header "Tasks to Refile")
+                      (org-tags-match-list-sublevels nil))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("h" "Habits"
+                     ((alltodo ""))
+                     ((org-agenda-files (list ,(concat org-directory "/habits.org"))))) t)
+
 
       (add-to-list 'org-agenda-custom-commands
                    '(" " "Agenda"
@@ -298,10 +303,6 @@
                              (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
                      nil))
 
-      (add-to-list 'org-agenda-custom-commands
-                   '("r" "Tasks to Refile" tags "INBOX"
-                     ((org-agenda-overriding-header "Tasks to Refile")
-                      (org-tags-match-list-sublevels nil))))
 
       (add-to-list 'org-agenda-custom-commands
                    '("#" "Stuck Projects" tags-todo "-CANCELLED/!"
