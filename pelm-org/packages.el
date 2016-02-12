@@ -90,7 +90,7 @@
 
       (add-hook 'org-babel-after-execute-hook 'update-results)
 
-            (eval-after-load 'org-indent
+      (eval-after-load 'org-indent
         '(spacemacs|hide-lighter org-indent-mode))
 
       (let ((dir (configuration-layer/get-layer-property 'pelm-org :dir)))
@@ -164,7 +164,6 @@
        org-agenda-skip-additional-timestamps-same-entry t
        org-clone-delete-id t
        org-agenda-window-setup 'current-window
-       org-enable-priority-commands nil
        org-src-preserve-indentation nil
        org-html-coding-system 'utf-8
        org-html-head-include-default-style nil
@@ -184,27 +183,57 @@
        org-refile-targets (quote ((nil :maxlevel . 9)
                                   (org-agenda-files :maxlevel . 9))))
 
-      ;; org-todo-keywords
+      ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
+      ;; for state change logging).
       (setq org-todo-keywords
-            (quote ((sequence "TODO(t)" "INPROGRESS(i)" "|" "DONE(d!/!)")
-                    (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" )))
+            '(
+              (sequence "NEW(n!)"        ; Proposal, idea (under review), to be prioritized.
+                        "TODO(t!)"       ; Open, not yet started
+                        "INPROGRESS(i!)" ; In progress, working on
+                        "WAIT(w@/!)"     ; On hold , to be discussed, feedback
+                        "SOMEDAY(m!)"    ; Someday, maybe perhaps.
+                        "|"
+                        "DONE(d!/!)"     ; Completed, closed fixed, verified
+                        "CANX(x!)")      ; Wontfix, rejected, ignored, cancelled
+
+              (sequence "QTE(q!)"        ; Planning.
+                        "QTD(Q!)"        ; Awaiting approval.
+                        "|"
+                        "APP(A!)"        ; Approved.
+                        "REJ(R!)")       ; Rejected.
+
+              (sequence "OPENPO(O!)"
+                        "|"
+                        "CLSDPO(C!)"))
 
             org-todo-keyword-faces
-            (quote (("TODO" :foreground "red" :weight bold)
-                    ("INPROGRESS" :foreground "blue" :weight bold)
-                    ("DONE" :foreground "forest green" :weight bold)
-                    ("WAITING" :foreground "orange" :weight bold)
-                    ("HOLD" :foreground "magenta" :weight bold)
-                    ("CANCELLED" :foreground "forest green" :weight bold)))
+            '(("NEW" . pelm-org-created-kwd)
+              ("TODO" . org-todo)
+              ("INPROGRESS" . pelm-org-in-progress-kwd)
+              ("WAIT" . pelm-org-waiting-for-kwd)
+              ("SOMEDAY" . pelm-org-someday-kwd)
+              ("DONE" . org-done)
+              ("CANX" . org-done)
+
+              ("QTE" . pelm-org-quote-kwd)
+              ("QTD" . pelm-org-quoted-kwd)
+              ("APP" . pelm-org-approved-kwd)
+              ("REJ" . pelm-org-rejected-kwd)
+
+              ("OPENPO" . pelm-org-openpo-kwd)
+              ("CLSDPO" . pelm-org-closedpo-kwd))
+
             ;; state change trigger
-            org-todo-state-tags-triggers
-            (quote (("CANCELLED" ("CANCELLED" . t))
-                    ("WAITING" ("WAITING" . t))
-                    ("HOLD" ("WAITING" . t) ("HOLD" . t))
-                    (done ("WAITING") ("HOLD"))
-                    ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                    ("INPROGRESS" ("WAITING") ("CANCELLED") ("HOLD"))
-                    ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+            ;; FIXME: need enable this agagin
+            ;;org-todo-state-tags-triggers
+            ;;(quote (("CANCELLED" ("CANCELLED" . t))
+            ;; ("WAITING" ("WAITING" . t))
+            ;; ("HOLD" ("WAITING" . t) ("HOLD" . t))
+            ;; (done ("WAITING") ("HOLD"))
+            ;; ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+            ;; ("INPROGRESS" ("WAITING") ("CANCELLED") ("HOLD"))
+            ;; ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))
+            )
 
       (setq org-capture-templates
             (quote (("t" "Toto" entry (file (concat org-directory "/inbox.org")) "* TODO %?\n%U\n %a\n " :clock-in t :clock-resume t)
@@ -243,6 +272,16 @@
                     org-wl
                     org-w3m)))
 
+      (defconst pelm-org-completed-date-regexp
+        (concat " \\("
+                "CLOSED: \\[%Y-%m-%d"
+                "\\|"
+                "- State \"\\(DONE\\|CANX\\)\" * from .* \\[%Y-%m-%d"
+                "\\|"
+                "- State .* ->  *\"\\(DONE\\|CANX\\)\" * \\[%Y-%m-%d"
+                "\\) ")
+        "Matches any completion time stamp.")
+
       ;; Custom agenda command definitions -- start with a clean state
       (setq org-agenda-custom-commands nil)
 
@@ -259,93 +298,486 @@
                      ((alltodo ""))
                      ((org-agenda-files (list ,(concat org-directory "/habits.org"))))) t)
 
+      (add-to-list 'org-agenda-custom-commands '("f" . "FOCUS...") t )
 
       (add-to-list 'org-agenda-custom-commands
-                   '(" " "Agenda"
-                     ((agenda "" nil)
-                      (tags "INBOX"
-                            ((org-agenda-overriding-header "Tasks to Refile")
-                             (org-tags-match-list-sublevels nil)))
-                      (tags-todo "-CANCELLED/!"
-                                 ((org-agenda-overriding-header "Stuck Projects")
-                                        ;(org-tags-match-list-sublevels 'indented)
-                                  (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects)))
-                      (tags-todo "-INPROGRESS"
-                                 ((org-agenda-overriding-header "Next Tasks")
-                                  (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
-                                  (org-agenda-todo-ignore-scheduled t)
-                                  (org-agenda-todo-ignore-deadlines t)
-                                  (org-tags-match-list-sublevels t)
-                                  (org-agenda-sorting-strategy
-                                   '(todo-state-down effort-up category-keep))))
-                      (tags-todo "-INBOX-CANCELLED-HABIT/!-HOLD-WAITING"
-                                 ((org-agenda-overriding-header "Backlogs")
-                                  (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
-                                  (org-agenda-todo-ignore-scheduled t)
-                                  (org-agenda-todo-ignore-deadlines t)
-                                  (org-agenda-sorting-strategy
-                                   '(category-keep))))
-                      (tags-todo "-CANCELLED/!"
-                                 ((org-agenda-overriding-header "Projects")
-                                  (org-agenda-skip-function 'pelm-org/skip-non-projects)
-                                  (org-agenda-todo-ignore-scheduled 'future)
-                                  (org-agenda-todo-ignore-deadlines 'future)
-                                  (org-agenda-sorting-strategy
-                                   '(category-keep))))
-                      (tags-todo "-CANCELLED/!WAITING|HOLD"
-                                 ((org-agenda-overriding-header "Waiting and Postponed Tasks")
-                                  (org-agenda-skip-function 'pelm-org/skip-stuck-projects)
-                                  (org-tags-match-list-sublevels nil)
-                                  (org-agenda-todo-ignore-scheduled 'future)
-                                  (org-agenda-todo-ignore-deadlines 'future)))
-                      (tags "-ARCHIVE/"
-                            ((org-agenda-overriding-header "Tasks to Archive")
-                             (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
-                     nil))
-
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("#" "Stuck Projects" tags-todo "-CANCELLED/!"
-                     ((org-agenda-overriding-header "Stuck Projects")
-                      (org-agenda-skip-function 'pelm-org/skip-non-stuck-projects))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!INPROGRESS"
-                     ((org-agenda-overriding-header "Next Tasks")
-                      (org-agenda-skip-function 'pelm-org/skip-projects-and-habits-and-single-tasks)
-                      (org-agenda-todo-ignore-scheduled t)
-                      (org-agenda-todo-ignore-deadlines t)
-                      (org-tags-match-list-sublevels t)
-                      (org-agenda-sorting-strategy
-                       '(todo-state-down effort-up category-keep)))))
+                   `("f." "Today"
+                     (
+                      ;; Events.
+                      (agenda ""
+                              ((org-agenda-entry-types '(:timestamp :sexp))
+                               (org-agenda-overriding-header
+                                (concat "CALENDAR Today "
+                                        (format-time-string "%a %d" (current-time))
+                                        ;; #("__________________" 0 12 (face (:foreground "gray")))
+                                        ))
+                               (org-agenda-span 'day)))
+                      ;; Unscheduled new tasks (waiting to be prioritized and scheduled).
+                      (tags-todo "LEVEL=2"
+                                 ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
+                                  (org-agenda-files (list ,(concat org-directory "/inbox.org")))))
+                      ;; List of all TODO entries with deadline today.
+                      (tags-todo "DEADLINE=\"<+0d>\""
+                                 ((org-agenda-overriding-header "DUE TODAY")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))
+                                  (org-agenda-sorting-strategy '(priority-down))))
+                                        ; XXX Timed deadlines NOT shown!!!
+                      ;; List of all TODO entries with deadline before today.
+                      (tags-todo "DEADLINE<\"<+0d>\""
+                                 ((org-agenda-overriding-header "OVERDUE")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))
+                                  (org-agenda-sorting-strategy '(priority-down))))
+                      (agenda ""
+                              ((org-agenda-entry-types '(:scheduled))
+                               (org-agenda-overriding-header "SCHEDULED")
+                               (org-agenda-skip-function
+                                '(org-agenda-skip-entry-if 'todo 'done))
+                               (org-agenda-sorting-strategy
+                                '(priority-down time-down))
+                               (org-agenda-span 'day)
+                               (org-agenda-start-on-weekday nil)
+                               (org-agenda-time-grid nil)))
+                      ;; List of all TODO entries completed today.
+                      (todo "TODO|DONE|CANX" ; Includes repeated tasks (back in TODO).
+                            ((org-agenda-overriding-header "COMPLETED TODAY")
+                             (org-agenda-skip-function
+                              '(org-agenda-skip-entry-if
+                                'notregexp
+                                (format-time-string pelm-org-completed-date-regexp)))
+                             (org-agenda-sorting-strategy '(priority-down)))))
+                     ((org-agenda-format-date "")
+                      (org-agenda-start-with-clockreport-mode nil))) t)
 
       (add-to-list 'org-agenda-custom-commands
-                   '("R" "Tasks" tags-todo "-INBOX-CANCELLED/!-HOLD-WAITING"
-                     ((org-agenda-overriding-header "Tasks")
-                      (org-agenda-skip-function 'pelm-org/skip-project-tasks-maybe)
-                      (org-agenda-sorting-strategy
-                       '(category-keep)))))
+                   '("fh" "Hotlist"
+                     ((tags-todo "DEADLINE<\"<+0d>\""
+                                 ((org-agenda-overriding-header "OVERDUE")))
+                      (tags-todo "DEADLINE>=\"<+0d>\"+DEADLINE<=\"<+1w>\""
+                                 ((org-agenda-overriding-header "DUE IN NEXT 7 DAYS")))
+                      (tags-todo "DEADLINE=\"\"+PRIORITY={A}|DEADLINE>\"<+1w>\"+PRIORITY={A}"
+                                 ((org-agenda-overriding-header "HIGH PRIORITY")))
+                      (tags-todo "DEADLINE=\"\"+FLAGGED|DEADLINE>\"<+1w>\"+FLAGGED"
+                                 ((org-agenda-overriding-header "FLAGGED")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-when-regexp-matches))
+                                  (org-agenda-skip-regexp "\\[#A\\]"))))
+                     ((org-agenda-todo-ignore-scheduled 'future)
+                      (org-agenda-sorting-strategy '(deadline-up)))) t) ; FIXME sort not OK
+
+      (add-to-list 'org-agenda-custom-commands '("r" . "REVIEW...") t)
+
+      (add-to-list 'org-agenda-custom-commands '("ra" . "All Tasks...") t)
 
       (add-to-list 'org-agenda-custom-commands
-                   '("p" "Projects" tags-todo "-CANCELLED/!"
-                     ((org-agenda-overriding-header "Projects")
-                      (org-agenda-skip-function 'pelm-org/skip-non-projects)
-                      (org-agenda-todo-ignore-scheduled 'future)
-                      (org-agenda-todo-ignore-deadlines 'future)
-                      (org-agenda-sorting-strategy
-                       '(category-keep)))))
+                   '("rad" "All Tasks (grouped by Due Date)"
+                     ((tags-todo "DEADLINE<\"<+0d>\""
+                                 ((org-agenda-overriding-header "OVERDUE")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+                      (tags-todo "DEADLINE=\"<+0d>\""
+                                 ((org-agenda-overriding-header "DUE TODAY")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+                      (tags-todo "DEADLINE=\"<+1d>\""
+                                 ((org-agenda-overriding-header "DUE TOMORROW")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+                      (tags-todo "DEADLINE>\"<+1d>\"+DEADLINE<=\"<+7d>\""
+                                 ((org-agenda-overriding-header "DUE WITHIN A WEEK")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+                      (tags-todo "DEADLINE>\"<+7d>\"+DEADLINE<=\"<+28d>\""
+                                 ((org-agenda-overriding-header "DUE WITHIN A MONTH")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+                      (tags-todo "DEADLINE>\"<+28d>\""
+                                 ((org-agenda-overriding-header "DUE LATER")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'notdeadline))))
+
+                      (tags-todo "TODO={INPROGRESS}"
+                                 ((org-agenda-overriding-header "NO DUE DATE / STARTED")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline))))
+                      (tags-todo "TODO<>{STRT\\|WAIT\\|SOMEDAY\\|HABIT}"
+                                 ((org-agenda-overriding-header "NO DUE DATE / NEXT")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline))))
+                      (tags-todo "TODO={WAIT}"
+                                 ((org-agenda-overriding-header "NO DUE DATE / WAITING FOR")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline))))
+                      (tags-todo "TODO={SOMEDAY}"
+                                 ((org-agenda-overriding-header "NO DUE DATE / SOMEDAY")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline)))))
+                     ((org-agenda-sorting-strategy '(priority-down))
+                      (org-agenda-write-buffer-name "All Tasks (grouped by Due Date)"))
+                     "~/org___all-tasks-by-due-date.pdf") t)
 
       (add-to-list 'org-agenda-custom-commands
-                   '("w" "Waiting Tasks" tags-todo "-CANCELLED/!WAITING|HOLD"
-                     ((org-agenda-overriding-header "Waiting and Postponed tasks"))
-                     (org-agenda-skip-function 'pelm-org/skip-projects-and-habits)
-                     (org-agenda-todo-ignore-scheduled 'future)
-                     (org-agenda-todo-ignore-deadlines 'future)))
+                   '("ra1" "All Tasks with a due date"
+                     ((alltodo ""))
+                     ((org-agenda-overriding-header "All Tasks (sorted by Due Date)")
+                      (org-agenda-skip-function
+                       '(org-agenda-skip-entry-if 'notdeadline))
+                      (org-agenda-sorting-strategy '(deadline-up)))) t)
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("ra2" "All active tasks, by due date"
+                     ((agenda ""
+                              ((org-agenda-overriding-header "Today")
+                               ;; FIXME We don't see "timed" DEADLINE.
+                               (org-agenda-skip-function
+                                (lambda ()
+                                  (let* ((dl (org-entry-get nil "DEADLINE")))
+                                    (if (or (not dl)
+                                            (equal dl "")
+                                            (org-time> dl (org-time-today)))
+                                        (progn (outline-next-heading) (point))))))
+                               (org-agenda-skip-scheduled-if-deadline-is-shown t)
+                               (org-agenda-span 'day)
+                               (org-deadline-warning-days 0)))
+                      (agenda ""
+                              ((org-agenda-entry-types '(:deadline))
+                               (org-agenda-overriding-header "Tomorrow")
+                               (org-agenda-skip-function
+                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 1))
+                               (org-deadline-warning-days 1)))
+                      (agenda ""
+                              ((org-agenda-overriding-header "Next 5 days")
+                               (org-agenda-skip-function
+                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 2))
+                               (org-deadline-warning-days 7)))
+                      (agenda ""
+                              ((org-agenda-format-date "")
+                               (org-agenda-overriding-header "Next 3 weeks")
+                               (org-agenda-skip-function
+                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 7))
+                               (org-deadline-warning-days 28))))
+                     ((org-agenda-deadline-faces '((0.0 . default)))
+                      (org-agenda-start-with-clockreport-mode nil)
+                      (org-agenda-format-date "")
+                      (org-agenda-span 'day)
+                      (org-agenda-sorting-strategy '(deadline-up))
+                      (org-agenda-use-time-grid nil)
+                      (org-agenda-write-buffer-name "Reminders"))) t)
+
+      (defun pelm-org/skip-entry-unless-deadline-in-n-days-or-more (n)
+        "Skip entries that have no deadline, or that have a deadline earlier than in N days."
+        (let* ((dl (org-entry-get nil "DEADLINE")))
+          (if (or (not dl)
+                  (equal dl "")
+                  (org-time< dl (+ (org-time-today) (* n 86400))))
+              (progn (outline-next-heading) (point)))))
+
+
+      (defun pelm-org/skip-entry-unless-overdue-deadline ()
+        "Skip entries that have no deadline, or that have a deadline later than or equal to today."
+        (let* ((dl (org-entry-get nil "DEADLINE")))
+          (if (or (not dl)
+                  (equal dl "")
+                  (org-time>= dl (org-time-today)))
+              (progn (outline-next-heading) (point)))))
+
+      (defun pelm-org/skip-entry-if-past-deadline ()
+        "Skip entries that have a deadline earlier than today."
+        (let* ((dl (org-entry-get nil "DEADLINE")))
+          (if (org-time< dl (org-time-today))
+              (progn (outline-next-heading) (point)))))
+
+      (defun pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days (n1 n2)
+        "Skip entries that have a deadline in less than N1 days, or that have a
+  scheduled date in less than N2 days, or that have no deadline nor scheduled."
+        (let* ((dl (org-entry-get nil "DEADLINE"))
+               (sd (org-entry-get nil "SCHEDULED")))
+          (if (or (and dl
+                       (not (equal dl ""))
+                       (org-time< dl (+ (org-time-today) (* n1 86400))))
+                  (and sd
+                       (not (equal sd ""))
+                       (org-time< sd (+ (org-time-today) (* n2 86400))))
+                  (and (or (not dl)       ; No deadline.
+                           (equal dl ""))
+                       (or (not sd)       ; Nor scheduled.
+                           (equal sd ""))))
+              (progn (outline-next-heading) (point)))))
+
+      (defun pelm-org/skip-entry-if-deadline-or-schedule ()
+        "Skip entries that have a deadline or that have a scheduled date."
+        (let* ((dl (org-entry-get nil "DEADLINE"))
+               (sd (org-entry-get nil "SCHEDULED")))
+          (if (or (and dl
+                       (not (equal dl "")))
+                  (and sd
+                       (not (equal sd ""))))
+              (progn (outline-next-heading) (point)))))
+
+      (defun pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days (n1 n2)
+        "Skip entries that have a deadline in less than N1 days, or that have a
+  scheduled date in less than N2 days, or that have no deadline nor scheduled."
+        (let* ((dl (org-entry-get nil "DEADLINE"))
+               (sd (org-entry-get nil "SCHEDULED")))
+          (if (or (and dl
+                       (not (equal dl ""))
+                       (org-time< dl (+ (org-time-today) (* n1 86400))))
+                  (and sd
+                       (not (equal sd ""))
+                       (org-time< sd (+ (org-time-today) (* n2 86400))))
+                  (and (or (not dl)       ; No deadline.
+                           (equal dl ""))
+                       (or (not sd)       ; Nor scheduled.
+                           (equal sd ""))))
+              (progn (outline-next-heading) (point)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("ra3" "Agenda for all TODO entries"
+                     ((agenda ""
+                              ((org-agenda-format-date "")
+                               (org-agenda-overriding-header "Past due")
+                               (org-agenda-skip-function
+                                'pelm-org/skip-entry-unless-overdue-deadline)
+                               (org-deadline-warning-days 0)))
+                      (agenda ""
+                              ((org-agenda-format-date "")
+                               (org-agenda-overriding-header "Today/tomorrow")
+                               (org-agenda-skip-function
+                                'pelm-org/skip-entry-if-past-deadline)
+                               (org-agenda-span 2)
+                               (org-agenda-use-time-grid t)
+                               (org-deadline-warning-days 0)))
+                      (agenda ""
+                              ((org-agenda-format-date "")
+                               (org-agenda-overriding-header "Next 12 days")
+                               (org-agenda-skip-function
+                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 2))
+                               (org-deadline-warning-days 14)))
+                      (todo ""
+                            ((org-agenda-overriding-header "Later")
+                             (org-agenda-skip-function
+                              '(pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days 15 2))
+                             (org-agenda-sorting-strategy '(ts-up))))
+                      (todo ""
+                            ((org-agenda-overriding-header "No due date")
+                             (org-agenda-skip-function
+                              'pelm-org/skip-entry-if-deadline-or-schedule))))
+                     ((org-agenda-start-with-clockreport-mode nil)
+                      (org-agenda-prefix-format " %i %?-12t% s")
+                      (org-agenda-span 'day)
+                      (org-agenda-use-time-grid nil)
+                      (org-agenda-sorting-strategy '(deadline-up)) ; FIXME sort does not work in "Past due", well in "Next 12 days".
+                      (org-agenda-write-buffer-name "List Review"))
+                     "~/org___agenda-all-todo-entries.html") t)
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("rap" "All (Unscheduled) Tasks (grouped by Priority)"
+                     ((tags-todo "PRIORITY={A}"
+                                 ((org-agenda-overriding-header "HIGH")
+                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                      (tags-todo "PRIORITY={B}"
+                                 ((org-agenda-overriding-header "MEDIUM")
+                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                      (tags-todo "PRIORITY=\"\""
+                                 ((org-agenda-overriding-header "NONE") ; = Medium.
+                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                      (tags-todo "PRIORITY={C}"
+                                 ((org-agenda-overriding-header "LOW")
+                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
+                      (todo "DONE|CANX"
+                            ((org-agenda-overriding-header "COMPLETED")
+                             (org-agenda-sorting-strategy '(priority-down)))))) t)
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("rt" . "Timesheet...") t)
+
+      ;; Show what happened today.
+      (add-to-list 'org-agenda-custom-commands
+                   '("rtd" "Daily Timesheet"
+                     ((agenda ""))
+                     ((org-agenda-log-mode-items '(clock closed))
+                      (org-agenda-overriding-header "DAILY TIMESHEET")
+                      (org-agenda-show-log 'clockcheck)
+                      (org-agenda-span 'day)
+                      (org-agenda-start-with-clockreport-mode t)
+                      (org-agenda-time-grid nil))) t)
+
+      ;; Show what happened this week.
+      (add-to-list 'org-agenda-custom-commands
+                   '("rtw" "Weekly Timesheet"
+                     ((agenda ""))
+                     (
+                      ;; (org-agenda-format-date "")
+                      (org-agenda-overriding-header "WEEKLY TIMESHEET")
+                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
+                      (org-agenda-span 'week)
+                      (org-agenda-start-on-weekday 1)
+                      (org-agenda-start-with-clockreport-mode t)
+                      (org-agenda-time-grid nil))) t)
+
+
+      (add-to-list 'org-agenda-custom-commands '("rc" . "Calendar...") t)
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("rc7" "Events and appointments for 7 days"
+                     ((agenda ""))
+                     ((org-agenda-entry-types '(:timestamp :sexp))
+                      ;; (org-agenda-overriding-header "Calendar for 7 days")
+                      ;; (org-agenda-repeating-timestamp-show-all t)
+                      (org-agenda-span 'week)
+                      (org-agenda-format-date "\n%a %d")
+                      ;; (org-agenda-date-weekend ... new face ...)
+                      (org-agenda-time-grid nil))) t)
 
       (add-to-list 'org-agenda-custom-commands
                    '("A" "Tasks to Archive" tags "-ARCHIVE/"
                      ((org-agenda-overriding-header "Tasks to Archive")
                       (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
+
+      ;; Calendar view for org-agenda.
+      (when (locate-library "calfw-org")
+        (autoload 'cfw:open-org-calendar "calfw-org"
+          "Open an Org schedule calendar." t)
+
+        (add-to-list 'org-agenda-custom-commands
+                     '("rcm" "Calendar for current month"
+                       (lambda (&rest ignore)
+                         (cfw:open-org-calendar))) t))
+
+  (add-to-list 'org-agenda-custom-commands
+               `("rC" "Completed view"
+                 (;; List of all TODO entries completed yesterday.
+                  (todo "TODO|DONE|CANX" ; includes repeated tasks (back in TODO)
+                             ((org-agenda-overriding-header
+                               (concat "YESTERDAY   "
+                                       (format-time-string "%a %d" (current-time-ndays-ago 1))
+                                       ;; #("__________________" 0 12 (face (:foreground "gray")))
+                                       ))
+                              (org-agenda-skip-function
+                               '(org-agenda-skip-entry-if
+                                 'notregexp
+                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 1))))
+                              (org-agenda-sorting-strategy '(priority-down))))
+                  ;; List of all TODO entries completed 2 days ago.
+                  (todo "TODO|DONE|CANX" ; includes repeated tasks (back in TODO)
+                             ((org-agenda-overriding-header
+                               (concat "2 DAYS AGO  "
+                                       (format-time-string "%a %d" (current-time-ndays-ago 2))))
+                              (org-agenda-skip-function
+                               '(org-agenda-skip-entry-if
+                                 'notregexp
+                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 2))))
+                              (org-agenda-sorting-strategy '(priority-down))))
+                  ;; List of all TODO entries completed 3 days ago.
+                  (todo "TODO|DONE|CANX" ; Includes repeated tasks (back in TODO).
+                             ((org-agenda-overriding-header
+                               (concat "3 DAYS AGO  "
+                                       (format-time-string "%a %d" (current-time-ndays-ago 3))))
+                              (org-agenda-skip-function
+                               '(org-agenda-skip-entry-if
+                                 'notregexp
+                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 3))))
+                              (org-agenda-sorting-strategy '(priority-down)))))
+                 ((org-agenda-format-date "")
+                  (org-agenda-start-with-clockreport-mode nil))) t)
+
+  (defun current-time-ndays-ago (n)
+    "Return the current time minus N days."
+    (time-subtract (current-time) (days-to-time n)))
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rx" "Completed tasks with no CLOCK lines"
+                 ((todo "DONE|CANX"
+                             ((org-agenda-overriding-header "Completed tasks with no CLOCK lines")
+                              (org-agenda-skip-function
+                               '(org-agenda-skip-entry-if
+                                 'regexp
+                                 (format-time-string "  CLOCK: .*--.* =>  .*")))
+                              (org-agenda-sorting-strategy '(priority-down)))))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rr" "Recent items (past 7 days)"
+                 ((agenda ""))
+                 ((org-agenda-start-day "-7d")
+                  (org-agenda-span 7)
+                  (org-agenda-repeating-timestamp-show-all nil)
+                  (org-agenda-inactive-leader "Inactive:  ")
+                  (org-agenda-include-inactive-timestamps t))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rw" "Weekly review"
+                 ((tags "CATEGORY={@Collect}&LEVEL=2|TODO={NEW}"
+                        ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")))
+
+                  (agenda ""
+                          ((org-agenda-clockreport-mode t)
+                           (org-agenda-format-date
+                            (concat "\n"
+                                    "%Y-%m-%d" " %a "
+                                    (make-string (window-width) ?_)))
+                           (org-agenda-overriding-header "PAST WEEK")
+                           (org-agenda-prefix-format " %?-11t %i %-12:c% s")
+                           (org-agenda-show-log 'clockcheck)
+                           (org-agenda-span 7)
+                           (org-agenda-start-day "-1w") ; recently done
+                           (org-deadline-warning-days 0)))
+
+                  ;; FIXME why monthly span here ??
+                  (agenda ""
+                          ((org-agenda-overriding-header "NEXT MONTH")
+                           (org-agenda-span 'month)
+                           (org-agenda-start-day "+0d")
+                           (org-deadline-warning-days 0) ; XXX
+                           ))
+
+                  (todo "PROJ"
+                        ((org-agenda-overriding-header "PROJECT LIST")))
+
+                  ;; FIXME we should show which tasks (don't) have CLOCK lines: archived vs. deleted.
+                  (todo "DONE|PROJDONE"
+                        ((org-agenda-overriding-header
+                          "Candidates to be archived")))
+
+                  (todo "INPROGRESS"
+                        ((org-agenda-overriding-header "IN PROGRESS")
+                         (org-agenda-todo-ignore-scheduled nil)))
+
+                  (todo "TODO"
+                        ((org-agenda-overriding-header "ACTION LIST")))
+
+                  (todo "WAIT"
+                        ((org-agenda-format-date "")
+                         (org-agenda-overriding-header "WAITING FOR")
+                         (org-agenda-todo-ignore-deadlines 'all) ; Future?
+                         (org-agenda-todo-ignore-scheduled t)))
+
+                  ;; Same reasoning as for WAIT.
+                  (todo "SOMEDAY"
+                        ((org-agenda-format-date "")
+                         (org-agenda-overriding-header "SOMEDAY")
+                         (org-agenda-todo-ignore-deadlines 'all)
+                         (org-agenda-todo-ignore-scheduled t)))
+                  )) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rN" "Next"
+                 ((tags-todo "TODO<>{SOMEDAY}"))
+                 ((org-agenda-overriding-header "List of all TODO entries with no due date (no SOMEDAY)")
+                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline))
+                  (org-agenda-sorting-strategy '(priority-down)))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rW" "Waiting for"
+                 ((tags-todo "TODO={WAIT}"))
+                 ((org-agenda-overriding-header "Waiting for")
+                  (org-agenda-sorting-strategy '(deadline-up)))) t) ; FIXME does not work.
+
+  (add-to-list 'org-agenda-custom-commands
+               '("rP" "Projects"
+                 ((tags-todo "project-DONE-CANX"))
+                 ((org-agenda-overriding-header "Projects (High Level)")
+                  (org-agenda-sorting-strategy nil))) t)
 
 
       (defun pelm-org/goto-diary ()
@@ -1144,7 +1576,10 @@ When not restricted, skip project and sub-project tasks, habits, and project rel
                (plantuml . t)
                ;;(latex . t)
                )))
-      )))
+
+
+      )
+  ))
 
 
 (defun pelm-org/post-init-gnuplot ()
