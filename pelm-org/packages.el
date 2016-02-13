@@ -59,6 +59,16 @@
       (add-hook 'org-agenda-mode-hook
                 '(lambda () (org-defkey org-agenda-mode-map "R" 'org-agenda-refile))
                 'append)
+      (add-hook 'org-agenda-mode-hook
+                '(lambda () (org-defkey org-agenda-mode-map "j" 'org-agenda-next-line))
+                'append)
+
+      (add-hook 'org-agenda-mode-hook
+                '(lambda () (org-defkey org-agenda-mode-map "k" 'org-agenda-previous-line))
+                'append)
+      (add-hook 'org-agenda-mode-hook
+                '(lambda () (org-defkey org-agenda-mode-map (kbd "SPC") spacemacs-default-map ))
+                'append)
 
       (defvar pelm-org/keep-clock-running nil)
 
@@ -103,11 +113,6 @@
         `(defun ,fname () (interactive)
                 (org-emphasize ,char)))
 
-      (eval-after-load "org-agenda"
-        '(progn
-           (define-key org-agenda-mode-map "j" 'org-agenda-next-line)
-           (define-key org-agenda-mode-map "k" 'org-agenda-previous-line)
-           (define-key org-agenda-mode-map (kbd "SPC") spacemacs-default-map)))
 
       ;; setq options
       (setq
@@ -120,6 +125,7 @@
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
        org-startup-indented t
+       org-todo-repeat-to-state "TODO"
        org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
        org-startup-with-inline-images t
        org-src-fontify-natively t
@@ -255,7 +261,7 @@
                     org-gnus
                     org-id
                     org-info
-                    org-jsinfo
+                    ;;org-jsinfo
                     org-habit
                     org-inlinetask
                     org-irc
@@ -713,13 +719,11 @@
                            (org-agenda-start-day "-1w") ; recently done
                            (org-deadline-warning-days 0)))
 
-                  ;; FIXME why monthly span here ??
                   (agenda ""
-                          ((org-agenda-overriding-header "NEXT MONTH")
-                           (org-agenda-span 'month)
+                          ((org-agenda-overriding-header "THIS WEEK")
+                           (org-agenda-span 'week)
                            (org-agenda-start-day "+0d")
-                           (org-deadline-warning-days 0) ; XXX
-                           ))
+                           (org-deadline-warning-days 0)))
 
                   (todo "PROJ"
                         ((org-agenda-overriding-header "PROJECT LIST")))
