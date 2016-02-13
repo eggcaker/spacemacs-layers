@@ -113,9 +113,9 @@
       (setq
        ;; mobile org options
        org-directory "~/.org-files"
-       org-default-notes-files (list (concat org-directory "/inbox.org"))
+       org-default-notes-files (list (concat org-directory "/refile.org"))
        org-mobile-directory "~/Dropbox/org"
-       org-mobile-inbox-for-pull "~/.org-files/inbox.org"
+       org-mobile-refile-for-pull "~/.org-files/refile.org"
 
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
@@ -231,8 +231,8 @@
             )
 
       (setq org-capture-templates
-            (quote (("t" "Toto" entry (file (concat org-directory "/inbox.org")) "* TODO %?\n%U\n %a\n " :clock-in t :clock-resume t)
-                    ("x" "CLI TODO" entry (file (concat org-directory "/inbox.org")) "* TODO %i\n%U" :immediate-finish t)
+            (quote (("t" "Toto" entry (file (concat org-directory "/refile.org")) "* TODO %?\n%U\n %a\n " :clock-in t :clock-resume t)
+                    ("x" "CLI TODO" entry (file (concat org-directory "/refile.org")) "* TODO %i\n%U" :immediate-finish t)
                     ("p" "Web Notes" entry (file+headline (concat org-directory "/notes.org") "Web Notes")
                      "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?" :empty-lines 1)
                     ("L" "Protocol Link" entry (file+headline (concat org-directory "/bookmarks.org") "Links") "* %? [[%:link][%:description]] \nCaptured On: %U")
@@ -284,7 +284,7 @@
                    '("c" . "COLLECT...") t)
 
       (add-to-list 'org-agenda-custom-commands
-                   '("cb" "Collect Box" tags "INBOX"
+                   '("cb" "Collect Box" tags "REFILE"
                      ((org-agenda-overriding-header "Tasks to Refile")
                       (org-tags-match-list-sublevels nil))))
 
@@ -310,7 +310,7 @@
                       ;; Unscheduled new tasks (waiting to be prioritized and scheduled).
                       (tags-todo "LEVEL=2"
                                  ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
-                                  (org-agenda-files (list ,(concat org-directory "/inbox.org")))))
+                                  (org-agenda-files (list ,(concat org-directory "/refile.org")))))
                       ;; List of all TODO entries with deadline today.
                       (tags-todo "DEADLINE=\"<+0d>\""
                                  ((org-agenda-overriding-header "DUE TODAY")
@@ -625,11 +625,6 @@
                       ;; (org-agenda-date-weekend ... new face ...)
                       (org-agenda-time-grid nil))) t)
 
-      (add-to-list 'org-agenda-custom-commands
-                   '("A" "Tasks to Archive" tags "-ARCHIVE/"
-                     ((org-agenda-overriding-header "Tasks to Archive")
-                      (org-agenda-skip-function 'pelm-org/skip-non-archivable-tasks))))
-
       ;; Calendar view for org-agenda.
       (when (locate-library "calfw-org")
         (autoload 'cfw:open-org-calendar "calfw-org"
@@ -773,6 +768,73 @@
                  ((tags-todo "project-DONE-CANX"))
                  ((org-agenda-overriding-header "Projects (High Level)")
                   (org-agenda-sorting-strategy nil))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("+" . "MORE...") t)
+
+  ;; Checking tasks that are assigned to me.
+  (add-to-list 'org-agenda-custom-commands
+               `("+a" "Assigned to me"
+                 ((tags ,(concat "Assignee={" user-login-name "\\|"
+                                 user-mail-address "}")))
+                 ((org-agenda-overriding-header "ASSIGNED TO ME"))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("E" . "Exported agenda files...") t)
+
+  ;; Exporting agenda views.
+  (add-to-list 'org-agenda-custom-commands
+               '("Ea"
+                 ((agenda ""))
+                 (;; (org-tag-faces nil)
+                  (ps-landscape-mode t)
+                  (ps-number-of-columns 1))
+                 ("~/org-agenda.html" "~/org-agenda.pdf")) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("Ep" "Call list"
+                 ((tags-todo "phone"))
+                 ((org-agenda-prefix-format " %-20:c [ ] " )
+                  (org-agenda-remove-tags t)
+                  ;; (org-agenda-with-colors nil)
+                  (org-agenda-write-buffer-name
+                   "Phone calls that you need to make")
+                  (ps-landscape-mode t)
+                  (ps-number-of-columns 1))
+                 ("~/org___calls.pdf")) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("A" . "ARCHIVE...") t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("Aa" "Archive"
+                 ((tags-todo "ARCHIVE"))
+                 ((org-agenda-todo-ignore-scheduled 'future)
+                  (org-agenda-sorting-strategy '(deadline-down)))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("R" . "REFERENCE...") t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("Rs" "Like s, but with extra files"
+                 ((search ""))
+                 ((org-agenda-text-search-extra-files
+                   ;; FIXME Add `agenda-archives'
+                   leuven-org-search-extra-files))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("RS" "Like s, but only TODO entries"
+                 ((search ""))
+                 ((org-agenda-text-search-extra-files
+                   ;; FIXME Add `agenda-archives'
+                   leuven-org-search-extra-files))) t)
+
+  (add-to-list 'org-agenda-custom-commands
+               '("Rn" "Organize thoughts to refile"
+                 ((tags "REFILE|CAPTURE"))
+                 ((org-agenda-overriding-header "Refile stuff"))) t)
+
+
 
       ;; TODO: maybe need enable it back.
       ;;(autoload 'appt-check "appt")
