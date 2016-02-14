@@ -39,6 +39,11 @@
      ;;finance
      ;;deft
      evil-commentary
+     (elfeed :variables
+             elfeed-enable-web-interface t
+             rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org")
+             )
+
      ;; (chinese
      ;; :variables
      ;; chinese-default-input-method 'wubi
@@ -62,9 +67,9 @@
      ;;fasd
      )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal hackernews nameless)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org)
 
-   dotspacemacs-excluded-packages '(julia-mode elfeed-org)
+   dotspacemacs-excluded-packages '(julia-mode)
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
@@ -206,9 +211,6 @@
    nameless-prefix ""
    nameless-separator nil
 
-   ;; Elfeed
-   elfeed-feeds
-   '("https://www.reddit.com/r/emacs/.rss" "http://xkcd.com/rss.xml")
 
    ;; IRC
    erc-autojoin-channels-alist
@@ -309,9 +311,6 @@
   (evil-leader/set-key (kbd "oh") 'avy-goto-char-in-line)
   (evil-leader/set-key (kbd "on") 'spacemacs/new-empty-buffer)
 
-
-  ;; Hacker news
-  (evil-leader/set-key (kbd "ah") 'hackernews)
   (with-eval-after-load 'web-mode
     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
     (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
