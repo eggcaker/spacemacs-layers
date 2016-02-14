@@ -40,9 +40,9 @@
      ;;deft
      evil-commentary
      (elfeed :variables
+             url-queue-timeout 30
              elfeed-enable-web-interface t
-             rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org")
-             )
+             rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
      ;; (chinese
      ;; :variables
