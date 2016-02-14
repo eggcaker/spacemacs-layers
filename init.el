@@ -78,10 +78,10 @@
    dotspacemacs-startup-lists '(recents bookmarks projects)
    dotspacemacs-startup-recent-list-size 5
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(spacemacs-dark  spacemacs-light organic-green subatomic )
+   dotspacemacs-themes '(spacemacs-dark  spacemacs-light organic-green material)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("M+ 2m"
-                               :size 18
+   dotspacemacs-default-font '("Source Code Pro"
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)

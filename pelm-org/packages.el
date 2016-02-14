@@ -56,19 +56,19 @@
     :config
     (progn
       ;; set org specific keybindings
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "R" 'org-agenda-refile))
-                'append)
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "j" 'org-agenda-next-line))
-                'append)
+      ;; (add-hook 'org-agenda-mode-hook
+      ;;           '(lambda () (org-defkey org-agenda-mode-map "R" 'org-agenda-refile))
+      ;;           'append)
+      ;; (add-hook 'org-agenda-mode-hook
+      ;;           '(lambda () (org-defkey org-agenda-mode-map "j" 'org-agenda-next-line))
+      ;;           'append)
 
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map "k" 'org-agenda-previous-line))
-                'append)
-      (add-hook 'org-agenda-mode-hook
-                '(lambda () (org-defkey org-agenda-mode-map (kbd "SPC") spacemacs-default-map ))
-                'append)
+      ;; (add-hook 'org-agenda-mode-hook
+      ;;           '(lambda () (org-defkey org-agenda-mode-map "k" 'org-agenda-previous-line))
+      ;;           'append)
+      ;; (add-hook 'org-agenda-mode-hook
+      ;;           '(lambda () (org-defkey org-agenda-mode-map (kbd "SPC") spacemacs-default-map ))
+      ;;           'append)
 
       (defvar pelm-org/keep-clock-running nil)
 
@@ -94,6 +94,34 @@
                       results))))))
 
       (add-hook 'org-babel-after-execute-hook 'update-results)
+
+      (defun pelm-org/org-update-buffer-before-save ()
+        "Update all dynamic blocks and all tables in the buffer before save."
+        (when (derived-mode-p 'org-mode)
+          (message "INFO- Update Org buffer %s"
+                   (file-name-nondirectory (buffer-file-name)))
+          ;; (sit-for 1.5)
+          (let ((cache-long-scans nil)      ; Make `forward-line' much faster and
+                                        ; thus `org-goto-line', `org-table-sum',
+                                        ; etc.
+                (fly-state (and (boundp 'flyspell-mode)
+                                (if flyspell-mode 1 -1)))
+                (buffer-undo-list buffer-undo-list)) ; For goto-chg.
+            (and fly-state (flyspell-mode -1))
+                                        ; Temporarily disable Flyspell to avoid
+                                        ; checking the following modifications
+                                        ; of the buffer.
+            (measure-time "Realigned all tags" (org-align-all-tags))
+            (measure-time "Updated all dynamic blocks" (org-update-all-dblocks))
+            (measure-time "Re-applied formulas to all tables"
+                          (org-table-iterate-buffer-tables))
+            (when (file-exists-p (buffer-file-name (current-buffer)))
+              (leuven-org-remove-redundant-tags))
+            (and fly-state (flyspell-mode fly-state)))))
+
+      ;; Make sure that all dynamic blocks and all tables are always up-to-date.
+      (add-hook 'before-save-hook #'pelm-org/org-update-buffer-before-save)
+
 
       (eval-after-load 'org-indent
         '(spacemacs|hide-lighter org-indent-mode))
@@ -140,9 +168,11 @@
        org-agenda-span 'day
        org-src-fontify-natively t
        org-use-fast-todo-selection t
+       org-refile-use-cache t
        org-treat-S-cursor-todo-selection-as-state-change nil
        org-habit-preceding-days 7
-       org-habit-graph-column 102
+       org-habit-graph-column 110
+       org-tags-column -110
        org-habit-following-days 1
        org-habit-show-habits-only-for-today t
        org-habit-show-all-today t
@@ -181,8 +211,8 @@
                                              ("*" . "-")
                                              ("1." . "-")
                                              ("1)" . "-")))
-       org-refile-targets (quote ((nil :maxlevel . 9)
-                                  (org-agenda-files :maxlevel . 9))))
+       org-refile-targets (quote ((nil :maxlevel . 4)
+                                  (org-agenda-files :maxlevel . 4))))
 
       ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
       ;; for state change logging).
@@ -224,6 +254,7 @@
               ("OPENPO" . pelm-org-openpo-kwd)
               ("CLSDPO" . pelm-org-closedpo-kwd))
 
+
             ;; state change trigger
             ;; FIXME: need enable this agagin
             ;;org-todo-state-tags-triggers
@@ -236,13 +267,61 @@
             ;; ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))
             )
 
-      (setq org-capture-templates
-            (quote (("t" "Toto" entry (file (concat org-directory "/refile.org")) "* TODO %?\n%U\n %a\n " :clock-in t :clock-resume t)
-                    ("x" "CLI TODO" entry (file (concat org-directory "/refile.org")) "* TODO %i\n%U" :immediate-finish t)
-                    ("p" "Web Notes" entry (file+headline (concat org-directory "/notes.org") "Web Notes")
-                     "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?" :empty-lines 1)
-                    ("L" "Protocol Link" entry (file+headline (concat org-directory "/bookmarks.org") "Links") "* %? [[%:link][%:description]] \nCaptured On: %U")
-                    ("c" "Contacts" entry (file "~/.org-files/contacts.org") "* %(org-contacts-template-name)
+      ;; Org standard faces.
+      (set-face-attribute 'org-todo nil
+                          :weight 'bold :box nil :foreground "#F44336" :background nil)
+
+      (set-face-attribute 'org-done nil
+                          :weight 'bold :box nil :foreground "#4CAF50" :background nil)
+
+
+      (setq org-stuck-projects
+            '("+LEVEL=2/-DONE"             ; Identify a project.
+              ("TODO" "INPROGRESS" "NEXT") ; Todo keywords.
+              nil ""))                     ; Tags, regexp.
+
+      (setq org-capture-templates nil)
+
+      (add-to-list 'org-capture-templates
+                   `("t" "Task" entry
+                     (file+headline ,(concat org-directory "/refile.org") "Tasks")
+                     "* NEW %^{Task}%?
+
+%i"
+                     :empty-lines 1) t)
+
+      (add-to-list 'org-capture-templates
+                   `("T" "Task in current file" entry
+                     (file+headline
+                      (buffer-file-name (org-capture-get :original-buffer))
+                      "Tasks")
+                     "* TODO %?
+  %U %a %n"
+                     :prepend t) t)
+
+      (add-to-list 'org-capture-templates
+                   `("a" "Appt" entry
+                     (file+headline ,(concat org-directory "/refile.org") "Events")
+                     "* %^{Appointment}%?
+%^T
+
+%i"
+                     :empty-lines 1) t)
+
+      (add-to-list 'org-capture-templates
+                   `("x" "CLI TODO" entry
+                     (file (concat org-directory "/refile.org")) "* TODO %i\n%U" :immediate-finish t) t)
+
+      (add-to-list 'org-capture-templates
+                   `("p" "Web Notes" entry (file+headline (concat org-directory "/notes.org") "Web Notes")
+                     "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?" :empty-lines 1) t)
+
+      (add-to-list 'org-capture-templates
+                   `("L" "Protocol Link" entry (file+headline (concat org-directory "/bookmarks.org") "Links")
+                     "* %? [[%:link][%:description]] \nCaptured On: %U") t)
+
+      (add-to-list 'org-capture-templates
+                   `("c" "Contacts" entry (file "~/.org-files/contacts.org") "* %(org-contacts-template-name)
  :PROPERTIES:
  :NAME:
  :PHONE:
@@ -251,7 +330,7 @@
  :NICKNAME:
  :NOTE:
  :ADDRESS:
- :END:"))))
+ :END:") t)
 
       ;; Enable habit tracking (and a bunch of other modules)
       (setq org-modules
@@ -274,13 +353,13 @@
                     org-w3m)))
 
       (defconst pelm-org-completed-date-regexp
-        (concat " \\("
+        (concat "\\("
                 "CLOSED: \\[%Y-%m-%d"
                 "\\|"
                 "- State \"\\(DONE\\|CANX\\)\" * from .* \\[%Y-%m-%d"
                 "\\|"
                 "- State .* ->  *\"\\(DONE\\|CANX\\)\" * \\[%Y-%m-%d"
-                "\\) ")
+                "\\)")
         "Matches any completion time stamp.")
 
       ;; Custom agenda command definitions -- start with a clean state
@@ -308,10 +387,7 @@
                       (agenda ""
                               ((org-agenda-entry-types '(:timestamp :sexp))
                                (org-agenda-overriding-header
-                                (concat "CALENDAR Today "
-                                        (format-time-string "%a %d" (current-time))
-                                        ;; #("__________________" 0 12 (face (:foreground "gray")))
-                                        ))
+                                (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
                                (org-agenda-span 'day)))
                       ;; Unscheduled new tasks (waiting to be prioritized and scheduled).
                       (tags-todo "LEVEL=2"
@@ -336,7 +412,7 @@
                                (org-agenda-skip-function
                                 '(org-agenda-skip-entry-if 'todo 'done))
                                (org-agenda-sorting-strategy
-                                '(priority-down time-down))
+                                '(priority-down time-up))
                                (org-agenda-span 'day)
                                (org-agenda-start-on-weekday nil)
                                (org-agenda-time-grid nil)))
@@ -611,7 +687,7 @@
                      (
                       ;; (org-agenda-format-date "")
                       (org-agenda-overriding-header "WEEKLY TIMESHEET")
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
+                      ;;(org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
                       (org-agenda-span 'week)
                       (org-agenda-start-on-weekday 1)
                       (org-agenda-start-with-clockreport-mode t)
@@ -785,7 +861,6 @@
 
   (add-to-list 'org-agenda-custom-commands
                '("E" . "Exported agenda files...") t)
-
   ;; Exporting agenda views.
   (add-to-list 'org-agenda-custom-commands
                '("Ea"
