@@ -42,6 +42,15 @@
     :init
     (progn
       (evil-leader/set-key "m'" 'org-edit-src-exit)
+      (global-set-key
+       (kbd "<f6>") (kbd "C-c a f ."))
+
+      ;; Display the hotlist.
+      (global-set-key (kbd "<f7>") (kbd "C-c a f h"))
+
+      ;; Display calendar for 7 days.
+      (global-set-key (kbd "<f8>") (kbd "C-c a r c 7"))
+
 
       ;; set org agenda global
       (spacemacs/declare-prefix "o" "org")
@@ -129,8 +138,7 @@
       (let ((dir (configuration-layer/get-layer-property 'pelm-org :dir)))
         (setq org-export-async-init-file (concat dir "org-async-init.el")))
 
-      (defvar org-gtd-other-files '("~/src/personal/scrum/scrum.org"
-                                    "~/src/personal/yep8.org/blog/index.org"))
+      (defvar org-gtd-other-files '("~/src/personal/yep8.org/blog/index.org"))
       (setf org-agenda-files (cons "~/.org-files" org-gtd-other-files))
 
       ;; auto save org files
@@ -393,6 +401,12 @@
                       (tags-todo "LEVEL=2"
                                  ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
                                   (org-agenda-files (list ,(concat org-directory "/refile.org")))))
+
+                      (tags-todo "TODO={INPROGRESS}"
+                                 ((org-agenda-overriding-header "INPROGRESS TASKS")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline))))
+
                       ;; List of all TODO entries with deadline today.
                       (tags-todo "DEADLINE=\"<+0d>\""
                                  ((org-agenda-overriding-header "DUE TODAY")
