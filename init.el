@@ -83,7 +83,7 @@
    dotspacemacs-startup-lists '(recents bookmarks projects)
    dotspacemacs-startup-recent-list-size 5
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(spacemacs-dark  spacemacs-light organic-green material)
+   dotspacemacs-themes '(monokai spacemacs-dark  spacemacs-light organic-green material)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
                                :size 16
@@ -216,7 +216,7 @@
    erc-autojoin-channels-alist
    '(("1\\.0\\.0" "#syl20bnr/spacemacs") ; Gitter
      ("irc.gitter.im" "#syl20bnr/spacemacs")
-     ("freenode\\.net" "#emacs" "#emacs-beginners" "#spacemacs" "#evil-mode"))
+     ("freenode\\.net" "#spacemacs" "#org\\-mode"))
 
    ;; Theme modifications
    theming-modifications

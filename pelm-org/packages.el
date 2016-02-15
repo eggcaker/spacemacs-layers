@@ -104,6 +104,29 @@
 
       (add-hook 'org-babel-after-execute-hook 'update-results)
 
+      ;; Remove redundant tags of headlines (from David Maus).
+      (defun pelm-org-remove-redundant-tags ()
+        "Remove redundant tags of headlines in current buffer.
+  A tag is considered redundant if it is local to a headline and inherited by
+  a parent headline."
+        (interactive)
+        (when (derived-mode-p 'org-mode)
+          (save-excursion
+            (org-map-entries
+             (lambda ()
+               (let ((alltags (split-string
+                               (or (org-entry-get (point) "ALLTAGS") "")
+                               ":"))
+                     local inherited tag)
+                 (dolist (tag alltags)
+                   (if (get-text-property 0 'inherited tag)
+                       (push tag inherited)
+                     (push tag local)))
+                 (dolist (tag local)
+                   (when (member tag inherited)
+                     (org-toggle-tag tag 'off)))))
+             t nil))))
+
       (defun pelm-org/org-update-buffer-before-save ()
         "Update all dynamic blocks and all tables in the buffer before save."
         (when (derived-mode-p 'org-mode)
@@ -125,7 +148,7 @@
             (measure-time "Re-applied formulas to all tables"
                           (org-table-iterate-buffer-tables))
             (when (file-exists-p (buffer-file-name (current-buffer)))
-              (leuven-org-remove-redundant-tags))
+              (pelm-org-remove-redundant-tags))
             (and fly-state (flyspell-mode fly-state)))))
 
       ;; Make sure that all dynamic blocks and all tables are always up-to-date.
@@ -226,7 +249,7 @@
       ;; for state change logging).
       (setq org-todo-keywords
             '(
-              (sequence "NEW(n!)"        ; Proposal, idea (under review), to be prioritized.
+              (sequence ;;"NEW(n!)"        ; Proposal, idea (under review), to be prioritized.
                         "TODO(t!)"       ; Open, not yet started
                         "INPROGRESS(i!)" ; In progress, working on
                         "WAIT(w@/!)"     ; On hold , to be discussed, feedback
@@ -246,7 +269,7 @@
                         "CLSDPO(C!)"))
 
             org-todo-keyword-faces
-            '(("NEW" . pelm-org-created-kwd)
+            '(;;("NEW" . pelm-org-created-kwd)
               ("TODO" . org-todo)
               ("INPROGRESS" . pelm-org-in-progress-kwd)
               ("WAIT" . pelm-org-waiting-for-kwd)
@@ -293,7 +316,7 @@
       (add-to-list 'org-capture-templates
                    `("t" "Task" entry
                      (file+headline ,(concat org-directory "/refile.org") "Tasks")
-                     "* NEW %^{Task}%?
+                     "* TODO %^{Task}%?
 
 %i"
                      :empty-lines 1) t)
@@ -379,7 +402,7 @@
       (add-to-list 'org-agenda-custom-commands
                    '("cb" "Collect Box" tags "REFILE"
                      ((org-agenda-overriding-header "Tasks to Refile")
-                      (org-tags-match-list-sublevels nil))))
+                      (org-tags-match-list-sublevels t))))
 
       (add-to-list 'org-agenda-custom-commands
                    `("h" "Habits"
@@ -743,7 +766,7 @@
                               (org-agenda-skip-function
                                '(org-agenda-skip-entry-if
                                  'notregexp
-                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 1))))
+                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 1))))
                               (org-agenda-sorting-strategy '(priority-down))))
                   ;; List of all TODO entries completed 2 days ago.
                   (todo "TODO|DONE|CANX" ; includes repeated tasks (back in TODO)
@@ -753,7 +776,7 @@
                               (org-agenda-skip-function
                                '(org-agenda-skip-entry-if
                                  'notregexp
-                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 2))))
+                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 2))))
                               (org-agenda-sorting-strategy '(priority-down))))
                   ;; List of all TODO entries completed 3 days ago.
                   (todo "TODO|DONE|CANX" ; Includes repeated tasks (back in TODO).
@@ -763,7 +786,7 @@
                               (org-agenda-skip-function
                                '(org-agenda-skip-entry-if
                                  'notregexp
-                                 (format-time-string leuven-org-completed-date-regexp (current-time-ndays-ago 3))))
+                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 3))))
                               (org-agenda-sorting-strategy '(priority-down)))))
                  ((org-agenda-format-date "")
                   (org-agenda-start-with-clockreport-mode nil))) t)
@@ -793,7 +816,7 @@
 
   (add-to-list 'org-agenda-custom-commands
                '("rw" "Weekly review"
-                 ((tags "CATEGORY={@Collect}&LEVEL=2|TODO={NEW}"
+                 ((tags "CATEGORY={@Collect}&LEVEL=2|TODO={TODO}"
                         ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")))
 
                   (agenda ""
@@ -859,19 +882,9 @@
 
   (add-to-list 'org-agenda-custom-commands
                '("rP" "Projects"
-                 ((tags-todo "project-DONE-CANX"))
+                 ((tags-todo "PROJECT-DONE-CANX"))
                  ((org-agenda-overriding-header "Projects (High Level)")
                   (org-agenda-sorting-strategy nil))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("+" . "MORE...") t)
-
-  ;; Checking tasks that are assigned to me.
-  (add-to-list 'org-agenda-custom-commands
-               `("+a" "Assigned to me"
-                 ((tags ,(concat "Assignee={" user-login-name "\\|"
-                                 user-mail-address "}")))
-                 ((org-agenda-overriding-header "ASSIGNED TO ME"))) t)
 
   (add-to-list 'org-agenda-custom-commands
                '("E" . "Exported agenda files...") t)
@@ -913,14 +926,14 @@
                  ((search ""))
                  ((org-agenda-text-search-extra-files
                    ;; FIXME Add `agenda-archives'
-                   leuven-org-search-extra-files))) t)
+                   nil))) t)
 
   (add-to-list 'org-agenda-custom-commands
                '("RS" "Like s, but only TODO entries"
                  ((search ""))
                  ((org-agenda-text-search-extra-files
                    ;; FIXME Add `agenda-archives'
-                   leuven-org-search-extra-files))) t)
+                   nil))) t)
 
   (add-to-list 'org-agenda-custom-commands
                '("Rn" "Organize thoughts to refile"
@@ -942,7 +955,9 @@
             (save-excursion
               (while (org-up-heading-safe)
                 (when (member (nth 2 (org-heading-components)) (list "INPROGRESS"))
-                  (org-todo "TODO")))))))
+                  (org-todo "TODO")))))
+
+          ))
 
 
       (defun pelm-org/narrow-up-one-org-level ()
@@ -1188,10 +1203,6 @@ Callers of this function already widen the buffer view."
           (beginning-of-line 0)
           ;;    (org-remove-empty-drawer-at "LOGBOOK" (point))))
           (org-remove-empty-drawer-at (point))))
-
-      (defun pelm-org/verify-refile-target ()
-        "Exclude todo keywords with a done state from refile targets."
-        (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
       (defun pelm-org/org-auto-exclude-function (tag)
         "Automatic task exclusion in the agenda with / RET"
