@@ -118,6 +118,7 @@
    dotspacemacs-smooth-scrolling t
    dotspacemacs-line-numbers nil
    dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-smart-close-parenthesis nil
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
@@ -216,7 +217,7 @@
    erc-autojoin-channels-alist
    '(("1\\.0\\.0" "#syl20bnr/spacemacs") ; Gitter
      ("irc.gitter.im" "#syl20bnr/spacemacs")
-     ("freenode\\.net" "#spacemacs" "#org\\-mode"))
+     ("freenode\\.net" "#spacemacs" "#org-mode"))
 
    ;; Theme modifications
    theming-modifications
