@@ -101,6 +101,15 @@
         (when (fboundp 'sauron-add-event)
           (sauron-add-event 'my 3 "Called org-mobile-pull and org-mobile-push")))
 
+      (defun pelm-org-mobile-sync ()
+         (interactive)
+         (org-mobile-pull)
+         (org-mobile-push)
+         )
+
+      (spacemacs/set-leader-keys
+        "op" 'pelm-org-mobile-sync)
+
       (defun pelm-org-mobile-sync-start ()
         "Start automated `org-mobile-push'"
         (interactive)
@@ -220,6 +229,7 @@
        org-mobile-files '(
                           "~/.org-files/refile.org"
                           "~/.org-files/contacts.org"
+                          "~/.org-files/personal.org"
                           "~/.org-files/books.org"
                           )
        org-default-notes-files (list (concat org-directory "/refile.org"))
