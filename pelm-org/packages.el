@@ -428,6 +428,12 @@
                       (org-tags-match-list-sublevels t))))
 
       (add-to-list 'org-agenda-custom-commands
+                   `("cm" "Mobile Org"
+                     ((alltodo ""))
+                     ((org-agenda-files (list ,(concat org-directory "/mobileorg.org"))))) t)
+
+
+      (add-to-list 'org-agenda-custom-commands
                    `("h" "Habits"
                      ((alltodo ""))
                      ((org-agenda-files (list ,(concat org-directory "/habits.org"))))) t)
@@ -447,6 +453,10 @@
                       (tags-todo "LEVEL=2"
                                  ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
                                   (org-agenda-files (list ,(concat org-directory "/refile.org")))))
+
+                      (todo "TODO"
+                            ((org-agenda-overriding-header "MobileOrg Task")
+                             (org-agenda-files (list ,(concat org-directory "/mobileorg.org")))))
 
                       (tags-todo "TODO={INPROGRESS}"
                                  ((org-agenda-overriding-header "INPROGRESS TASKS")
