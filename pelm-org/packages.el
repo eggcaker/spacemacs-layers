@@ -249,8 +249,11 @@
                                              ("*" . "-")
                                              ("1." . "-")
                                              ("1)" . "-")))
-       org-refile-targets  '((nil :maxlevel . 9)
-                             (org-agenda-files :maxlevel . 9)))
+       org-refile-targets
+       '(
+         (nil :maxlevel . 8) ;; only the current file
+         (org-agenda-files :maxlevel . 8)
+         (org-files-list :maxlevel . 8)))
 
       ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
       ;; for state change logging).
