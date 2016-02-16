@@ -42,6 +42,11 @@
     :init
     (progn
       (evil-leader/set-key "m'" 'org-edit-src-exit)
+      (evil-leader/set-key "oj"
+        (lambda ()
+          (interactive)
+          ;(setq current-prefix-arg '(4))
+          (org-refile '(4))))
       (global-set-key
        (kbd "<f6>") (kbd "C-c a f ."))
 
@@ -178,12 +183,14 @@
        ;; mobile org options
        org-directory "~/.org-files"
        org-default-notes-files (list (concat org-directory "/refile.org"))
-       org-mobile-directory "~/Dropbox/org"
-       org-mobile-refile-for-pull "~/.org-files/refile.org"
-
+       org-mobile-directory "~/.mobile-org/"
+       org-mobile-inbox-for-pull "~/.org-files/from-mobile.org"
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
        org-startup-indented t
+       org-goto-interface 'outline-path-completion
+       org-goto-max-level 10
+
        org-todo-repeat-to-state "TODO"
        org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
        org-startup-with-inline-images t
@@ -210,8 +217,8 @@
        org-refile-use-outline-path nil
        org-outline-path-complete-in-steps nil
        org-refile-allow-creating-parent-nodes (quote confirm) ;
-       org-completion-use-ido t
-       ido-everywhere t
+       org-completion-use-ido nil
+       ido-everywhere nil
        org-agenda-todo-ignore-with-date nil
        org-agenda-todo-ignore-deadlines nil
        org-agenda-todo-ignore-scheduled nil
@@ -242,8 +249,8 @@
                                              ("*" . "-")
                                              ("1." . "-")
                                              ("1)" . "-")))
-       org-refile-targets (quote ((nil :maxlevel . 4)
-                                  (org-agenda-files :maxlevel . 4))))
+       org-refile-targets  '((nil :maxlevel . 9)
+                             (org-agenda-files :maxlevel . 9)))
 
       ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
       ;; for state change logging).
