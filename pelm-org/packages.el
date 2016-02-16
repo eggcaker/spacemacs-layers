@@ -91,6 +91,31 @@
            (message "__%s (in %.02f s)___________________________"
                     ,message (float-time (time-since start)))))
 
+      (defvar pelm-org-mobile-sync-timer nil)
+
+      (defvar pelm-org-mobile-sync-secs (* 60 2))
+
+      (defun pelm-org-mobile-sync-pull-and-push ()
+        (org-mobile-pull)
+        (org-mobile-push)
+        (when (fboundp 'sauron-add-event)
+          (sauron-add-event 'my 3 "Called org-mobile-pull and org-mobile-push")))
+
+      (defun pelm-org-mobile-sync-start ()
+        "Start automated `org-mobile-push'"
+        (interactive)
+        (setq pelm-org-mobile-sync-timer
+              (run-with-idle-timer pelm-org-mobile-sync-secs t
+                                   'pelm-org-mobile-sync-pull-and-push)))
+
+      (defun pelm-org-mobile-sync-stop ()
+        "Stop automated `org-mobile-push'"
+        (interactive)
+        (cancel-timer pelm-org-mobile-sync-timer))
+
+      (pelm-org-mobile-sync-start)
+
+
       (defvar pelm-org/keep-clock-running nil)
 
       (defun update-results ()
