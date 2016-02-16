@@ -84,6 +84,13 @@
       ;;           '(lambda () (org-defkey org-agenda-mode-map (kbd "SPC") spacemacs-default-map ))
       ;;           'append)
 
+      (defmacro measure-time (message &rest body)
+        "Measure the time it takes to evaluate BODY."
+        `(let ((start (current-time)))
+           ,@body
+           (message "__%s (in %.02f s)___________________________"
+                    ,message (float-time (time-since start)))))
+
       (defvar pelm-org/keep-clock-running nil)
 
       (defun update-results ()
@@ -182,9 +189,15 @@
       (setq
        ;; mobile org options
        org-directory "~/.org-files"
+       org-mobile-directory "~/Dropbox/MobileOrg/"
+       org-mobile-inbox-for-pull "~/.org-files/mobileorg.org"
+       org-mobile-agendas "a"
+       org-mobile-files '(
+                          "~/.org-files/refile.org"
+                          "~/.org-files/contacts.org"
+                          "~/.org-files/books.org"
+                          )
        org-default-notes-files (list (concat org-directory "/refile.org"))
-       org-mobile-directory "~/.mobile-org/"
-       org-mobile-inbox-for-pull "~/.org-files/from-mobile.org"
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
        org-startup-indented t
@@ -890,43 +903,43 @@
                  ((org-agenda-overriding-header "Waiting for")
                   (org-agenda-sorting-strategy '(deadline-up)))) t) ; FIXME does not work.
 
-  (add-to-list 'org-agenda-custom-commands
-               '("rP" "Projects"
-                 ((tags-todo "PROJECT-DONE-CANX"))
-                 ((org-agenda-overriding-header "Projects (High Level)")
-                  (org-agenda-sorting-strategy nil))) t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("rP" "Projects"
+  ;;                ((tags-todo "PROJECT-DONE-CANX"))
+  ;;                ((org-agenda-overriding-header "Projects (High Level)")
+  ;;                 (org-agenda-sorting-strategy nil))) t)
 
-  (add-to-list 'org-agenda-custom-commands
-               '("E" . "Exported agenda files...") t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("E" . "Exported agenda files...") t)
   ;; Exporting agenda views.
-  (add-to-list 'org-agenda-custom-commands
-               '("Ea"
-                 ((agenda ""))
-                 (;; (org-tag-faces nil)
-                  (ps-landscape-mode t)
-                  (ps-number-of-columns 1))
-                 ("~/org-agenda.html" "~/org-agenda.pdf")) t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("Ea"
+  ;;                ((agenda ""))
+  ;;                (;; (org-tag-faces nil)
+  ;;                 (ps-landscape-mode t)
+  ;;                 (ps-number-of-columns 1))
+  ;;                ("~/org-agenda.html" "~/org-agenda.pdf")) t)
 
-  (add-to-list 'org-agenda-custom-commands
-               '("Ep" "Call list"
-                 ((tags-todo "phone"))
-                 ((org-agenda-prefix-format " %-20:c [ ] " )
-                  (org-agenda-remove-tags t)
-                  ;; (org-agenda-with-colors nil)
-                  (org-agenda-write-buffer-name
-                   "Phone calls that you need to make")
-                  (ps-landscape-mode t)
-                  (ps-number-of-columns 1))
-                 ("~/org___calls.pdf")) t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("Ep" "Call list"
+  ;;                ((tags-todo "phone"))
+  ;;                ((org-agenda-prefix-format " %-20:c [ ] " )
+  ;;                 (org-agenda-remove-tags t)
+  ;;                 ;; (org-agenda-with-colors nil)
+  ;;                 (org-agenda-write-buffer-name
+  ;;                  "Phone calls that you need to make")
+  ;;                 (ps-landscape-mode t)
+  ;;                 (ps-number-of-columns 1))
+  ;;                ("~/org___calls.pdf")) t)
 
-  (add-to-list 'org-agenda-custom-commands
-               '("A" . "ARCHIVE...") t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("A" . "ARCHIVE...") t)
 
-  (add-to-list 'org-agenda-custom-commands
-               '("Aa" "Archive"
-                 ((tags-todo "ARCHIVE"))
-                 ((org-agenda-todo-ignore-scheduled 'future)
-                  (org-agenda-sorting-strategy '(deadline-down)))) t)
+  ;; (add-to-list 'org-agenda-custom-commands
+  ;;              '("Aa" "Archive"
+  ;;                ((tags-todo "ARCHIVE"))
+  ;;                ((org-agenda-todo-ignore-scheduled 'future)
+  ;;                 (org-agenda-sorting-strategy '(deadline-down)))) t)
 
   (add-to-list 'org-agenda-custom-commands
                '("R" . "REFERENCE...") t)
