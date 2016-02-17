@@ -22,5 +22,15 @@ If you are lazy guy, you can clone this repo to =.spacemacs.d= and then link
 the ~init.el~ as =.spacemacs= file to get start.
 
 ** Contents
+*** Pelm-org
+*** Pelm-erc
+*** Pelm-blog
+*** Crontab
+#+BEGIN_SRC sh
 
-TBD
+# emacs org file sync
+25,55 * * * * /Users/eggcaker/.zsh-it/bin/e.os > /dev/null 2>&1
+
+# fetch mail
+55 * * * * offlineimap -u quiet > /dev/null 2>&1
+#+END_SRC
