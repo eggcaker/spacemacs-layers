@@ -41,7 +41,7 @@
      evil-commentary
      (elfeed :variables
              url-queue-timeout 30
-             elfeed-enable-web-interface t
+             elfeed-enable-web-interface nil
              rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
      ;; (chinese
@@ -53,6 +53,10 @@
      ;;xkcd
      ;;typing-games
      ;;org-ipython
+
+     (mu4e :variables
+           mu4e-account-alist t
+           mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
 
      ;; Personal Layers 
      pelm-org
@@ -217,7 +221,7 @@
    erc-autojoin-channels-alist
    '(("1\\.0\\.0" "#syl20bnr/spacemacs") ; Gitter
      ("irc.gitter.im" "#syl20bnr/spacemacs")
-     ("freenode\\.net" "#spacemacs" "#org-mode"))
+     ("freenode\\.net" "#org-mode"))
 
    ;; Theme modifications
    theming-modifications
@@ -287,6 +291,13 @@
       (message "Region or buffer evaluated!")
       (setq deactivate-mark nil)))
 
+  (defun offlineimap-get-password (host port)
+    (require 'netrc)
+    (let* ((netrc (netrc-parse (expand-file-name "~/.authinfo.gpg")))
+           (hostentry (netrc-machine netrc host port port)))
+      (when hostentry (netrc-get hostentry "password"))))
+
+
   (setq-default
    js2-strict-trailing-comma-warning nil
    js2-highlight-external-variables nil
@@ -311,6 +322,74 @@
   (evil-leader/set-key (kbd "or") 'avy-copy-region)
   (evil-leader/set-key (kbd "oh") 'avy-goto-char-in-line)
   (evil-leader/set-key (kbd "on") 'spacemacs/new-empty-buffer)
+
+  ;; mu4e config
+  (setq mu4e-account-alist
+        '(("gmail"
+           ;; Under each account, set the account-specific variables you want.
+           (mu4e-sent-messages-behavior delete)
+           (mu4e-sent-folder "/Gmail/[Gmail].Sent Mail")
+           (mu4e-drafts-folder "/Gmail/[Gmail].Drafts")
+           (mu4e-trash-folder "/Gmail/[Gmail].Trash")
+           (mu4e-refile-folder "/Gmail/[Gmail].Archive")
+
+           (user-mail-address "eggcaker@gmail.com")
+           (user-full-name "eggcaker"))
+          ;; ("qq"
+          ;;  (mu4e-sent-messages-behavior sent)
+          ;;  (mu4e-sent-folder "/qq/Sent Items")
+          ;;  (mu4e-drafts-folder "/qq/Drafts")
+          ;;  (user-mail-address "eggcaker@qq.com")
+          ;;  (user-full-name "eggcaker"))
+
+          ))
+  (mu4e/mail-account-reset)
+  (setq mu4e-maildir "~/.mails"
+        mu4e-trash-folder "/Trash"
+        mail-user-agent 'mu4e-user-agent
+        mu4e-refile-folder "/Archive"
+        mu4e-get-mail-command "offlineimap"
+        mu4e-update-interval nil
+        mu4e-view-prefer-html t
+        mu4e-compose-signature "Sent from my emacs."
+        mu4e-html2text-command "w3m -T text/html"
+        mu4e-view-show-images t
+        mu4e-display-image t
+        mu4e-view-show-addresses t)
+
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+  ;;; Mail directory shortcuts
+  (setq mu4e-maildir-shortcuts
+        '(("/Gmail/INBOX" . ?g)
+          ("/Gmail/PacerHealth" . ?p)
+          ("/qq/INBOX" . ?q)))
+
+  ;;; Bookmarks
+  (setq mu4e-bookmarks
+        `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
+          ("date:today..now" "Today's messages" ?t)
+          ("date:7d..now" "Last 7 days" ?w)
+          ("mime:image/*" "Messages with images" ?p)
+          (,(mapconcat 'identity
+                       (mapcar
+                        (lambda (maildir)
+                          (concat "maildir:" (car maildir)))
+                        mu4e-maildir-shortcuts) " OR ")
+           "All inboxes" ?i)))
+
+  ;; Send mail setup
+  ;; SMTP setup
+  (setq message-send-mail-function 'smtpmail-send-it
+        smtpmail-stream-type 'starttls
+        starttls-use-gnutls t)
+  ;; Personal info
+  (setq user-full-name "Tongzhu, Zhang")
+  (setq user-mail-address "eggcaker@gmail.com")
+  ;; gmail setup
+  (setq smtpmail-smtp-server "smtp.gmail.com")
+  (setq smtpmail-smtp-service 587)
+  (setq smtpmail-smtp-user "eggcaker@gmail.com")
 
   (with-eval-after-load 'web-mode
     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
