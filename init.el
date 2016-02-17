@@ -351,7 +351,7 @@
         mu4e-get-mail-command "offlineimap"
         mu4e-update-interval nil
         mu4e-view-prefer-html t
-        mu4e-compose-signature "Sent from my emacs."
+        mu4e-compose-signature "Tongzhu Zhang\nSent from my iPhone10"
         mu4e-html2text-command "w3m -T text/html"
         mu4e-view-show-images t
         mu4e-display-image t
