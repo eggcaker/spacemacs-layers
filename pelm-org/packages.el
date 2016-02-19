@@ -69,20 +69,18 @@
         "oO" 'pelm-org/punch-out))
     :config
     (progn
-      ;; set org specific keybindings
-      ;; (add-hook 'org-agenda-mode-hook
-      ;;           '(lambda () (org-defkey org-agenda-mode-map "R" 'org-agenda-refile))
-      ;;           'append)
-      ;; (add-hook 'org-agenda-mode-hook
-      ;;           '(lambda () (org-defkey org-agenda-mode-map "j" 'org-agenda-next-line))
-      ;;           'append)
 
-      ;; (add-hook 'org-agenda-mode-hook
-      ;;           '(lambda () (org-defkey org-agenda-mode-map "k" 'org-agenda-previous-line))
-      ;;           'append)
-      ;; (add-hook 'org-agenda-mode-hook
-      ;;           '(lambda () (org-defkey org-agenda-mode-map (kbd "SPC") spacemacs-default-map ))
-      ;;           'append)
+      (setq org-tag-alist '(("@work" . ?w)
+                            ("@home" . ?h)
+                            ("@emacs" . ?e)
+                            ("@writing" . ?b)
+                            ("@drawing" . ?d)
+                            ("@coding" . ?c)
+                            ("@phone" . ?p)
+                            ("@reading" . ?r)
+                            ("@subway" . ?s)
+                            ("@computer" . ?l)
+                            ))
 
       (defmacro measure-time (message &rest body)
         "Measure the time it takes to evaluate BODY."
@@ -90,6 +88,24 @@
            ,@body
            (message "__%s (in %.02f s)___________________________"
                     ,message (float-time (time-since start)))))
+
+
+      (defun pelm-org/org-mode-ask-effort ()
+        "Ask for an effort estimate when clocking in."
+        (unless (org-entry-get (point) "Effort")
+          (let ((effort
+                 (completing-read
+                  "Effort: "
+                  (org-entry-get-multivalued-property (point) "Effort"))))
+            (unless (equal effort "")
+              (org-set-property "Effort" effort)))))
+
+      (add-hook 'org-clock-in-prepare-hook 'pelm-org/org-mode-ask-effort)
+
+      ;; Enable filtering by effort eastimate, that way, it's easy to see
+      ;; short tasks that I can finish
+      (add-to-list 'org-global-properties
+                   '("Effort_ALL" . "0:05 0:15 0:30 1:00 2:00 3:00 4:00" ))
 
       (defvar pelm-org-mobile-sync-timer nil)
 
@@ -235,10 +251,12 @@
        org-default-notes-files (list (concat org-directory "/refile.org"))
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
+       org-agenda-start-on-weekday 7
        org-startup-indented t
        org-goto-interface 'outline-path-completion
        org-goto-max-level 10
-
+       org-log-into-drawer "LOGBOOK"
+       org-clock-into-drawer t
        org-todo-repeat-to-state "TODO"
        org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
        org-startup-with-inline-images t
@@ -249,7 +267,6 @@
        org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80))
 
        org-log-done (quote time)
-       org-log-into-drawer "LOGBOOK"
        org-alphabetical-lists t
        org-agenda-span 'day
        org-src-fontify-natively t
@@ -266,7 +283,8 @@
        org-outline-path-complete-in-steps nil
        org-refile-allow-creating-parent-nodes t
        org-completion-use-ido t
-       ido-everywhere nil
+       ido-everywhere t
+       ido-max-directory-size 100000
        org-agenda-todo-ignore-with-date nil
        org-agenda-todo-ignore-deadlines nil
        org-agenda-todo-ignore-scheduled nil
@@ -286,7 +304,6 @@
        org-html-head-include-scripts nil
        org-tags-exclude-from-inheritance (quote ("crypt"))
        org-startup-folded 'content
-       ido-max-directory-size 100000
        org-clock-in-switch-to-state 'pelm-org/clock-in-to-next
        pelm-org-diary-file "~/.org-files/diary.org"
        pelm-org-note-file "~/.org-files/notes.org"
@@ -297,13 +314,15 @@
                                              ("*" . "-")
                                              ("1." . "-")
                                              ("1)" . "-")))
-       ;; org-refile-targets
-       ;; '(
-       ;;   (nil :maxlevel . 6) ;; only the current file
-       ;;   (org-agenda-files :maxlevel . 6)
-       ;;   ;;(org-files-list :maxlevel . 6)
-       ;;   )
+       org-refile-targets
+       '(
+         (nil :maxlevel . 9) ;; only the current file
+         (org-agenda-files :maxlevel . 9))
 
+       org-agenda-time-grid '((daily today require-timed)
+                              "----------------"
+                              (800 1000 1200 1400 1600 1800))
+       org-columns-default-format "%14SCHEDULED %Effort{:} %1PRIORITY %TODO %50ITEM %TAGS"
        )
 
       ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
@@ -325,9 +344,7 @@
                         "APP(A!)"        ; Approved.
                         "REJ(R!)")       ; Rejected.
 
-              (sequence "OPENPO(O!)"
-                        "|"
-                        "CLSDPO(C!)"))
+              )
 
             org-todo-keyword-faces
             '(;;("NEW" . pelm-org-created-kwd)
@@ -797,7 +814,7 @@
                       (org-agenda-overriding-header "WEEKLY TIMESHEET")
                       ;;(org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
                       (org-agenda-span 'week)
-                      (org-agenda-start-on-weekday 1)
+                      (org-agenda-start-on-weekday 7)
                       (org-agenda-start-with-clockreport-mode t)
                       (org-agenda-time-grid nil))) t)
 
