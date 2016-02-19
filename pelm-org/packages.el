@@ -271,7 +271,7 @@
        org-agenda-span 'day
        org-src-fontify-natively t
        org-use-fast-todo-selection t
-       org-refile-use-cache t
+       org-refile-use-cache nil
        org-treat-S-cursor-todo-selection-as-state-change nil
        org-habit-preceding-days 7
        org-habit-graph-column 110
@@ -322,6 +322,7 @@
        org-agenda-time-grid '((daily today require-timed)
                               "----------------"
                               (800 1000 1200 1400 1600 1800))
+       org-blank-before-new-entry nil
        org-columns-default-format "%14SCHEDULED %Effort{:} %1PRIORITY %TODO %50ITEM %TAGS"
        )
 
@@ -389,33 +390,51 @@
               ("TODO" "INPROGRESS" "NEXT") ; Todo keywords.
               nil ""))                     ; Tags, regexp.
 
+
+
+      (defvar pelm-org/basic-task-template "* TODO %^{Task}
+:PROPERTIES:
+:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}
+:END:
+Captured %<%Y-%m-%d %H:%M>
+%?
+
+%i
+" "Basic task data")
+
       (setq org-capture-templates nil)
 
       (add-to-list 'org-capture-templates
                    `("t" "Task" entry
-                     (file+headline ,(concat org-directory "/refile.org") "Tasks")
-                     "* TODO %^{Task}%?
-
-%i"
-                     :empty-lines 1) t)
+                     (file+headline ,(concat org-directory "/refile.org") "Inbox")
+                     ,pelm-org/basic-task-template))
 
       (add-to-list 'org-capture-templates
-                   `("T" "Task in current file" entry
-                     (file+headline
-                      (buffer-file-name (org-capture-get :original-buffer))
-                      "Tasks")
-                     "* TODO %?
-  %U %a %n"
-                     :prepend t) t)
+                   `("T" "Quick task" entry
+                     (file+headline ,(concat org-directory "/refile.org") "Inbox")
+                     "* TODO %^{Task}\nSCHEDULED: %t\n"
+                     :immediate-finish t))
 
       (add-to-list 'org-capture-templates
-                   `("a" "Appt" entry
-                     (file+headline ,(concat org-directory "/refile.org") "Events")
-                     "* %^{Appointment}%?
-%^T
+                   `("i" "Interrupting task" entry
+                      (file+headline ,(concat  org-directory "/refile.org") "Inbox")
+                      "* INPROGRESS %^{Task}"
+                      :clock-in :clock-resume))
 
-%i"
-                     :empty-lines 1) t)
+      (add-to-list 'org-capture-templates
+                   `("e" "Emacs idea" entry
+                    (file+headline (concat org-directory "/emacs.org") "Emacs")
+                    "** TODO %^{Task}"
+                    :immediate-finish t))
+
+      (add-to-list 'org-capture-templates
+                   `("b" "Business task" entry
+                    (file+headline (concat org-directory "/business.org") "Tasks")
+                    ,pelm-org/basic-task-template))
+      (add-to-list 'org-capture-templates
+                   `("b" "People task" entry
+                     (file+headline (concat org-directory "/people.org") "Tasks")
+                     ,pelm-org/basic-task-template))
 
       (add-to-list 'org-capture-templates
                    `("x" "CLI TODO" entry
@@ -460,6 +479,9 @@
                     org-vm
                     org-wl
                     org-w3m)))
+
+      ;; TODO test if need this ?
+      (org-load-modules-maybe t)
 
       (defconst pelm-org-completed-date-regexp
         (concat "\\("

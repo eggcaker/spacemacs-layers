@@ -411,6 +411,7 @@
     (require 'key-chord)
     (key-chord-mode 1)
     (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
+    (key-chord-define-global "JJ"     'org-capture)
 
     (setq-default line-spacing 10)
     (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
