@@ -264,8 +264,8 @@
        org-habit-show-all-today t
        org-refile-use-outline-path nil
        org-outline-path-complete-in-steps nil
-       org-refile-allow-creating-parent-nodes (quote confirm) ;
-       org-completion-use-ido nil
+       org-refile-allow-creating-parent-nodes t
+       org-completion-use-ido t
        ido-everywhere nil
        org-agenda-todo-ignore-with-date nil
        org-agenda-todo-ignore-deadlines nil
@@ -297,11 +297,14 @@
                                              ("*" . "-")
                                              ("1." . "-")
                                              ("1)" . "-")))
-       org-refile-targets
-       '(
-         (nil :maxlevel . 8) ;; only the current file
-         (org-agenda-files :maxlevel . 8)
-         (org-files-list :maxlevel . 8)))
+       ;; org-refile-targets
+       ;; '(
+       ;;   (nil :maxlevel . 6) ;; only the current file
+       ;;   (org-agenda-files :maxlevel . 6)
+       ;;   ;;(org-files-list :maxlevel . 6)
+       ;;   )
+
+       )
 
       ;; List of TODO entry keyword sequences (+ fast access keys and specifiers
       ;; for state change logging).

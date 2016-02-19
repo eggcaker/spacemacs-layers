@@ -71,7 +71,7 @@
      ;;fasd
      )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode)
 
    dotspacemacs-excluded-packages '(julia-mode)
    dotspacemacs-delete-orphan-packages t))
@@ -316,6 +316,9 @@
   ;; Evalute JavaScript
   (evil-leader/set-key (kbd "oe") 'pelm/node-eval)
 
+  ;; groovy for gradle file
+  (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
+
   ;; Buffer related (should be under o directly)
   (evil-leader/set-key (kbd "ol") 'avy-goto-line)
   (evil-leader/set-key (kbd "oc") 'avy-copy-line)
@@ -413,6 +416,9 @@
     (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
     (setq ledger-post-amount-alignment-column 68)
     (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
+
+    (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                     (org-agenda-files :maxlevel . 9))))
 
     (use-package nameless
       :defer t
