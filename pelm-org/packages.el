@@ -530,17 +530,52 @@ Captured %<%Y-%m-%d %H:%M>
 
       (add-to-list 'org-agenda-custom-commands
                    `("c" todo ""
-                     (
-                      (org-agenda-overriding-header "Tasks to refile: ")
+                     ((org-agenda-overriding-header "Tasks to refile: ")
                       (org-agenda-files (list
                                          ,(concat org-directory "/refile.org")
-                                         ,(concat org-directory "/mobileorg.org")
-                                         )))))
+                                         ,(concat org-directory "/mobileorg.org"))))))
 
       (add-to-list 'org-agenda-custom-commands
-                   `("h" "Habits"
-                     ((alltodo ""))
-                     ((org-agenda-files (list ,(concat org-directory "/habits.org"))))) t)
+                   `("h" todo ""
+                     ((org-agenda-overriding-header "Habit Tasks: ")
+                      (org-agenda-files (list ,(concat org-directory "/habits.org"))))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("b" todo ""
+                     ((org-agenda-overriding-header "Business Tasks: ")
+                      (org-agenda-files (list ,(concat org-directory "/business.org"))))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("B" todo ""
+                     ((org-agenda-overriding-header "Books to read: ")
+                      (org-agenda-files (list ,(concat org-directory "/books.org"))))))
+
+      ;; Weekly review
+      (add-to-list 'org-agenda-custom-commands
+                   '("w" "Weekly review" agenda ""
+                     ((org-agenda-span 7)
+                      (org-agenda-log-mode 1)) nil))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("W" "Weekly review sans routines" agenda ""
+                     ((org-agenda-span 7)
+                      (org-agenda-log-mode 1)
+                      (org-agenda-tag-filter-preset '("-ROUTINE"))) nil))
+
+      ;;FIXME: do i need this command ?
+      (add-to-list 'org-agenda-custom-commands
+                   '("2" "Bi-weekly review" agenda ""
+                     ((org-agenda-span 14)
+                      (org-agenda-start-day "-1w") ;; FIXME: do it need this ?
+                      (org-agenda-log-mode 1))))
+
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("gb" "Business" todo ""
+                     (
+                      (org-agenda-overriding-header "--")
+                      (org-agenda-files (list ,(concat org-directory "/business.org")))
+                      (org-agenda-view-columns-initially t))))
 
       (add-to-list 'org-agenda-custom-commands '("f" . "FOCUS...") t )
 
@@ -862,15 +897,6 @@ Captured %<%Y-%m-%d %H:%M>
                                  'regexp
                                  (format-time-string "  CLOCK: .*--.* =>  .*")))
                               (org-agenda-sorting-strategy '(priority-down)))))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("rr" "Recent items (past 7 days)"
-                 ((agenda ""))
-                 ((org-agenda-start-day "-7d")
-                  (org-agenda-span 7)
-                  (org-agenda-repeating-timestamp-show-all nil)
-                  (org-agenda-inactive-leader "Inactive:  ")
-                  (org-agenda-include-inactive-timestamps t))) t)
 
   (add-to-list 'org-agenda-custom-commands
                '("rw" "Weekly review"
