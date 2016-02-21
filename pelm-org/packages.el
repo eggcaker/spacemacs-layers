@@ -27,6 +27,7 @@
     :defer t
     :commands (org-mode
                org-edit-src-exit
+               org-refile
                org-agenda
                org-capture
                pelm-org/punch-in
@@ -79,8 +80,7 @@
                             ("@phone" . ?p)
                             ("@reading" . ?r)
                             ("@subway" . ?s)
-                            ("@computer" . ?l)
-                            ))
+                            ("@computer" . ?l)))
 
       (defmacro measure-time (message &rest body)
         "Measure the time it takes to evaluate BODY."
@@ -120,8 +120,7 @@
       (defun pelm-org-mobile-sync ()
          (interactive)
          (org-mobile-pull)
-         (org-mobile-push)
-         )
+         (org-mobile-push))
 
       (spacemacs/set-leader-keys
         "op" 'pelm-org-mobile-sync)
@@ -266,13 +265,17 @@
        org-plantuml-jar-path "~/.emacs.d/private/pelm-org/vendor/plantuml.jar"
        org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80))
 
-       org-log-done (quote time)
+       ;;TODO fixed to here
+       ;;org-log-done (quote time)
        org-alphabetical-lists t
        org-agenda-span 'day
        org-src-fontify-natively t
        org-use-fast-todo-selection t
        org-refile-use-cache nil
        org-treat-S-cursor-todo-selection-as-state-change nil
+       org-enforce-todo-dependencies t
+       org-track-ordered-property-with-tag t
+       org-agenda-dim-blocked-tasks t
        org-habit-preceding-days 7
        org-habit-graph-column 110
        org-tags-column -110
@@ -304,7 +307,13 @@
        org-html-head-include-scripts nil
        org-tags-exclude-from-inheritance (quote ("crypt"))
        org-startup-folded 'content
-       org-clock-in-switch-to-state 'pelm-org/clock-in-to-next
+       org-clock-idle-time nil
+       org-log-done 'time
+       org-clock-continuously nil
+       org-clock-persist t
+       org-clock-in-switch-to-state "STARTED"
+       org-clock-in-resume nil
+       org-show-notification-handler 'message
        pelm-org-diary-file "~/.org-files/diary.org"
        pelm-org-note-file "~/.org-files/notes.org"
        pelm-org-work-file "~/.org-files/work.org"
@@ -332,65 +341,88 @@
             '(
               (sequence ;;"NEW(n!)"        ; Proposal, idea (under review), to be prioritized.
                         "TODO(t!)"       ; Open, not yet started
-                        "INPROGRESS(i!)" ; In progress, working on
+                        "STARTED(s)"     ; In progress, working on
                         "WAIT(w@/!)"     ; On hold , to be discussed, feedback
-                        "SOMEDAY(m!)"    ; Someday, maybe perhaps.
+                        "SOMEDAY(.)"    ; Someday, maybe perhaps.
                         "|"
                         "DONE(d!/!)"     ; Completed, closed fixed, verified
-                        "CANX(x!)")      ; Wontfix, rejected, ignored, cancelled
+                        "CANCELLED(x!)")      ; Wontfix, rejected, ignored, cancelled
 
-              (sequence "QTE(q!)"        ; Planning.
-                        "QTD(Q!)"        ; Awaiting approval.
-                        "|"
-                        "APP(A!)"        ; Approved.
-                        "REJ(R!)")       ; Rejected.
+              (sequence "TOBLOG" "BLOGGED" "|" "POSTED")
+              (sequence "LEARN" "TRY" "TEACH" "|" "COMPLETE(x)"))
 
-              )
+            org-todo-keyword-faces (quote
+                                    (("TODO" :foreground "red" :weight bold)
+                                     ("NEXT" :foreground "blue" :weight bold)
+                                     ("STARTED" :foreground "yellow" :weight bold)
+                                     ("DONE" :foreground "forest green" :weight bold)
+                                     ("WAITING" :foreground "orange" :weight bold)
+                                     ("HOLD" :foreground "magenta" :weight bold)
+                                     ("CANCELLED" :foreground "forest green" :weight bold)))
 
-            org-todo-keyword-faces
-            '(;;("NEW" . pelm-org-created-kwd)
-              ("TODO" . org-todo)
-              ("INPROGRESS" . pelm-org-in-progress-kwd)
-              ("WAIT" . pelm-org-waiting-for-kwd)
-              ("SOMEDAY" . pelm-org-someday-kwd)
-              ("DONE" . org-done)
-              ("CANX" . org-done)
+            org-todo-state-tags-triggers
+            (quote (("CANCELLED" ("CANCELLED" . t))
+                    ("WAITING" ("WAITING" . t))
+                    ("HOLD" ("WAITING" . t) ("HOLD" . t))
+                    (done ("WAITING") ("HOLD"))
+                    ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                    ("STARTED" ("WAITING") ("CANCELLED") ("HOLD"))
+                    ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))
+            )))
 
-              ("QTE" . pelm-org-quote-kwd)
-              ("QTD" . pelm-org-quoted-kwd)
-              ("APP" . pelm-org-approved-kwd)
-              ("REJ" . pelm-org-rejected-kwd)
+      ;; Projects are headings with the :project: tag, so we
+      ;; generally don't want that tag inherited, except when we
+      ;; display unscheduled tasks that don't belong to any projects.
 
-              ("OPENPO" . pelm-org-openpo-kwd)
-              ("CLSDPO" . pelm-org-closedpo-kwd))
-
-
-            ;; state change trigger
-            ;; FIXME: need enable this agagin
-            ;;org-todo-state-tags-triggers
-            ;;(quote (("CANCELLED" ("CANCELLED" . t))
-            ;; ("WAITING" ("WAITING" . t))
-            ;; ("HOLD" ("WAITING" . t) ("HOLD" . t))
-            ;; (done ("WAITING") ("HOLD"))
-            ;; ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-            ;; ("INPROGRESS" ("WAITING") ("CANCELLED") ("HOLD"))
-            ;; ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))
-            )
-
-      ;; Org standard faces.
-      (set-face-attribute 'org-todo nil
-                          :weight 'bold :box nil :foreground "#F44336" :background nil)
-
-      (set-face-attribute 'org-done nil
-                          :weight 'bold :box nil :foreground "#4CAF50" :background nil)
-
-
+      (setq org-tags-exclude-from-inheritance '("project"))
       (setq org-stuck-projects
-            '("+LEVEL=2/-DONE"             ; Identify a project.
-              ("TODO" "INPROGRESS" "NEXT") ; Todo keywords.
-              nil ""))                     ; Tags, regexp.
+            '("+PROJECT-MAYBE-DONE"
+              ("TODO")
+              nil
+              "\\<IGNORE\\>"))
 
+      (defmacro pelm-org/org-with-current-task (&rest body)
+        "Execute BODY with the point at the subtree of the current task."
+        `(if (derived-mode-p 'org-agenda-mode)
+             (save-window-excursion
+               (org-agenda-switch-to)
+               ,@body)
+           ,@body))
 
+      (defun pelm-org/org-agenda-for-subtree ()
+        (interactive)
+        (when (derived-mode-p 'org-agenda-mode) (org-agenda-switch-to))
+        (pelm-org/org-with-current-task
+         (let ((org-agenda-view-columns-initially t))
+           (org-agenda nil "t" 'subtree))))
+
+      (add-to-list 'org-speed-commands-user '("T" pelm-org/org-agenda-for-subtree))
+
+      (add-to-list 'org-speed-commands-user '("N" org-narrow-to-subtree))
+      (add-to-list 'org-speed-commands-user '("W" widen))
+
+      ;; Create an agenda commands that displays a list of tasks
+      ;; by context.
+      (defvar pelm-org/org-agenda-limit-items nil
+        "Number of items to show in agenda to-do view; nil if unlimited.")
+
+      (defadvice org-agenda-finalize-entries (around sacha activate)
+        (if pelm-org/org-agenda-limit-items
+            (progn
+              (setq list (mapcar 'org-agenda-highlight-todo list))
+              (setq ad-return-value
+                    (subseq list 0 pelm-org/org-agenda-limit-items))
+              (when org-agenda-before-sorting-filter-function
+                (setq list (delq nil (mapcar org-agenda-before-sorting-filter-function list))))
+              (setq ad-return-value
+                    (mapconcat 'identity
+                               (delq nil
+                                     (subseq
+                                      (sort list 'org-entries-lessp)
+                                      0
+                                      pelm-org/org-agenda-limit-items))
+                               "\n")))
+          ad-do-it))
 
       (defvar pelm-org/basic-task-template "* TODO %^{Task}
 :PROPERTIES:
@@ -418,7 +450,7 @@ Captured %<%Y-%m-%d %H:%M>
       (add-to-list 'org-capture-templates
                    `("i" "Interrupting task" entry
                       (file+headline ,(concat  org-directory "/refile.org") "Inbox")
-                      "* INPROGRESS %^{Task}"
+                      "* STARTED %^{Task}"
                       :clock-in :clock-resume))
 
       (add-to-list 'org-capture-templates
@@ -487,9 +519,9 @@ Captured %<%Y-%m-%d %H:%M>
         (concat "\\("
                 "CLOSED: \\[%Y-%m-%d"
                 "\\|"
-                "- State \"\\(DONE\\|CANX\\)\" * from .* \\[%Y-%m-%d"
+                "- State \"\\(DONE\\|CANCELLED\\)\" * from .* \\[%Y-%m-%d"
                 "\\|"
-                "- State .* ->  *\"\\(DONE\\|CANX\\)\" * \\[%Y-%m-%d"
+                "- State .* ->  *\"\\(DONE\\|CANCELLED\\)\" * \\[%Y-%m-%d"
                 "\\)")
         "Matches any completion time stamp.")
 
@@ -535,8 +567,8 @@ Captured %<%Y-%m-%d %H:%M>
                             ((org-agenda-overriding-header "MobileOrg Task")
                              (org-agenda-files (list ,(concat org-directory "/mobileorg.org")))))
 
-                      (tags-todo "TODO={INPROGRESS}"
-                                 ((org-agenda-overriding-header "INPROGRESS TASKS")
+                      (tags-todo "TODO={STARTED}"
+                                 ((org-agenda-overriding-header "STARTED TASKS")
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'deadline))))
 
@@ -548,10 +580,10 @@ Captured %<%Y-%m-%d %H:%M>
                                   (org-agenda-sorting-strategy '(priority-down))))
                                         ; XXX Timed deadlines NOT shown!!!
                       ;; List of all TODO entries with deadline before today.
-                      (tags-todo "DEADLINE<\"<+0d>\""
+                      (tags-todo "DEADLINE<\"<+0d>\"|SCHEDULED<\"<+0d>\""
                                  ((org-agenda-overriding-header "OVERDUE")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))
+                                  ;;(org-agenda-skip-function
+                                  ;; '(org-agenda-skip-entry-if 'notdeadline))
                                   (org-agenda-sorting-strategy '(priority-down))))
                       (agenda ""
                               ((org-agenda-entry-types '(:scheduled))
@@ -564,7 +596,7 @@ Captured %<%Y-%m-%d %H:%M>
                                (org-agenda-start-on-weekday nil)
                                (org-agenda-time-grid nil)))
                       ;; List of all TODO entries completed today.
-                      (todo "TODO|DONE|CANX" ; Includes repeated tasks (back in TODO).
+                      (todo "TODO|DONE|CANCELLED" ; Includes repeated tasks (back in TODO).
                             ((org-agenda-overriding-header "COMPLETED TODAY")
                              (org-agenda-skip-function
                               '(org-agenda-skip-entry-if
@@ -621,7 +653,7 @@ Captured %<%Y-%m-%d %H:%M>
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'notdeadline))))
 
-                      (tags-todo "TODO={INPROGRESS}"
+                      (tags-todo "TODO={STARTED}"
                                  ((org-agenda-overriding-header "NO DUE DATE / STARTED")
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'deadline))))
@@ -648,46 +680,6 @@ Captured %<%Y-%m-%d %H:%M>
                       (org-agenda-skip-function
                        '(org-agenda-skip-entry-if 'notdeadline))
                       (org-agenda-sorting-strategy '(deadline-up)))) t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("ra2" "All active tasks, by due date"
-                     ((agenda ""
-                              ((org-agenda-overriding-header "Today")
-                               ;; FIXME We don't see "timed" DEADLINE.
-                               (org-agenda-skip-function
-                                (lambda ()
-                                  (let* ((dl (org-entry-get nil "DEADLINE")))
-                                    (if (or (not dl)
-                                            (equal dl "")
-                                            (org-time> dl (org-time-today)))
-                                        (progn (outline-next-heading) (point))))))
-                               (org-agenda-skip-scheduled-if-deadline-is-shown t)
-                               (org-agenda-span 'day)
-                               (org-deadline-warning-days 0)))
-                      (agenda ""
-                              ((org-agenda-entry-types '(:deadline))
-                               (org-agenda-overriding-header "Tomorrow")
-                               (org-agenda-skip-function
-                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 1))
-                               (org-deadline-warning-days 1)))
-                      (agenda ""
-                              ((org-agenda-overriding-header "Next 5 days")
-                               (org-agenda-skip-function
-                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 2))
-                               (org-deadline-warning-days 7)))
-                      (agenda ""
-                              ((org-agenda-format-date "")
-                               (org-agenda-overriding-header "Next 3 weeks")
-                               (org-agenda-skip-function
-                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 7))
-                               (org-deadline-warning-days 28))))
-                     ((org-agenda-deadline-faces '((0.0 . default)))
-                      (org-agenda-start-with-clockreport-mode nil)
-                      (org-agenda-format-date "")
-                      (org-agenda-span 'day)
-                      (org-agenda-sorting-strategy '(deadline-up))
-                      (org-agenda-use-time-grid nil)
-                      (org-agenda-write-buffer-name "Reminders"))) t)
 
       (defun pelm-org/skip-entry-unless-deadline-in-n-days-or-more (n)
         "Skip entries that have no deadline, or that have a deadline earlier than in N days."
@@ -757,45 +749,6 @@ Captured %<%Y-%m-%d %H:%M>
               (progn (outline-next-heading) (point)))))
 
       (add-to-list 'org-agenda-custom-commands
-                   '("ra3" "Agenda for all TODO entries"
-                     ((agenda ""
-                              ((org-agenda-format-date "")
-                               (org-agenda-overriding-header "Past due")
-                               (org-agenda-skip-function
-                                'pelm-org/skip-entry-unless-overdue-deadline)
-                               (org-deadline-warning-days 0)))
-                      (agenda ""
-                              ((org-agenda-format-date "")
-                               (org-agenda-overriding-header "Today/tomorrow")
-                               (org-agenda-skip-function
-                                'pelm-org/skip-entry-if-past-deadline)
-                               (org-agenda-span 2)
-                               (org-agenda-use-time-grid t)
-                               (org-deadline-warning-days 0)))
-                      (agenda ""
-                              ((org-agenda-format-date "")
-                               (org-agenda-overriding-header "Next 12 days")
-                               (org-agenda-skip-function
-                                '(pelm-org/skip-entry-unless-deadline-in-n-days-or-more 2))
-                               (org-deadline-warning-days 14)))
-                      (todo ""
-                            ((org-agenda-overriding-header "Later")
-                             (org-agenda-skip-function
-                              '(pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days 15 2))
-                             (org-agenda-sorting-strategy '(ts-up))))
-                      (todo ""
-                            ((org-agenda-overriding-header "No due date")
-                             (org-agenda-skip-function
-                              'pelm-org/skip-entry-if-deadline-or-schedule))))
-                     ((org-agenda-start-with-clockreport-mode nil)
-                      (org-agenda-prefix-format " %i %?-12t% s")
-                      (org-agenda-span 'day)
-                      (org-agenda-use-time-grid nil)
-                      (org-agenda-sorting-strategy '(deadline-up)) ; FIXME sort does not work in "Past due", well in "Next 12 days".
-                      (org-agenda-write-buffer-name "List Review"))
-                     "~/org___agenda-all-todo-entries.html") t)
-
-      (add-to-list 'org-agenda-custom-commands
                    '("rap" "All (Unscheduled) Tasks (grouped by Priority)"
                      ((tags-todo "PRIORITY={A}"
                                  ((org-agenda-overriding-header "HIGH")
@@ -809,7 +762,7 @@ Captured %<%Y-%m-%d %H:%M>
                       (tags-todo "PRIORITY={C}"
                                  ((org-agenda-overriding-header "LOW")
                                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                      (todo "DONE|CANX"
+                      (todo "DONE|CANCELLED"
                             ((org-agenda-overriding-header "COMPLETED")
                              (org-agenda-sorting-strategy '(priority-down)))))) t)
 
@@ -867,7 +820,7 @@ Captured %<%Y-%m-%d %H:%M>
   (add-to-list 'org-agenda-custom-commands
                `("rC" "Completed view"
                  (;; List of all TODO entries completed yesterday.
-                  (todo "TODO|DONE|CANX" ; includes repeated tasks (back in TODO)
+                  (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
                              ((org-agenda-overriding-header
                                (concat "YESTERDAY   "
                                        (format-time-string "%a %d" (current-time-ndays-ago 1))
@@ -879,7 +832,7 @@ Captured %<%Y-%m-%d %H:%M>
                                  (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 1))))
                               (org-agenda-sorting-strategy '(priority-down))))
                   ;; List of all TODO entries completed 2 days ago.
-                  (todo "TODO|DONE|CANX" ; includes repeated tasks (back in TODO)
+                  (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
                              ((org-agenda-overriding-header
                                (concat "2 DAYS AGO  "
                                        (format-time-string "%a %d" (current-time-ndays-ago 2))))
@@ -889,7 +842,7 @@ Captured %<%Y-%m-%d %H:%M>
                                  (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 2))))
                               (org-agenda-sorting-strategy '(priority-down))))
                   ;; List of all TODO entries completed 3 days ago.
-                  (todo "TODO|DONE|CANX" ; Includes repeated tasks (back in TODO).
+                  (todo "TODO|DONE|CANCELLED" ; Includes repeated tasks (back in TODO).
                              ((org-agenda-overriding-header
                                (concat "3 DAYS AGO  "
                                        (format-time-string "%a %d" (current-time-ndays-ago 3))))
@@ -907,7 +860,7 @@ Captured %<%Y-%m-%d %H:%M>
 
   (add-to-list 'org-agenda-custom-commands
                '("rx" "Completed tasks with no CLOCK lines"
-                 ((todo "DONE|CANX"
+                 ((todo "DONE|CANCELLED"
                              ((org-agenda-overriding-header "Completed tasks with no CLOCK lines")
                               (org-agenda-skip-function
                                '(org-agenda-skip-entry-if
@@ -956,7 +909,7 @@ Captured %<%Y-%m-%d %H:%M>
                         ((org-agenda-overriding-header
                           "Candidates to be archived")))
 
-                  (todo "INPROGRESS"
+                  (todo "STARTED"
                         ((org-agenda-overriding-header "IN PROGRESS")
                          (org-agenda-todo-ignore-scheduled nil)))
 
@@ -992,7 +945,7 @@ Captured %<%Y-%m-%d %H:%M>
 
   ;; (add-to-list 'org-agenda-custom-commands
   ;;              '("rP" "Projects"
-  ;;                ((tags-todo "PROJECT-DONE-CANX"))
+  ;;                ((tags-todo "PROJECT-DONE-CANCELLED"))
   ;;                ((org-agenda-overriding-header "Projects (High Level)")
   ;;                 (org-agenda-sorting-strategy nil))) t)
 
@@ -1057,14 +1010,14 @@ Captured %<%Y-%m-%d %H:%M>
       
       ;; Config support
       (defun pelm-org/mark-next-parent-tasks-todo ()
-        "Visit each parent task and change INPROGRESS states to TODO"
+        "Visit each parent task and change STARTED states to TODO"
         (let ((mystate (or (and (fboundp 'state)
                                 org-state)
                            (nth 2 (org-heading-components)))))
-          (when (equal mystate "INPROGRESS")
+          (when (equal mystate "STARTED")
             (save-excursion
               (while (org-up-heading-safe)
-                (when (member (nth 2 (org-heading-components)) (list "INPROGRESS"))
+                (when (member (nth 2 (org-heading-components)) (list "STARTED"))
                   (org-todo "TODO")))))
 
           ))
@@ -1339,19 +1292,6 @@ Callers of this function already widen the buffer view."
               ((string= tag "hold")         t)
               )
              (concat "-" tag)))
-
-      (defun pelm-org/clock-in-to-next (kw)
-        "Switch a task from TODO to INPROGRESS when clocking in.
-Skips capture tasks, projects, and subprojects.
-Switch projects and subprojects from INPROGRESS back to TODO"
-        (when (not (and (boundp 'org-capture-mode) org-capture-mode))
-          (cond
-           ((and (member (org-get-todo-state) (list "TODO"))
-                 (pelm-org/is-task-p))
-            "INPROGRESS")
-           ((and (member (org-get-todo-state) (list "INPROGRESS"))
-                 (pelm-org/is-project-p))
-            "TODO"))))
 
       (defun pelm-org/find-project-task ()
         "Move point to the parent (project) task if any"
