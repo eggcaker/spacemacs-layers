@@ -71,16 +71,30 @@
     :config
     (progn
 
+      (defvar pelm-org/org-agenda-contexts
+        '((tags-todo "+@phone")
+          (tags-todo "+@work")
+          (tags-todo "+EMACS")
+          (tags-todo "+@market")
+          (tags-todo "+@coding")
+          (tags-todo "+@writing")
+          (tags-todo "+@computer")
+          (tags-todo "+@home"))
+        "Usual list of contexts.")
+
+
       (setq org-tag-alist '(("@work" . ?w)
                             ("@home" . ?h)
                             ("@emacs" . ?e)
+                            ("@market" . ?m)
                             ("@writing" . ?b)
-                            ("@drawing" . ?d)
                             ("@coding" . ?c)
                             ("@phone" . ?p)
                             ("@reading" . ?r)
-                            ("@subway" . ?s)
                             ("@computer" . ?l)))
+
+      (defun pelm-org/org-agenda-skip-scheduled ()
+        (org-agenda-skip-entry-if 'scheduled 'deadline 'regexp "\n]+>"))
 
       (defmacro measure-time (message &rest body)
         "Measure the time it takes to evaluate BODY."
@@ -529,58 +543,14 @@ Captured %<%Y-%m-%d %H:%M>
       (setq org-agenda-custom-commands nil)
 
       (add-to-list 'org-agenda-custom-commands
-                   `("c" todo ""
+                   `("c" todo "Collect box: "
                      ((org-agenda-overriding-header "Tasks to refile: ")
                       (org-agenda-files (list
                                          ,(concat org-directory "/refile.org")
                                          ,(concat org-directory "/mobileorg.org"))))))
 
       (add-to-list 'org-agenda-custom-commands
-                   `("h" todo ""
-                     ((org-agenda-overriding-header "Habit Tasks: ")
-                      (org-agenda-files (list ,(concat org-directory "/habits.org"))))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("b" todo ""
-                     ((org-agenda-overriding-header "Business Tasks: ")
-                      (org-agenda-files (list ,(concat org-directory "/business.org"))))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("B" todo ""
-                     ((org-agenda-overriding-header "Books to read: ")
-                      (org-agenda-files (list ,(concat org-directory "/books.org"))))))
-
-      ;; Weekly review
-      (add-to-list 'org-agenda-custom-commands
-                   '("w" "Weekly review" agenda ""
-                     ((org-agenda-span 7)
-                      (org-agenda-log-mode 1)) nil))
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("W" "Weekly review sans routines" agenda ""
-                     ((org-agenda-span 7)
-                      (org-agenda-log-mode 1)
-                      (org-agenda-tag-filter-preset '("-ROUTINE"))) nil))
-
-      ;;FIXME: do i need this command ?
-      (add-to-list 'org-agenda-custom-commands
-                   '("2" "Bi-weekly review" agenda ""
-                     ((org-agenda-span 14)
-                      (org-agenda-start-day "-1w") ;; FIXME: do it need this ?
-                      (org-agenda-log-mode 1))))
-
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("gb" "Business" todo ""
-                     (
-                      (org-agenda-overriding-header "--")
-                      (org-agenda-files (list ,(concat org-directory "/business.org")))
-                      (org-agenda-view-columns-initially t))))
-
-      (add-to-list 'org-agenda-custom-commands '("f" . "FOCUS...") t )
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("f." "Today"
+                   `("." "Today"
                      (
                       ;; Events.
                       (agenda ""
@@ -636,25 +606,87 @@ Captured %<%Y-%m-%d %H:%M>
                      ((org-agenda-format-date "")
                       (org-agenda-start-with-clockreport-mode nil))) t)
 
+      (add-to-list 'org-agenda-custom-commands '("l" . "List Tasks...") t)
+
       (add-to-list 'org-agenda-custom-commands
-                   '("fh" "Hotlist"
-                     ((tags-todo "DEADLINE<\"<+0d>\""
-                                 ((org-agenda-overriding-header "OVERDUE")))
-                      (tags-todo "DEADLINE>=\"<+0d>\"+DEADLINE<=\"<+1w>\""
-                                 ((org-agenda-overriding-header "DUE IN NEXT 7 DAYS")))
-                      (tags-todo "DEADLINE=\"\"+PRIORITY={A}|DEADLINE>\"<+1w>\"+PRIORITY={A}"
-                                 ((org-agenda-overriding-header "HIGH PRIORITY")))
-                      (tags-todo "DEADLINE=\"\"+FLAGGED|DEADLINE>\"<+1w>\"+FLAGGED"
-                                 ((org-agenda-overriding-header "FLAGGED")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-when-regexp-matches))
-                                  (org-agenda-skip-regexp "\\[#A\\]"))))
-                     ((org-agenda-todo-ignore-scheduled 'future)
-                      (org-agenda-sorting-strategy '(deadline-up)))) t) ; FIXME sort not OK
+                   `("lh" todo ""
+                     ((org-agenda-overriding-header "Habit Tasks: ")
+                      (org-agenda-files (list ,(concat org-directory "/habits.org"))))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("ly" todo ""
+                     ((org-agenda-overriding-header "Business Tasks: ")
+                      (org-agenda-files (list ,(concat org-directory "/business.org"))))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("lw" todo ""
+                     ((org-agenda-overriding-header "Pacer Tasks: ")
+                      (org-agenda-files (list ,(concat org-directory "/work.org"))))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("lB" todo ""
+                     ((org-agenda-overriding-header "Books to read: ")
+                      (org-agenda-files (list ,(concat org-directory "/books.org"))))))
+
+
+      ;;FIXME: do i need this command ?
+      ;; (add-to-list 'org-agenda-custom-commands
+      ;;              '("2" "Bi-weekly review" agenda ""
+      ;;                ((org-agenda-span 14)
+      ;;                 (org-agenda-start-day "-1w") ;; FIXME: do it need this ?
+      ;;                 (org-agenda-log-mode 1))))
+
+
+      (add-to-list 'org-agenda-custom-commands '("g" . "Goto Tasks List...") t)
+      (add-to-list 'org-agenda-custom-commands
+                   `("gb" "Business" todo ""
+                     (
+                      (org-agenda-overriding-header "--")
+                      (org-agenda-files (list ,(concat org-directory "/business.org")))
+                      (org-agenda-view-columns-initially t))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("gw" "Writing" tags-todo "@writing"
+                     ((org-agenda-view-columns-initially t))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("gp" "Phone" tags-todo "@phone"
+                     ((org-agenda-view-columns-initially t))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("gh" "Home" tags-todo "@home"
+                     ((org-agenda-view-columns-initially t))))
+
 
       (add-to-list 'org-agenda-custom-commands '("r" . "REVIEW...") t)
 
       (add-to-list 'org-agenda-custom-commands '("ra" . "All Tasks...") t)
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("ra3" "Top 3 by context"
+                     , pelm-org/org-agenda-contexts
+                     ((org-agenda-sorting-strategy '(priority-up effort-down))
+                      (pelm-org/org-agenda-limit-items 3))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("rac" "All by context"
+                      ,pelm-org/org-agenda-contexts
+                      ((org-agenda-sorting-strategy '(priority-down effort-down))
+                       (pelm-org/org-agenda-limit-items nil))))
+
+      (add-to-list 'org-agenda-custom-commands
+                     `("rau" "Unscheduled top 3 by context"
+                      ,pelm-org/org-agenda-contexts
+                      ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
+                       (org-agenda-sorting-strategy '(priority-down effort-down))
+                       (pelm-org/org-agenda-limit-items 3))))
+
+      (add-to-list 'org-agenda-custom-commands
+                     `("raC" "All unscheduled by context"
+                      ,pelm-org/org-agenda-contexts
+                      ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
+                       (org-agenda-sorting-strategy '(priority-down effort-down))
+                       )))
 
       (add-to-list 'org-agenda-custom-commands
                    '("rad" "All Tasks (grouped by Due Date)"
@@ -701,82 +733,7 @@ Captured %<%Y-%m-%d %H:%M>
                                    '(org-agenda-skip-entry-if 'deadline)))))
                      ((org-agenda-sorting-strategy '(priority-down))
                       (org-agenda-write-buffer-name "All Tasks (grouped by Due Date)"))
-                     "~/org___all-tasks-by-due-date.pdf") t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("ra1" "All Tasks with a due date"
-                     ((alltodo ""))
-                     ((org-agenda-overriding-header "All Tasks (sorted by Due Date)")
-                      (org-agenda-skip-function
-                       '(org-agenda-skip-entry-if 'notdeadline))
-                      (org-agenda-sorting-strategy '(deadline-up)))) t)
-
-      (defun pelm-org/skip-entry-unless-deadline-in-n-days-or-more (n)
-        "Skip entries that have no deadline, or that have a deadline earlier than in N days."
-        (let* ((dl (org-entry-get nil "DEADLINE")))
-          (if (or (not dl)
-                  (equal dl "")
-                  (org-time< dl (+ (org-time-today) (* n 86400))))
-              (progn (outline-next-heading) (point)))))
-
-
-      (defun pelm-org/skip-entry-unless-overdue-deadline ()
-        "Skip entries that have no deadline, or that have a deadline later than or equal to today."
-        (let* ((dl (org-entry-get nil "DEADLINE")))
-          (if (or (not dl)
-                  (equal dl "")
-                  (org-time>= dl (org-time-today)))
-              (progn (outline-next-heading) (point)))))
-
-      (defun pelm-org/skip-entry-if-past-deadline ()
-        "Skip entries that have a deadline earlier than today."
-        (let* ((dl (org-entry-get nil "DEADLINE")))
-          (if (org-time< dl (org-time-today))
-              (progn (outline-next-heading) (point)))))
-
-      (defun pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days (n1 n2)
-        "Skip entries that have a deadline in less than N1 days, or that have a
-  scheduled date in less than N2 days, or that have no deadline nor scheduled."
-        (let* ((dl (org-entry-get nil "DEADLINE"))
-               (sd (org-entry-get nil "SCHEDULED")))
-          (if (or (and dl
-                       (not (equal dl ""))
-                       (org-time< dl (+ (org-time-today) (* n1 86400))))
-                  (and sd
-                       (not (equal sd ""))
-                       (org-time< sd (+ (org-time-today) (* n2 86400))))
-                  (and (or (not dl)       ; No deadline.
-                           (equal dl ""))
-                       (or (not sd)       ; Nor scheduled.
-                           (equal sd ""))))
-              (progn (outline-next-heading) (point)))))
-
-      (defun pelm-org/skip-entry-if-deadline-or-schedule ()
-        "Skip entries that have a deadline or that have a scheduled date."
-        (let* ((dl (org-entry-get nil "DEADLINE"))
-               (sd (org-entry-get nil "SCHEDULED")))
-          (if (or (and dl
-                       (not (equal dl "")))
-                  (and sd
-                       (not (equal sd ""))))
-              (progn (outline-next-heading) (point)))))
-
-      (defun pelm-org/skip-entry-if-deadline-in-less-than-n-days-or-schedule-in-less-than-n-days (n1 n2)
-        "Skip entries that have a deadline in less than N1 days, or that have a
-  scheduled date in less than N2 days, or that have no deadline nor scheduled."
-        (let* ((dl (org-entry-get nil "DEADLINE"))
-               (sd (org-entry-get nil "SCHEDULED")))
-          (if (or (and dl
-                       (not (equal dl ""))
-                       (org-time< dl (+ (org-time-today) (* n1 86400))))
-                  (and sd
-                       (not (equal sd ""))
-                       (org-time< sd (+ (org-time-today) (* n2 86400))))
-                  (and (or (not dl)       ; No deadline.
-                           (equal dl ""))
-                       (or (not sd)       ; Nor scheduled.
-                           (equal sd ""))))
-              (progn (outline-next-heading) (point)))))
+                     "~/.agenda/org___all-tasks-by-due-date.pdf") t)
 
       (add-to-list 'org-agenda-custom-commands
                    '("rap" "All (Unscheduled) Tasks (grouped by Priority)"
@@ -799,16 +756,17 @@ Captured %<%Y-%m-%d %H:%M>
       (add-to-list 'org-agenda-custom-commands
                    '("rt" . "Timesheet...") t)
 
+
       ;; Show what happened today.
       (add-to-list 'org-agenda-custom-commands
-                   '("rtd" "Daily Timesheet"
-                     ((agenda ""))
-                     ((org-agenda-log-mode-items '(clock closed))
-                      (org-agenda-overriding-header "DAILY TIMESHEET")
-                      (org-agenda-show-log 'clockcheck)
-                      (org-agenda-span 'day)
-                      (org-agenda-start-with-clockreport-mode t)
-                      (org-agenda-time-grid nil))) t)
+                   '("rtd" "Timeline for today" ((agenda "" ))
+                     ((org-agenda-ndays 1)
+                      (org-agenda-show-log t)
+                      (org-agenda-log-mode-items '(clock closed))
+                      (org-agenda-clockreport-mode t)
+                      (org-agenda-entry-types '())))
+                   )
+
 
       ;; Show what happened this week.
       (add-to-list 'org-agenda-custom-commands
@@ -823,6 +781,11 @@ Captured %<%Y-%m-%d %H:%M>
                       (org-agenda-start-with-clockreport-mode t)
                       (org-agenda-time-grid nil))) t)
 
+      (add-to-list 'org-agenda-custom-commands
+                   '("rtW" "Weekly review sans routines" agenda ""
+                     ((org-agenda-span 7)
+                      (org-agenda-log-mode 1)
+                      (org-agenda-tag-filter-preset '("-ROUTINE"))) nil))
 
       (add-to-list 'org-agenda-custom-commands '("rc" . "Calendar...") t)
 
