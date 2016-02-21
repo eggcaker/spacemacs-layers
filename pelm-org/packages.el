@@ -529,18 +529,13 @@ Captured %<%Y-%m-%d %H:%M>
       (setq org-agenda-custom-commands nil)
 
       (add-to-list 'org-agenda-custom-commands
-                   '("c" . "COLLECT...") t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("cb" "Collect Box" tags "REFILE"
-                     ((org-agenda-overriding-header "Tasks to Refile")
-                      (org-tags-match-list-sublevels t))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("cm" "Mobile Org"
-                     ((alltodo ""))
-                     ((org-agenda-files (list ,(concat org-directory "/mobileorg.org"))))) t)
-
+                   `("c" todo ""
+                     (
+                      (org-agenda-overriding-header "Tasks to refile: ")
+                      (org-agenda-files (list
+                                         ,(concat org-directory "/refile.org")
+                                         ,(concat org-directory "/mobileorg.org")
+                                         )))))
 
       (add-to-list 'org-agenda-custom-commands
                    `("h" "Habits"
