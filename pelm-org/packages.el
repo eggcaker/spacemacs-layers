@@ -48,15 +48,8 @@
           (interactive)
           ;(setq current-prefix-arg '(4))
           (org-refile '(4))))
-      (global-set-key
-       (kbd "<f6>") (kbd "C-c a f ."))
-
-      ;; Display the hotlist.
-      (global-set-key (kbd "<f7>") (kbd "C-c a f h"))
-
-      ;; Display calendar for 7 days.
-      (global-set-key (kbd "<f8>") (kbd "C-c a r c 7"))
-
+      (global-set-key (kbd "<f6>") (kbd "C-c a ."))
+      (global-set-key (kbd "<f5>") (kbd "C-c a g p"))
 
       ;; set org agenda global
       (spacemacs/declare-prefix "o" "org")
@@ -71,14 +64,20 @@
     :config
     (progn
 
+      (setq org-html-checkbox-type 'unicode)
+      (setq org-html-checkbox-types
+            '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
+                       (off . "<span class=\"task-todo\">&#x2610;</span>")
+                       (trans . "<span class=\"task-in-progress\">[-]</span>"))))
       (defvar pelm-org/org-agenda-contexts
-        '((tags-todo "+@phone")
+        '(
+          ;;(tags-todo "+@phone")
           (tags-todo "+@work")
-          (tags-todo "+EMACS")
+          (tags-todo "+@emacs")
           (tags-todo "+@market")
-          (tags-todo "+@coding")
-          (tags-todo "+@writing")
-          (tags-todo "+@computer")
+          ;;(tags-todo "+@coding")
+         ;; (tags-todo "+@writing")
+          ;;(tags-todo "+@computer")
           (tags-todo "+@home"))
         "Usual list of contexts.")
 
@@ -87,11 +86,12 @@
                             ("@home" . ?h)
                             ("@emacs" . ?e)
                             ("@market" . ?m)
-                            ("@writing" . ?b)
-                            ("@coding" . ?c)
-                            ("@phone" . ?p)
+                            ;;("@writing" . ?b)
+                            ;;("@coding" . ?c)
+                            ;;("@phone" . ?p)
                             ("@reading" . ?r)
-                            ("@computer" . ?l)))
+                            ;;("@computer" . ?l)
+                            ))
 
       (defun pelm-org/org-agenda-skip-scheduled ()
         (org-agenda-skip-entry-if 'scheduled 'deadline 'regexp "\n]+>"))
@@ -279,8 +279,6 @@
        org-plantuml-jar-path "~/.emacs.d/private/pelm-org/vendor/plantuml.jar"
        org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80))
 
-       ;;TODO fixed to here
-       ;;org-log-done (quote time)
        org-alphabetical-lists t
        org-agenda-span 'day
        org-src-fontify-natively t
@@ -478,7 +476,7 @@ Captured %<%Y-%m-%d %H:%M>
                     (file+headline (concat org-directory "/business.org") "Tasks")
                     ,pelm-org/basic-task-template))
       (add-to-list 'org-capture-templates
-                   `("b" "People task" entry
+                   `("P" "People task" entry
                      (file+headline (concat org-directory "/people.org") "Tasks")
                      ,pelm-org/basic-task-template))
 
@@ -543,7 +541,7 @@ Captured %<%Y-%m-%d %H:%M>
       (setq org-agenda-custom-commands nil)
 
       (add-to-list 'org-agenda-custom-commands
-                   `("c" todo "Collect box: "
+                   `("c" todo ""
                      ((org-agenda-overriding-header "Tasks to refile: ")
                       (org-agenda-files (list
                                          ,(concat org-directory "/refile.org")
@@ -650,8 +648,10 @@ Captured %<%Y-%m-%d %H:%M>
                      ((org-agenda-view-columns-initially t))))
 
       (add-to-list 'org-agenda-custom-commands
-                   '("gp" "Phone" tags-todo "@phone"
-                     ((org-agenda-view-columns-initially t))))
+                   '("gp" "Work" tags-todo "@work"
+                     (
+                      (org-agenda-overriding-header "")
+                      (org-agenda-view-columns-initially t))))
 
       (add-to-list 'org-agenda-custom-commands
                    '("gh" "Home" tags-todo "@home"
@@ -788,17 +788,6 @@ Captured %<%Y-%m-%d %H:%M>
                       (org-agenda-tag-filter-preset '("-ROUTINE"))) nil))
 
       (add-to-list 'org-agenda-custom-commands '("rc" . "Calendar...") t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("rc7" "Events and appointments for 7 days"
-                     ((agenda ""))
-                     ((org-agenda-entry-types '(:timestamp :sexp))
-                      ;; (org-agenda-overriding-header "Calendar for 7 days")
-                      ;; (org-agenda-repeating-timestamp-show-all t)
-                      (org-agenda-span 'week)
-                      (org-agenda-format-date "\n%a %d")
-                      ;; (org-agenda-date-weekend ... new face ...)
-                      (org-agenda-time-grid nil))) t)
 
       ;; Calendar view for org-agenda.
       (when (locate-library "calfw-org")

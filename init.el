@@ -14,6 +14,7 @@
      ;; better-defaults
      erc
      emacs-lisp
+     plantuml
      (org :variables
           org-enable-github-support t)
      git
@@ -299,6 +300,8 @@
 
 
   (setq-default
+   puml-plantuml-jar-path "/Users/eggcaker/.spacemacs.d/pelm-org/vendor/plantuml.jar"
+   org-plantuml-jar-path "~/.spacemacs.d/pelm-org/vendor/plantuml.jar"
    js2-strict-trailing-comma-warning nil
    js2-highlight-external-variables nil
    truncate-lines t
@@ -409,6 +412,7 @@
 
     ;; key-chord to exit insert mode
     (require 'key-chord)
+    (setq key-chord-one-key-delay 0.16)
     (key-chord-mode 1)
     (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
     (key-chord-define-global "JJ"     'org-capture)
