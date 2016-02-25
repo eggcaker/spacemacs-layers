@@ -49,7 +49,7 @@
           ;(setq current-prefix-arg '(4))
           (org-refile '(4))))
       (global-set-key (kbd "<f6>") (kbd "C-c a ."))
-      (global-set-key (kbd "<f5>") (kbd "C-c a g p"))
+      (global-set-key (kbd "<f13>") (kbd "C-c a g p"))
 
       ;; set org agenda global
       (spacemacs/declare-prefix "o" "org")
@@ -76,7 +76,7 @@
           (tags-todo "+@emacs")
           (tags-todo "+@market")
           ;;(tags-todo "+@coding")
-         ;; (tags-todo "+@writing")
+          (tags-todo "+@reading")
           ;;(tags-todo "+@computer")
           (tags-todo "+@home"))
         "Usual list of contexts.")
@@ -254,14 +254,11 @@
        org-directory "~/.org-files"
        org-mobile-directory "~/Dropbox/MobileOrg/"
        org-mobile-inbox-for-pull "~/.org-files/mobileorg.org"
-       org-mobile-agendas "a"
+       org-mobile-agendas '(".")
        org-mobile-files '(
-                          "~/.org-files/refile.org"
-                          "~/.org-files/contacts.org"
-                          "~/.org-files/personal.org"
                           "~/.org-files/books.org"
+                          "~/.org-files/habits.org"
                           )
-       org-default-notes-files (list (concat org-directory "/refile.org"))
        org-export-backends '(ascii beamer html latex md rss reveal)
        org-show-entry-below (quote ((default)))
        org-agenda-start-on-weekday 7
@@ -326,10 +323,6 @@
        org-clock-in-switch-to-state "STARTED"
        org-clock-in-resume nil
        org-show-notification-handler 'message
-       pelm-org-diary-file "~/.org-files/diary.org"
-       pelm-org-note-file "~/.org-files/notes.org"
-       pelm-org-work-file "~/.org-files/work.org"
-       pelm-org-life-file "~/.org-files/life.org"
 
        org-list-demote-modify-bullet (quote (("+" . "-")
                                              ("*" . "-")
@@ -455,30 +448,15 @@ Captured %<%Y-%m-%d %H:%M>
 
       (add-to-list 'org-capture-templates
                    `("T" "Quick task" entry
-                     (file+headline ,(concat org-directory "/refile.org") "Inbox")
+                     (file+headline "~/.org-files/refile.org" "Inbox")
                      "* TODO %^{Task}\nSCHEDULED: %t\n"
                      :immediate-finish t))
 
       (add-to-list 'org-capture-templates
                    `("i" "Interrupting task" entry
-                      (file+headline ,(concat  org-directory "/refile.org") "Inbox")
+                      (file+headline "~/.org-files/refile.org" "Inbox")
                       "* STARTED %^{Task}"
                       :clock-in :clock-resume))
-
-      (add-to-list 'org-capture-templates
-                   `("e" "Emacs idea" entry
-                    (file+headline (concat org-directory "/emacs.org") "Emacs")
-                    "** TODO %^{Task}"
-                    :immediate-finish t))
-
-      (add-to-list 'org-capture-templates
-                   `("b" "Business task" entry
-                    (file+headline (concat org-directory "/business.org") "Tasks")
-                    ,pelm-org/basic-task-template))
-      (add-to-list 'org-capture-templates
-                   `("P" "People task" entry
-                     (file+headline (concat org-directory "/people.org") "Tasks")
-                     ,pelm-org/basic-task-template))
 
       (add-to-list 'org-capture-templates
                    `("x" "CLI TODO" entry
@@ -557,32 +535,30 @@ Captured %<%Y-%m-%d %H:%M>
                                 (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
                                (org-agenda-span 'day)))
                       ;; Unscheduled new tasks (waiting to be prioritized and scheduled).
-                      (tags-todo "LEVEL=2"
-                                 ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
-                                  (org-agenda-files (list ,(concat org-directory "/refile.org")))))
-
                       (todo "TODO"
-                            ((org-agenda-overriding-header "MobileOrg Task")
-                             (org-agenda-files (list ,(concat org-directory "/mobileorg.org")))))
+                            ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
+                             (org-agenda-files (list ,(concat org-directory "/mobileorg.org")
+                                                     ,(concat org-directory "/refile.org")
+                                                     ))))
 
                       (tags-todo "TODO={STARTED}"
                                  ((org-agenda-overriding-header "STARTED TASKS")
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'deadline))))
 
-                      ;; List of all TODO entries with deadline today.
-                      (tags-todo "DEADLINE=\"<+0d>\""
-                                 ((org-agenda-overriding-header "DUE TODAY")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))
-                                  (org-agenda-sorting-strategy '(priority-down))))
-                                        ; XXX Timed deadlines NOT shown!!!
                       ;; List of all TODO entries with deadline before today.
-                      (tags-todo "DEADLINE<\"<+0d>\"|SCHEDULED<\"<+0d>\""
+                      (tags-todo "DEADLINE<=\"<+0d>\"|SCHEDULED<=\"<+0d>\""
                                  ((org-agenda-overriding-header "OVERDUE")
                                   ;;(org-agenda-skip-function
                                   ;; '(org-agenda-skip-entry-if 'notdeadline))
                                   (org-agenda-sorting-strategy '(priority-down))))
+
+                      (tags-todo "TODO={WAIT}"
+                                 ((org-agenda-overriding-header "Waiting For")
+                                  ;;(org-agenda-skip-function
+                                  ;; '(org-agenda-skip-entry-if 'notdeadline))
+                                  (org-agenda-sorting-strategy '(priority-down))))
+
                       (agenda ""
                               ((org-agenda-entry-types '(:scheduled))
                                (org-agenda-overriding-header "SCHEDULED")
@@ -1464,6 +1440,24 @@ Callers of this function already widen the buffer view."
                 (lambda ()
                   (define-key org-agenda-mode-map "q" 'bury-buffer))
                 'append)
+
+      ;;FIXME: temp disable helm for org-capture
+      (defun kk/org-set-tags-no-helm (orig-func &rest args)
+        "Run org-set-tags without helm."
+        (if (boundp 'helm-mode)
+            (let ((orig-helm-mode helm-mode))
+              (unwind-protect
+                  (progn
+                    (helm-mode 0)
+                    (apply orig-func args)
+                    )
+                (helm-mode (if orig-helm-mode 1 0))))
+          (apply orig-func args)
+          ))
+
+
+      (advice-add 'org-capture :around 'kk/org-set-tags-no-helm)
+
 
       (org-babel-do-load-languages
        (quote org-babel-load-languages)

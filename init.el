@@ -74,7 +74,7 @@
 
    dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode)
 
-   dotspacemacs-excluded-packages '(julia-mode)
+   dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
@@ -273,6 +273,13 @@
       (term :foreground nil :background nil)))))
 
 (defun dotspacemacs/user-config ()
+
+  (push '(baidu
+          :name "Baidu - 百度"
+          :url "https://www.baidu.com/s?wd=%s")
+        search-engine-alist)
+
+
   (defun pelm/node-eval ()
     (interactive)
     (let ((debug-on-error t) (start 1) (end 1))
@@ -363,18 +370,28 @@
         mu4e-display-image t
         mu4e-view-show-addresses t)
 
+
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
+
   ;;; Mail directory shortcuts
   (setq mu4e-maildir-shortcuts
         '(("/Gmail/INBOX" . ?g)
-          ("/Gmail/PacerHealth" . ?p)
-          ("/qq/INBOX" . ?q)))
+          ("/Gmail/PacerHealth" . ?p)))
+
+  ;; Custom marks
+  (setq mu4e-headers-new-mark              '("N" . "✉")
+        mu4e-headers-empty-parent-prefix '("-" . "○")
+        mu4e-headers-first-child-prefix '("\\" . "┗━❯")
+        mu4e-headers-has-child-prefix '("+" . "┗◉")
+        mu4e-headers-duplicate-prefix      '("=" . "⚌")
+        mu4e-headers-default-prefix  '("|" . "┃"))
+
 
   ;;; Bookmarks
   (setq mu4e-bookmarks
-        `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-          ("date:today..now" "Today's messages" ?t)
+        `(("flag:unread AND NOT flag:trashed AND NOT maildir:/Gmail/[Gmail].Spam" "Unread messages" ?u)
+          ("date:today..now AND NOT maildir:/Gmail/[Gmail].Spam" "Today's messages" ?t)
           ("date:7d..now" "Last 7 days" ?w)
           ("mime:image/*" "Messages with images" ?p)
           (,(mapconcat 'identity
@@ -382,7 +399,10 @@
                         (lambda (maildir)
                           (concat "maildir:" (car maildir)))
                         mu4e-maildir-shortcuts) " OR ")
-           "All inboxes" ?i)))
+           "All inboxes" ?i)
+          ("flag:unread AND NOT flag:trashed AND maildir:/Gmail/[Gmail].Spam"     "Unread spam"               ?s)
+
+          ))
 
   ;; Send mail setup
   ;; SMTP setup
@@ -415,15 +435,36 @@
     (setq key-chord-one-key-delay 0.16)
     (key-chord-mode 1)
     (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
-    (key-chord-define-global "JJ"     'org-capture)
+    (key-chord-define-global "UU"     'org-capture)
 
     (setq-default line-spacing 10)
-    (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
+    ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))
+    (setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
+
+    ;;(setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
     (setq ledger-post-amount-alignment-column 68)
     (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
 
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))))
+
+
+    ;; ;; define the search engine
+    ;; (setq search-engine-alist
+    ;;       '(            (duck-duck-go
+    ;;          :name "Duck Duck Go"
+    ;;          :url "https://duckduckgo.com/?q=%s")
+    ;;         (google
+    ;;          :name "Google"
+    ;;          :url "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s")
+    ;;         (github
+    ;;          :name "Github"
+    ;;          :url "https://github.com/search?ref=simplesearch&q=%s")
+    ;;         (stack-overflow
+    ;;          :name "Stack Overflow"
+    ;;          :url "https://stackoverflow.com/search?q=%s"
+    ;;          )))
+
 
     (use-package nameless
       :defer t
