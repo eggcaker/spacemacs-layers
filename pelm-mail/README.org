@@ -1,0 +1,19 @@
+#+TITLE: pelm-mail layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/readtheorg.css" />
+
+
+* Table of Contents                                                                       :TOC_4_org:noexport:
+ - [[Decsription][Description]]
+ - [[Install][Install]]
+ - [[Key bindings][Key bindings]]
+
+* Description
+This layer add some mu4e configurations
+* Install
+To use this contribution add it to your =~/.spacemacs=
+
+#+begin_src emacs-lisp
+  (setq-default dotspacemacs-configuration-layers '(pelm-mail))
+#+end_src
+
+* Key bindings
