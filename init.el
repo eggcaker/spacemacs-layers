@@ -37,7 +37,7 @@
      ;; tern
      javascript
      react
-     ;;finance
+     finance
      ;;deft
      evil-commentary
      (elfeed :variables
@@ -168,6 +168,14 @@
 
    ;; Magit
    magit-popup-show-common-commands nil
+   git-magit-status-fullscreen t
+
+   magit-repository-directories '(
+                                  "~/.spacemacs.d/"
+                                  "~/src/work/pacer_android/"
+                                  "~/src/work/pacer_groups/"
+                                  "~/src/work/mandian_server/"
+                                  )
 
    ;; Flycheck
    flycheck-check-syntax-automatically '(save mode-enabled)
@@ -273,7 +281,7 @@
       (term :foreground nil :background nil)))))
 
 (defun dotspacemacs/user-config ()
-
+  (global-git-commit-mode t)
   (push '(baidu
           :name "Baidu - 百度"
           :url "https://www.baidu.com/s?wd=%s")

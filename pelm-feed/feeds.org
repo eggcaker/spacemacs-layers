@@ -1,8 +1,9 @@
 * Blogs                                                                                               :elfeed:
-** http://git-annex.branchable.com/design/assistant/blog/index.rss                                 :mustread:
 ** Software Development                                                                                 :dev:
 *** Emacs                                                                                   :emacs:mustread:
 **** https://www.reddit.com/r/emacs/.rss
 **** http://planet.emacsen.org/atom.xml
-***  Fun
-   '("" "http://xkcd.com/rss.xml")
+**** http://sachachua.com/blog/feed/
+**  Fun
+*** http://xkcd.com/rss.xml
+

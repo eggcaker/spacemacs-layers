@@ -63,6 +63,17 @@
         "oO" 'pelm-org/punch-out))
     :config
     (progn
+      ;; just for fun
+(setq org-agenda-category-icon-alist
+      '(("[Ee]macs" "~/.spacemacs.d/pelm-org/vendor/icons/org/emacs.png" nil nil :ascent center)
+        ("Pacer" "~/.spacemacs.d/pelm-org/vendor/icons/org/pacer.png" nil nil :ascent center)
+        ("Habit[s]" "~/.spacemacs.d/pelm-org/vendor/icons/org/habit.png" nil nil :ascent center)
+        ("Business" "~/.spacemacs.d/pelm-org/vendor/icons/org/business.png" nil nil :ascent center)
+        ("Learn" "~/.spacemacs.d/pelm-org/vendor/icons/org/learn.png" nil nil :ascent center)
+        ("Org" "~/.spacemacs.d/pelm-org/vendor/icons/org/org.png" nil nil :ascent center)
+        ("Reading" "~/.spacemacs.d/pelm-org/vendor/icons/org/book.png" nil nil :ascent center)
+        ("\\(Holidays\\|Vacation\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/holidays.png" nil nil :ascent center)
+        (".*" '(space . (:width (16))))))
 
       (setq org-html-checkbox-type 'unicode)
       (setq org-html-checkbox-types
@@ -541,7 +552,7 @@ Captured %<%Y-%m-%d %H:%M>
                                                      ,(concat org-directory "/refile.org")
                                                      ))))
 
-                      (tags-todo "TODO={STARTED}"
+                      (tags-todo "TODO={STARTED\\|TRY}"
                                  ((org-agenda-overriding-header "STARTED TASKS")
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'deadline))))
