@@ -64,20 +64,20 @@
     :config
     (progn
       ;; just for fun
-(setq org-agenda-category-icon-alist
-      '(("[Ee]macs" "~/.spacemacs.d/pelm-org/vendor/icons/org/emacs.png" nil nil :ascent center)
-        ("Pacer" "~/.spacemacs.d/pelm-org/vendor/icons/org/pacer.png" nil nil :ascent center)
-        ("Refile" "~/.spacemacs.d/pelm-org/vendor/icons/org/inbox.png" nil nil :ascent center)
-        ("Habit[s]" "~/.spacemacs.d/pelm-org/vendor/icons/org/habit.png" nil nil :ascent center)
-        ("Business" "~/.spacemacs.d/pelm-org/vendor/icons/org/business.png" nil nil :ascent center)
-        ("Blog" "~/.spacemacs.d/pelm-org/vendor/icons/org/blog.png" nil nil :ascent center)
-        ("Geek" "~/.spacemacs.d/pelm-org/vendor/icons/org/geek.png" nil nil :ascent center)
-        ("\\(Personal\\|People\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/personal.svg" nil nil :ascent center)
-        ("Learn" "~/.spacemacs.d/pelm-org/vendor/icons/org/learn.png" nil nil :ascent center)
-        ("Org" "~/.spacemacs.d/pelm-org/vendor/icons/org/org.png" nil nil :ascent center)
-        ("Reading" "~/.spacemacs.d/pelm-org/vendor/icons/org/book.png" nil nil :ascent center)
-        ("\\(Holidays\\|Vacation\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/holidays.png" nil nil :ascent center)
-        (".*" '(space . (:width (20))))))
+      (setq org-agenda-category-icon-alist
+            '(("[Ee]macs" "~/.spacemacs.d/pelm-org/vendor/icons/org/emacs.png" nil nil :ascent center)
+              ("Pacer" "~/.spacemacs.d/pelm-org/vendor/icons/org/pacer.png" nil nil :ascent center)
+              ("Refile" "~/.spacemacs.d/pelm-org/vendor/icons/org/inbox.png" nil nil :ascent center)
+              ("Habit[s]" "~/.spacemacs.d/pelm-org/vendor/icons/org/habit.png" nil nil :ascent center)
+              ("Business" "~/.spacemacs.d/pelm-org/vendor/icons/org/business.png" nil nil :ascent center)
+              ("Blog" "~/.spacemacs.d/pelm-org/vendor/icons/org/blog.png" nil nil :ascent center)
+              ("Geek" "~/.spacemacs.d/pelm-org/vendor/icons/org/geek.png" nil nil :ascent center)
+              ("\\(Personal\\|People\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/personal.svg" nil nil :ascent center)
+              ("Learn" "~/.spacemacs.d/pelm-org/vendor/icons/org/learn.png" nil nil :ascent center)
+              ("Org" "~/.spacemacs.d/pelm-org/vendor/icons/org/org.png" nil nil :ascent center)
+              ("Reading" "~/.spacemacs.d/pelm-org/vendor/icons/org/book.png" nil nil :ascent center)
+              ("\\(Holidays\\|Vacation\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/holidays.png" nil nil :ascent center)
+              (".*" '(space . (:width (20))))))
 
       (setq org-html-checkbox-type 'unicode)
       (setq org-html-checkbox-types
@@ -266,6 +266,13 @@
       ;; setq options
       (setq
        ;; mobile org options
+       org-agenda-sorting-strategy
+             '((agenda time-up priority-down tag-up category-keep effort-up)
+               ;; (todo user-defined-up todo-state-up priority-down effort-up)
+               (todo todo-state-up priority-down effort-up)
+               (tags user-defined-up)
+               (search category-keep))
+
        org-directory "~/.org-files"
        org-mobile-directory "~/Dropbox/MobileOrg/"
        org-mobile-inbox-for-pull "~/.org-files/mobileorg.org"
@@ -596,28 +603,17 @@ Captured %<%Y-%m-%d %H:%M>
                      ((org-agenda-format-date "")
                       (org-agenda-start-with-clockreport-mode nil))) t)
 
-      (add-to-list 'org-agenda-custom-commands '("l" . "List Tasks...") t)
+      ;; Weekly review
+      (add-to-list 'org-agenda-custom-commands
+                   `("w" "Weekly review" agenda ""
+                     ((org-agenda-span 7)
+                      (org-agenda-log-mode 1)) "~/Dropbox/agenda/this-week.html"))
 
       (add-to-list 'org-agenda-custom-commands
-                   `("lh" todo ""
-                     ((org-agenda-overriding-header "Habit Tasks: ")
-                      (org-agenda-files (list ,(concat org-directory "/habits.org"))))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("ly" todo ""
-                     ((org-agenda-overriding-header "Business Tasks: ")
-                      (org-agenda-files (list ,(concat org-directory "/business.org"))))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("lw" todo ""
-                     ((org-agenda-overriding-header "Pacer Tasks: ")
-                      (org-agenda-files (list ,(concat org-directory "/work.org"))))))
-
-      (add-to-list 'org-agenda-custom-commands
-                   `("lB" todo ""
-                     ((org-agenda-overriding-header "Books to read: ")
-                      (org-agenda-files (list ,(concat org-directory "/books.org"))))))
-
+                   `("W" "Weekly review sans routines" agenda ""
+                     ((org-agenda-span 7)
+                      (org-agenda-log-mode 1)
+                      (org-agenda-tag-filter-preset '("-routine"))) "~/Dropbox/agenda/this-week-nonroutine.html"))
 
       ;;FIXME: do i need this command ?
       ;; (add-to-list 'org-agenda-custom-commands
@@ -649,330 +645,314 @@ Captured %<%Y-%m-%d %H:%M>
                    '("gh" "Home" tags-todo "@home"
                      ((org-agenda-view-columns-initially t))))
 
-
-      (add-to-list 'org-agenda-custom-commands '("r" . "REVIEW...") t)
-
-      (add-to-list 'org-agenda-custom-commands '("ra" . "All Tasks...") t)
-
       (add-to-list 'org-agenda-custom-commands
-                   `("ra3" "Top 3 by context"
-                     , pelm-org/org-agenda-contexts
+                   `("0" "Top 3 by context"
+                     ,pelm-org/org-agenda-contexts
                      ((org-agenda-sorting-strategy '(priority-up effort-down))
                       (pelm-org/org-agenda-limit-items 3))))
 
       (add-to-list 'org-agenda-custom-commands
-                   `("rac" "All by context"
+                   `(")" "All by context"
                       ,pelm-org/org-agenda-contexts
                       ((org-agenda-sorting-strategy '(priority-down effort-down))
                        (pelm-org/org-agenda-limit-items nil))))
 
       (add-to-list 'org-agenda-custom-commands
-                     `("rau" "Unscheduled top 3 by context"
+                     `("9" "Unscheduled top 3 by context"
                       ,pelm-org/org-agenda-contexts
                       ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
                        (org-agenda-sorting-strategy '(priority-down effort-down))
                        (pelm-org/org-agenda-limit-items 3))))
 
       (add-to-list 'org-agenda-custom-commands
-                     `("raC" "All unscheduled by context"
+                     `("(" "All unscheduled by context"
                       ,pelm-org/org-agenda-contexts
                       ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
                        (org-agenda-sorting-strategy '(priority-down effort-down))
                        )))
 
-      (add-to-list 'org-agenda-custom-commands
-                   '("rad" "All Tasks (grouped by Due Date)"
-                     ((tags-todo "DEADLINE<\"<+0d>\""
-                                 ((org-agenda-overriding-header "OVERDUE")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-                      (tags-todo "DEADLINE=\"<+0d>\""
-                                 ((org-agenda-overriding-header "DUE TODAY")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-                      (tags-todo "DEADLINE=\"<+1d>\""
-                                 ((org-agenda-overriding-header "DUE TOMORROW")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-                      (tags-todo "DEADLINE>\"<+1d>\"+DEADLINE<=\"<+7d>\""
-                                 ((org-agenda-overriding-header "DUE WITHIN A WEEK")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-                      (tags-todo "DEADLINE>\"<+7d>\"+DEADLINE<=\"<+28d>\""
-                                 ((org-agenda-overriding-header "DUE WITHIN A MONTH")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-                      (tags-todo "DEADLINE>\"<+28d>\""
-                                 ((org-agenda-overriding-header "DUE LATER")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'notdeadline))))
-
-                      (tags-todo "TODO={STARTED}"
-                                 ((org-agenda-overriding-header "NO DUE DATE / STARTED")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'deadline))))
-                      (tags-todo "TODO<>{STRT\\|WAIT\\|SOMEDAY\\|HABIT}"
-                                 ((org-agenda-overriding-header "NO DUE DATE / NEXT")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'deadline))))
-                      (tags-todo "TODO={WAIT}"
-                                 ((org-agenda-overriding-header "NO DUE DATE / WAITING FOR")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'deadline))))
-                      (tags-todo "TODO={SOMEDAY}"
-                                 ((org-agenda-overriding-header "NO DUE DATE / SOMEDAY")
-                                  (org-agenda-skip-function
-                                   '(org-agenda-skip-entry-if 'deadline)))))
-                     ((org-agenda-sorting-strategy '(priority-down))
-                      (org-agenda-write-buffer-name "All Tasks (grouped by Due Date)"))
-                     "~/.agenda/org___all-tasks-by-due-date.pdf") t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("rap" "All (Unscheduled) Tasks (grouped by Priority)"
-                     ((tags-todo "PRIORITY={A}"
-                                 ((org-agenda-overriding-header "HIGH")
-                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                      (tags-todo "PRIORITY={B}"
-                                 ((org-agenda-overriding-header "MEDIUM")
-                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                      (tags-todo "PRIORITY=\"\""
-                                 ((org-agenda-overriding-header "NONE") ; = Medium.
-                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                      (tags-todo "PRIORITY={C}"
-                                 ((org-agenda-overriding-header "LOW")
-                                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))
-                      (todo "DONE|CANCELLED"
-                            ((org-agenda-overriding-header "COMPLETED")
-                             (org-agenda-sorting-strategy '(priority-down)))))) t)
-
-      (add-to-list 'org-agenda-custom-commands
-                   '("rt" . "Timesheet...") t)
-
-
       ;; Show what happened today.
       (add-to-list 'org-agenda-custom-commands
-                   '("rtd" "Timeline for today" ((agenda "" ))
+                   '("d" "Timeline for today" ((agenda "" ))
                      ((org-agenda-ndays 1)
                       (org-agenda-show-log t)
                       (org-agenda-log-mode-items '(clock closed))
                       (org-agenda-clockreport-mode t)
-                      (org-agenda-entry-types '())))
-                   )
-
-
-      ;; Show what happened this week.
-      (add-to-list 'org-agenda-custom-commands
-                   '("rtw" "Weekly Timesheet"
-                     ((agenda ""))
-                     (
-                      ;; (org-agenda-format-date "")
-                      (org-agenda-overriding-header "WEEKLY TIMESHEET")
-                      ;;(org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))
-                      (org-agenda-span 'week)
-                      (org-agenda-start-on-weekday 7)
-                      (org-agenda-start-with-clockreport-mode t)
-                      (org-agenda-time-grid nil))) t)
+                      (org-agenda-entry-types '()))))
 
       (add-to-list 'org-agenda-custom-commands
-                   '("rtW" "Weekly review sans routines" agenda ""
-                     ((org-agenda-span 7)
-                      (org-agenda-log-mode 1)
-                      (org-agenda-tag-filter-preset '("-ROUTINE"))) nil))
+                   `("w" "Waiting for" todo "WAITING"))
+      (add-to-list 'org-agenda-custom-commands
+                   `("u" "Unscheduled tasks" tags-todo "-someday-TODO=\"SOMEDAY\"-TODO=\"DELEGATED\"-TODO=\"WAITING\"-project"
+                     ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
+                      (org-agenda-view-columns-initially t)
+                      (org-tags-exclude-from-inheritance '("project"))
+                      (org-agenda-overriding-header "Unscheduled TODO entries: ")
+                      (org-columns-default-format "%50ITEM %TODO %3PRIORITY %Effort{:} %TAGS")
+                      (org-agenda-sorting-strategy '(todo-state-up priority-down effort-up tag-up category-keep)))))
 
-      (add-to-list 'org-agenda-custom-commands '("rc" . "Calendar...") t)
+      (add-to-list 'org-agenda-custom-commands
+                   `("U" "Unscheduled tasks outside projects" tags-todo "-project"
+                     ((org-agenda-skip-function 'pelm-org/org-agenda-skip-scheduled)
+                      (org-tags-exclude-from-inheritance nil)
+                      (org-agenda-view-columns-initially t)
+                      (org-agenda-overriding-header "Unscheduled TODO entries outside projects: ")
+                      (org-agenda-sorting-strategy '(todo-state-up priority-down tag-up category-keep effort-down)))))
 
-      ;; Calendar view for org-agenda.
-      (when (locate-library "calfw-org")
-        (autoload 'cfw:open-org-calendar "calfw-org"
-          "Open an Org schedule calendar." t)
+      (add-to-list 'org-agenda-custom-commands
+                   `("P" "By priority"
+                     ((tags-todo "+PRIORITY=\"A\"")
+                      (tags-todo "+PRIORITY=\"B\"")
+                      (tags-todo "+PRIORITY=\"\"")
+                      (tags-todo "+PRIORITY=\"C\""))
+                     ((org-agenda-prefix-format "%-10c %-10T %e ")
+                      (org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down)))))
 
-        (add-to-list 'org-agenda-custom-commands
-                     '("rcm" "Calendar for current month"
-                       (lambda (&rest ignore)
-                         (cfw:open-org-calendar))) t))
+      (add-to-list 'org-agenda-custom-commands
+                   `("pp" tags "+project-someday-TODO=\"DONE\"-TODO=\"SOMEDAY\"-inactive"
+                     ((org-tags-exclude-from-inheritance '("project"))
+                      (org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down)))))
 
-  (add-to-list 'org-agenda-custom-commands
-               `("rC" "Completed view"
-                 (;; List of all TODO entries completed yesterday.
-                  (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
-                             ((org-agenda-overriding-header
-                               (concat "YESTERDAY   "
-                                       (format-time-string "%a %d" (current-time-ndays-ago 1))
-                                       ;; #("__________________" 0 12 (face (:foreground "gray")))
-                                       ))
-                              (org-agenda-skip-function
-                               '(org-agenda-skip-entry-if
-                                 'notregexp
-                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 1))))
-                              (org-agenda-sorting-strategy '(priority-down))))
-                  ;; List of all TODO entries completed 2 days ago.
-                  (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
-                             ((org-agenda-overriding-header
-                               (concat "2 DAYS AGO  "
-                                       (format-time-string "%a %d" (current-time-ndays-ago 2))))
-                              (org-agenda-skip-function
-                               '(org-agenda-skip-entry-if
-                                 'notregexp
-                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 2))))
-                              (org-agenda-sorting-strategy '(priority-down))))
-                  ;; List of all TODO entries completed 3 days ago.
-                  (todo "TODO|DONE|CANCELLED" ; Includes repeated tasks (back in TODO).
-                             ((org-agenda-overriding-header
-                               (concat "3 DAYS AGO  "
-                                       (format-time-string "%a %d" (current-time-ndays-ago 3))))
-                              (org-agenda-skip-function
-                               '(org-agenda-skip-entry-if
-                                 'notregexp
-                                 (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 3))))
-                              (org-agenda-sorting-strategy '(priority-down)))))
-                 ((org-agenda-format-date "")
-                  (org-agenda-start-with-clockreport-mode nil))) t)
+      (add-to-list 'org-agenda-custom-commands
+                   `("S" tags-todo "TODO=\"STARTED\""))
 
-  (defun current-time-ndays-ago (n)
-    "Return the current time minus N days."
-    (time-subtract (current-time) (days-to-time n)))
-
-  (add-to-list 'org-agenda-custom-commands
-               '("rx" "Completed tasks with no CLOCK lines"
-                 ((todo "DONE|CANCELLED"
-                             ((org-agenda-overriding-header "Completed tasks with no CLOCK lines")
-                              (org-agenda-skip-function
-                               '(org-agenda-skip-entry-if
-                                 'regexp
-                                 (format-time-string "  CLOCK: .*--.* =>  .*")))
-                              (org-agenda-sorting-strategy '(priority-down)))))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("rw" "Weekly review"
-                 ((tags "CATEGORY={@Collect}&LEVEL=2|TODO={TODO}"
-                        ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")))
-
-                  (agenda ""
-                          ((org-agenda-clockreport-mode t)
-                           (org-agenda-format-date
-                            (concat "\n"
-                                    "%Y-%m-%d" " %a "
-                                    (make-string (window-width) ?_)))
-                           (org-agenda-overriding-header "PAST WEEK")
-                           (org-agenda-prefix-format " %?-11t %i %-12:c% s")
-                           (org-agenda-show-log 'clockcheck)
-                           (org-agenda-span 7)
-                           (org-agenda-start-day "-1w") ; recently done
-                           (org-deadline-warning-days 0)))
-
-                  (agenda ""
-                          ((org-agenda-overriding-header "THIS WEEK")
-                           (org-agenda-span 'week)
-                           (org-agenda-start-day "+0d")
-                           (org-deadline-warning-days 0)))
-
-                  (todo "PROJ"
-                        ((org-agenda-overriding-header "PROJECT LIST")))
-
-                  ;; FIXME we should show which tasks (don't) have CLOCK lines: archived vs. deleted.
-                  (todo "DONE|PROJDONE"
-                        ((org-agenda-overriding-header
-                          "Candidates to be archived")))
-
-                  (todo "STARTED"
-                        ((org-agenda-overriding-header "IN PROGRESS")
-                         (org-agenda-todo-ignore-scheduled nil)))
-
-                  (todo "TODO"
-                        ((org-agenda-overriding-header "ACTION LIST")))
-
-                  (todo "WAIT"
-                        ((org-agenda-format-date "")
-                         (org-agenda-overriding-header "WAITING FOR")
-                         (org-agenda-todo-ignore-deadlines 'all) ; Future?
-                         (org-agenda-todo-ignore-scheduled t)))
-
-                  ;; Same reasoning as for WAIT.
-                  (todo "SOMEDAY"
-                        ((org-agenda-format-date "")
-                         (org-agenda-overriding-header "SOMEDAY")
-                         (org-agenda-todo-ignore-deadlines 'all)
-                         (org-agenda-todo-ignore-scheduled t)))
-                  )) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("rN" "Next"
-                 ((tags-todo "TODO<>{SOMEDAY}"))
-                 ((org-agenda-overriding-header "List of all TODO entries with no due date (no SOMEDAY)")
-                  (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline))
-                  (org-agenda-sorting-strategy '(priority-down)))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("rW" "Waiting for"
-                 ((tags-todo "TODO={WAIT}"))
-                 ((org-agenda-overriding-header "Waiting for")
-                  (org-agenda-sorting-strategy '(deadline-up)))) t) ; FIXME does not work.
-
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("rP" "Projects"
-  ;;                ((tags-todo "PROJECT-DONE-CANCELLED"))
-  ;;                ((org-agenda-overriding-header "Projects (High Level)")
-  ;;                 (org-agenda-sorting-strategy nil))) t)
-
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("E" . "Exported agenda files...") t)
-  ;; Exporting agenda views.
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("Ea"
-  ;;                ((agenda ""))
-  ;;                (;; (org-tag-faces nil)
-  ;;                 (ps-landscape-mode t)
-  ;;                 (ps-number-of-columns 1))
-  ;;                ("~/org-agenda.html" "~/org-agenda.pdf")) t)
-
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("Ep" "Call list"
-  ;;                ((tags-todo "phone"))
-  ;;                ((org-agenda-prefix-format " %-20:c [ ] " )
-  ;;                 (org-agenda-remove-tags t)
-  ;;                 ;; (org-agenda-with-colors nil)
-  ;;                 (org-agenda-write-buffer-name
-  ;;                  "Phone calls that you need to make")
-  ;;                 (ps-landscape-mode t)
-  ;;                 (ps-number-of-columns 1))
-  ;;                ("~/org___calls.pdf")) t)
-
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("A" . "ARCHIVE...") t)
-
-  ;; (add-to-list 'org-agenda-custom-commands
-  ;;              '("Aa" "Archive"
-  ;;                ((tags-todo "ARCHIVE"))
-  ;;                ((org-agenda-todo-ignore-scheduled 'future)
-  ;;                 (org-agenda-sorting-strategy '(deadline-down)))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("R" . "REFERENCE...") t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("Rs" "Like s, but with extra files"
-                 ((search ""))
-                 ((org-agenda-text-search-extra-files
-                   ;; FIXME Add `agenda-archives'
-                   nil))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("RS" "Like s, but only TODO entries"
-                 ((search ""))
-                 ((org-agenda-text-search-extra-files
-                   ;; FIXME Add `agenda-archives'
-                   nil))) t)
-
-  (add-to-list 'org-agenda-custom-commands
-               '("Rn" "Organize thoughts to refile"
-                 ((tags "REFILE|CAPTURE"))
-                 ((org-agenda-overriding-header "Refile stuff"))) t)
+      (add-to-list 'org-agenda-custom-commands
+                   `("2" "List projects with tasks" pelm-org/org-agenda-projects-and-tasks
+                     "+PROJECT"
+                     ((pelm-org/org-agenda-limit-items 3))))
 
 
+      (defun pelm-org/org-agenda-project-agenda ()
+        "Return the project headline and up to `pelm-org/org-agenda-limit-items' tasks."
+        (save-excursion
+          (let* ((marker (org-agenda-new-marker))
+                 (heading
+                  (org-agenda-format-item "" (org-get-heading) (org-get-category) nil))
+                 (org-agenda-restrict t)
+                 (org-agenda-restrict-begin (point))
+                 (org-agenda-restrict-end (org-end-of-subtree 'invisible))
+                 ;; Find the TODO items in this subtree
+                 (list (org-agenda-get-day-entries (buffer-file-name) (calendar-current-date) :todo)))
+            (org-add-props heading
+                (list 'face 'defaults
+                      'done-face 'org-agenda-done
+                      'undone-face 'default
+                      'mouse-face 'highlight
+                      'org-not-done-regexp org-not-done-regexp
+                      'org-todo-regexp org-todo-regexp
+                      'org-complex-heading-regexp org-complex-heading-regexp
+                      'help-echo
+                      (format "mouse-2 or RET jump to org file %s"
+                              (abbreviate-file-name
+                               (or (buffer-file-name (buffer-base-buffer))
+                                   (buffer-name (buffer-base-buffer))))))
+              'org-marker marker
+              'org-hd-marker marker
+              'org-category (org-get-category)
+              'type "tagsmatch")
+            (concat heading "\n"
+                    (org-agenda-finalize-entries list)))))
 
-      ;; TODO: maybe need enable it back.
-      ;;(autoload 'appt-check "appt")
-      
+      (defun pelm-org/org-agenda-projects-and-tasks (match)
+        "Show TODOs for all `org-agenda-files' headlines matching MATCH."
+        (interactive "MString: ")
+        (let ((todo-only nil))
+          (if org-agenda-overriding-arguments
+              (setq todo-only (car org-agenda-overriding-arguments)
+                    match (nth 1 org-agenda-overriding-arguments)))
+          (let* ((org-tags-match-list-sublevels
+                  org-tags-match-list-sublevels)
+                 (completion-ignore-case t)
+                 rtn rtnall files file pos matcher
+                 buffer)
+            (when (and (stringp match) (not (string-match "\\S-" match)))
+              (setq match nil))
+            (when match
+              (setq matcher (org-make-tags-matcher match)
+                    match (car matcher) matcher (cdr matcher)))
+            (catch 'exit
+              (if org-agenda-sticky
+                  (setq org-agenda-buffer-name
+                        (if (stringp match)
+                            (format "*Org Agenda(%s:%s)*"
+                                    (or org-keys (or (and todo-only "M") "m")) match)
+                          (format "*Org Agenda(%s)*" (or (and todo-only "M") "m")))))
+              (org-agenda-prepare (concat "TAGS " match))
+              (org-compile-prefix-format 'tags)
+              (org-set-sorting-strategy 'tags)
+              (setq org-agenda-query-string match)
+              (setq org-agenda-redo-command
+                    (list 'org-tags-view `(quote ,todo-only)
+                          (list 'if 'current-prefix-arg nil `(quote ,org-agenda-query-string))))
+              (setq files (org-agenda-files nil 'ifmode)
+                    rtnall nil)
+              (while (setq file (pop files))
+                (catch 'nextfile
+                  (org-check-agenda-file file)
+                  (setq buffer (if (file-exists-p file)
+                                   (org-get-agenda-file-buffer file)
+                                 (error "No such file %s" file)))
+                  (if (not buffer)
+                      ;; If file does not exist, error message to agenda
+                      (setq rtn (list
+                                 (format "ORG-AGENDA-ERROR: No such org-file %s" file))
+                            rtnall (append rtnall rtn))
+                    (with-current-buffer buffer
+                      (unless (derived-mode-p 'org-mode)
+                        (error "Agenda file %s is not in `org-mode'" file))
+                      (save-excursion
+                        (save-restriction
+                          (if org-agenda-restrict
+                              (narrow-to-region org-agenda-restrict-begin
+                                                org-agenda-restrict-end)
+                            (widen))
+                          (setq rtn (org-scan-tags 'pelm-org/org-agenda-project-agenda matcher todo-only))
+                          (setq rtnall (append rtnall rtn))))))))
+              (if org-agenda-overriding-header
+                  (insert (org-add-props (copy-sequence org-agenda-overriding-header)
+                              nil 'face 'org-agenda-structure) "\n")
+                (insert "Headlines with TAGS match: ")
+                (add-text-properties (point-min) (1- (point))
+                                     (list 'face 'org-agenda-structure
+                                           'short-heading
+                                           (concat "Match: " match)))
+                (setq pos (point))
+                (insert match "\n")
+                (add-text-properties pos (1- (point)) (list 'face 'org-warning))
+                (setq pos (point))
+                (unless org-agenda-multi
+                  (insert "Press `C-u r' to search again with new search string\n"))
+                (add-text-properties pos (1- (point)) (list 'face 'org-agenda-structure)))
+              (org-agenda-mark-header-line (point-min))
+              (when rtnall
+                (insert (mapconcat 'identity rtnall "\n") ""))
+              (goto-char (point-min))
+              (or org-agenda-multi (org-agenda-fit-window-to-buffer))
+              (add-text-properties (point-min) (point-max)
+                                   `(org-agenda-type tags
+                                                     org-last-args (,todo-only ,match)
+                                                     org-redo-cmd ,org-agenda-redo-command
+                                                     org-series-cmd ,org-cmd))
+              (org-agenda-finalize)
+              (setq buffer-read-only t)))))
+
+      (add-to-list 'org-agenda-custom-commands
+                   `("D" "Completed view"
+                     (;; List of all TODO entries completed yesterday.
+                      (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
+                            ((org-agenda-overriding-header
+                              (concat "YESTERDAY   "
+                                      (format-time-string "%a %d" (current-time-ndays-ago 1))
+                                      ;; #("__________________" 0 12 (face (:foreground "gray")))
+                                      ))
+                             (org-agenda-skip-function
+                              '(org-agenda-skip-entry-if
+                                'notregexp
+                                (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 1))))
+                             (org-agenda-sorting-strategy '(priority-down))))
+                      ;; List of all TODO entries completed 2 days ago.
+                      (todo "TODO|DONE|CANCELLED" ; includes repeated tasks (back in TODO)
+                            ((org-agenda-overriding-header
+                              (concat "2 DAYS AGO  "
+                                      (format-time-string "%a %d" (current-time-ndays-ago 2))))
+                             (org-agenda-skip-function
+                              '(org-agenda-skip-entry-if
+                                'notregexp
+                                (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 2))))
+                             (org-agenda-sorting-strategy '(priority-down))))
+                      ;; List of all TODO entries completed 3 days ago.
+                      (todo "TODO|DONE|CANCELLED" ; Includes repeated tasks (back in TODO).
+                            ((org-agenda-overriding-header
+                              (concat "3 DAYS AGO  "
+                                      (format-time-string "%a %d" (current-time-ndays-ago 3))))
+                             (org-agenda-skip-function
+                              '(org-agenda-skip-entry-if
+                                'notregexp
+                                (format-time-string pelm-org-completed-date-regexp (current-time-ndays-ago 3))))
+                             (org-agenda-sorting-strategy '(priority-down)))))
+                     ((org-agenda-format-date "")
+                      (org-agenda-start-with-clockreport-mode nil))) t)
+
+      (defun current-time-ndays-ago (n)
+        "Return the current time minus N days."
+        (time-subtract (current-time) (days-to-time n)))
+
+      (add-to-list 'org-agenda-custom-commands
+                   '("rw" "Weekly review"
+                     ((tags "CATEGORY={@Collect}&LEVEL=2|TODO={TODO}"
+                            ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")))
+
+                      (agenda ""
+                              ((org-agenda-clockreport-mode t)
+                               (org-agenda-format-date
+                                (concat "\n"
+                                        "%Y-%m-%d" " %a "
+                                        (make-string (window-width) ?_)))
+                               (org-agenda-overriding-header "PAST WEEK")
+                               (org-agenda-prefix-format " %?-11t %i %-12:c% s")
+                               (org-agenda-show-log 'clockcheck)
+                               (org-agenda-span 7)
+                               (org-agenda-start-day "-1w") ; recently done
+                               (org-deadline-warning-days 0)))
+
+                      (agenda ""
+                              ((org-agenda-overriding-header "THIS WEEK")
+                               (org-agenda-span 'week)
+                               (org-agenda-start-day "+0d")
+                               (org-deadline-warning-days 0)))
+
+                      (todo "PROJECT"
+                            ((org-agenda-overriding-header "PROJECT LIST")))
+
+                      ;; FIXME we should show which tasks (don't) have CLOCK lines: archived vs. deleted.
+                      (todo "DONE"
+                            ((org-agenda-overriding-header
+                              "Candidates to be archived")))
+
+                      (todo "STARTED"
+                            ((org-agenda-overriding-header "IN PROGRESS")
+                             (org-agenda-todo-ignore-scheduled nil)))
+
+                      (todo "TODO"
+                            ((org-agenda-overriding-header "ACTION LIST")))
+
+                      (todo "WAIT"
+                            ((org-agenda-format-date "")
+                             (org-agenda-overriding-header "WAITING FOR")
+                             (org-agenda-todo-ignore-deadlines 'all) ; Future?
+                             (org-agenda-todo-ignore-scheduled t)))
+
+                      ;; Same reasoning as for WAIT.
+                      (todo "SOMEDAY"
+                            ((org-agenda-format-date "")
+                             (org-agenda-overriding-header "SOMEDAY")
+                             (org-agenda-todo-ignore-deadlines 'all)
+                             (org-agenda-todo-ignore-scheduled t)))
+                      )) t)
+
+      (defun pelm-org/org-agenda-done (&optional arg)
+        "Mark current TODO as done.
+This changes the line at point, all other lines in the agenda referring to
+the same tree node, and the headline of the tree node in the Org-mode file."
+        (interactive "P")
+        (org-agenda-todo "DONE"))
+
+      ;; Override the key definition for org-exit
+      (define-key org-agenda-mode-map "x" 'pelm-org/org-agenda-done)
+
+      (defun pelm-org/org-agenda-mark-done-and-add-followup ()
+        "Mark the current TODO as done and add another task after it.
+Creates it at the same level as the previous task, so it's better to use
+this with to-do items than with projects or headings."
+        (interactive)
+        (org-agenda-todo "DONE")
+        (org-agenda-switch-to)
+        (org-capture 0 "t"))
+      ;; Override the key definition
+      (define-key org-agenda-mode-map "X" 'pelm-org/org-agenda-mark-done-and-add-followup)
+
+      (autoload 'appt-check "appt")
+
       ;; Config support
       (defun pelm-org/mark-next-parent-tasks-todo ()
         "Visit each parent task and change STARTED states to TODO"
@@ -983,9 +963,7 @@ Captured %<%Y-%m-%d %H:%M>
             (save-excursion
               (while (org-up-heading-safe)
                 (when (member (nth 2 (org-heading-components)) (list "STARTED"))
-                  (org-todo "TODO")))))
-
-          ))
+                  (org-todo "TODO")))))))
 
 
       (defun pelm-org/narrow-up-one-org-level ()
