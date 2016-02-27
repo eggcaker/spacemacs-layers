@@ -407,6 +407,22 @@
                :password pelm/gitter-pwd :full-name pelm/full-name)
       (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker" :full-name pelm/full-name))
 
+
+    (defun pelm-shell/describe-random-interactive-function ()
+      (interactive)
+      "Show the documentation for a random interactive function.
+Consider only documented, non-obsolete functions."
+      (let (result)
+        (mapatoms
+         (lambda (s)
+           (when (and (commandp s)
+                      (documentation s t)
+                      (null (get s 'byte-obsolete-info)))
+             (setq result (cons s result)))))
+        (describe-function (elt result (random (length result))))))
+
+    (key-chord-define-global "hh"    'pelm-shell/describe-random-interactive-function)
+
     ;; Load local
     (when (file-exists-p "~/.local.el")
       (load "~/.local.el")))

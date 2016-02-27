@@ -375,8 +375,7 @@
                         "DONE(d!/!)"     ; Completed, closed fixed, verified
                         "CANCELLED(x!)")      ; Wontfix, rejected, ignored, cancelled
 
-              (sequence "TOBLOG" "BLOGGED" "|" "POSTED")
-              (sequence "LEARN" "TRY" "TEACH" "|" "COMPLETE(x)"))
+              (sequence "PLAN(p)" "LEARN(l)" "|" "COMPLETE(x)"))
 
             org-todo-keyword-faces (quote
                                     (("TODO" :foreground "red" :weight bold)
@@ -557,14 +556,14 @@ Captured %<%Y-%m-%d %H:%M>
                                (org-agenda-overriding-header
                                 (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
                                (org-agenda-span 'day)))
-                      ;; Unscheduled new tasks (waiting to be prioritized and scheduled).
+                      ;; Unscheduled new tasks (waiging to be prioritized and scheduled).
                       (todo "TODO"
                             ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
                              (org-agenda-files (list ,(concat org-directory "/mobileorg.org")
                                                      ,(concat org-directory "/refile.org")
                                                      ))))
 
-                      (tags-todo "TODO={STARTED\\|TRY}"
+                      (tags-todo "TODO={STARTED\\|LEARN}"
                                  ((org-agenda-overriding-header "STARTED TASKS")
                                   (org-agenda-skip-function
                                    '(org-agenda-skip-entry-if 'deadline))))
