@@ -58,6 +58,7 @@
         "ob" 'org-iswitchb
         "og" 'org-clock-goto
         "oc" 'org-capture
+        "oC" 'org-gcal-sync
         "os" 'org-search-view
         "oI" 'pelm-org/punch-in
         "oO" 'pelm-org/punch-out))
@@ -326,6 +327,7 @@
        org-agenda-todo-ignore-scheduled nil
        org-agenda-todo-ignore-timestamp nil
        org-agenda-skip-deadline-if-done t
+       org-deadline-warning-days 7
        org-agenda-skip-scheduled-if-done t
        org-agenda-skip-timestamp-if-done t
        org-remove-highlights-with-change nil
@@ -945,6 +947,9 @@ the same tree node, and the headline of the tree node in the Org-mode file."
 
       ;; Override the key definition for org-exit
       (define-key org-agenda-mode-map "x" 'pelm-org/org-agenda-done)
+
+      ;; google calendar sync
+      (define-key org-agenda-mode-map "gs" 'org-gcal-sync)
 
       (defun pelm-org/org-agenda-mark-done-and-add-followup ()
         "Mark the current TODO as done and add another task after it.
