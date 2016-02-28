@@ -70,6 +70,7 @@
               ("Refile" "~/.spacemacs.d/pelm-org/vendor/icons/org/inbox.png" nil nil :ascent center)
               ("Habit[s]" "~/.spacemacs.d/pelm-org/vendor/icons/org/habit.png" nil nil :ascent center)
               ("Business" "~/.spacemacs.d/pelm-org/vendor/icons/org/business.png" nil nil :ascent center)
+              ("\\(google\\|Calendar\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/calendar.png" nil nil :ascent center)
               ("Blog" "~/.spacemacs.d/pelm-org/vendor/icons/org/blog.png" nil nil :ascent center)
               ("Geek" "~/.spacemacs.d/pelm-org/vendor/icons/org/geek.png" nil nil :ascent center)
               ("\\(Personal\\|People\\)" "~/.spacemacs.d/pelm-org/vendor/icons/org/personal.svg" nil nil :ascent center)
@@ -141,6 +142,7 @@
       (defvar pelm-org-mobile-sync-secs (* 60 2))
 
       (defun pelm-org-mobile-sync-pull-and-push ()
+        (org-gcal-sync)
         (org-mobile-pull)
         (org-mobile-push)
         (when (fboundp 'sauron-add-event)
@@ -466,6 +468,11 @@ Captured %<%Y-%m-%d %H:%M>
                    `("t" "Task" entry
                      (file+headline ,(concat org-directory "/refile.org") "Inbox")
                      ,pelm-org/basic-task-template))
+
+      ;; google calendar item
+      (add-to-list 'org-capture-templates
+                   `("g" "Google Calendar Entry " entry
+                     (file (concat org-directory "/google.org")) "* %^{Task}\n %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n" :immediate-finish t) t)
 
       (add-to-list 'org-capture-templates
                    `("T" "Quick task" entry

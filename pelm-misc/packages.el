@@ -14,6 +14,7 @@
 ;; which require an initialization must be listed explicitly in the list.
 (setq pelm-misc-packages
     '(
+      org-gcal
       ;;discover-my-major
       ))
 
@@ -22,10 +23,15 @@
 
 ;; For each package, define a function pelm-misc/init-<package-name>
 ;;
-(defun pelm-misc/init-discover-my-major ()
-    (use-package discover-my-major
+(defun pelm-misc/init-org-gcal ()
+    (use-package org-gcal
+      :commands (org-gcal-sync org-gcal-fetch)
       :defer t
       :init
+      (setq org-gcal-dir "~/.emacs.d/.cache/org-gcal/")
+      (setq org-gcal-logo "org.png")
+      (setq org-gcal-token-file "~/.emacs.d/.cache/.org-gcal-token")
+      (setq org-gcal-file-alist '(("eggcaker@gmail.com" .  "~/.org-files/google.org")))
+      :config
       (progn
-        (evil-leader/set-key (kbd "mhm") 'discover-my-major)
-        (evilify makey-key-mode makey-key-mode-get-key-map ))))
+        )))

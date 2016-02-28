@@ -421,7 +421,7 @@ Consider only documented, non-obsolete functions."
              (setq result (cons s result)))))
         (describe-function (elt result (random (length result))))))
 
-    (key-chord-define-global "hh"    'pelm-shell/describe-random-interactive-function)
+    (key-chord-define-global "HH"    'pelm-shell/describe-random-interactive-function)
 
     ;; Load local
     (when (file-exists-p "~/.local.el")
@@ -430,3 +430,18 @@ Consider only documented, non-obsolete functions."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-gcal-dir "~/.emacs.d/.cache/org-gcal/")
+ '(org-gcal-logo "org.png")
+ '(org-gcal-token-file "~/.emacs.d/.cache/.org-gcal-token"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
