@@ -13,6 +13,7 @@
      ;;games
      ;; better-defaults
      erc
+     emoji
      emacs-lisp
      plantuml
      (org :variables
@@ -229,9 +230,11 @@
 
    ;; IRC
    erc-autojoin-channels-alist
-   '(("1\\.0\\.0" "#syl20bnr/spacemacs") ; Gitter
-     ("irc.gitter.im" "#syl20bnr/spacemacs")
-     ("freenode\\.net" "#org-mode"))
+   '(
+     ;;("irc.gitter.im" "#syl20bnr/spacemacs")
+     ("localhost" "#动动健身" "#动动大集合")
+     ;;("freenode\\.net" "#org-mode")
+     )
 
    ;; Theme modifications
    theming-modifications
@@ -403,9 +406,12 @@
     (spacemacs|define-custom-layout "@ERC"
       :binding "E"
       :body
-      (erc-tls :server "irc.gitter.im" :port "6667" :nick "eggcaker"
-               :password pelm/gitter-pwd :full-name pelm/full-name)
-      (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker" :full-name pelm/full-name))
+      ;;(erc-tls :server "irc.gitter.im" :port "6667" :nick "eggcaker"
+      ;;         :password pelm/gitter-pwd :full-name pelm/full-name)
+      ;;(erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
+       ;;    :password pelm/irc-pwd :full-name pelm/full-name)
+      (erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
+      )
 
 
     (defun pelm-shell/describe-random-interactive-function ()

@@ -949,7 +949,8 @@ the same tree node, and the headline of the tree node in the Org-mode file."
       (define-key org-agenda-mode-map "x" 'pelm-org/org-agenda-done)
 
       ;; google calendar sync
-      (define-key org-agenda-mode-map "gs" 'org-gcal-sync)
+      ;; FIXME: not working
+      ;;(define-key org-agenda-mode-map "<SPC> gs" 'org-gcal-sync)
 
       (defun pelm-org/org-agenda-mark-done-and-add-followup ()
         "Mark the current TODO as done and add another task after it.
