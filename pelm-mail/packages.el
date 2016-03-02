@@ -61,7 +61,7 @@
 
   ;;; Mail directory shortcuts
   (setq mu4e-maildir-shortcuts
-        '(("/Gmail/INBOX" . ?g)
+        '(("/Gmail/INBOX" . ?j)
           ("/Gmail/PacerHealth" . ?p)))
 
   ;; Custom marks
@@ -100,8 +100,7 @@
   ;; gmail setup
   (setq smtpmail-smtp-server "smtp.gmail.com")
   (setq smtpmail-smtp-service 587)
-  (setq smtpmail-smtp-user "eggcaker@gmail.com")
-  )
+  (setq smtpmail-smtp-user "eggcaker@gmail.com"))
 
 
 ;;; packages.el ends here

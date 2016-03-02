@@ -1,8 +1,5 @@
 * Blogs                                                                                               :elfeed:
 ** Software Development                                                                                 :dev:
 *** Emacs                                                                                   :emacs:mustread:
-**** https://www.reddit.com/r/emacs/.rss
 **** http://planet.emacsen.org/atom.xml
 **  Fun
-*** http://xkcd.com/rss.xml
-

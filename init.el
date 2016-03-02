@@ -360,7 +360,11 @@
     (setq key-chord-one-key-delay 0.16)
     (key-chord-mode 1)
     (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
+
     (key-chord-define-global "UU"     'org-capture)
+
+    ;;TODO: add ledger file open shortkey
+    ;;(key-chord-define-global "KK"     'org-capture)
 
     (setq-default line-spacing 10)
     ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))

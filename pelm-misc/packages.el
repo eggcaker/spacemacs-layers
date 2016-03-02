@@ -15,6 +15,7 @@
 (setq pelm-misc-packages
     '(
       org-gcal
+      ledger-mode
       ;;discover-my-major
       ))
 
@@ -31,7 +32,14 @@
       (setq org-gcal-dir "~/.emacs.d/.cache/org-gcal/")
       (setq org-gcal-logo "org.png")
       (setq org-gcal-token-file "~/.emacs.d/.cache/.org-gcal-token")
-      (setq org-gcal-file-alist '(("eggcaker@gmail.com" .  "~/.org-files/google.org")))
-      :config
-      (progn
-        )))
+      (setq org-gcal-file-alist '(("eggcaker@gmail.com" .  "~/.org-files/google.org")))))
+
+
+(defun pelm-misc/post-init-ledger-mode ()
+  (use-package ledger-mode
+    :ensure t
+    :init
+    (setq ledger-clear-whole-transactions 1)
+    :mode "\\.dat"
+    :config
+    (add-to-list 'evil-emacs-state-modes 'ledger-report-mode)))
