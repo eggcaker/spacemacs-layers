@@ -10,10 +10,7 @@
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
                       auto-completion-private-snippets-directory "~/.spaemacs.d/snippets/")
-     ;;games
-     ;; better-defaults
      erc
-     emoji
      emacs-lisp
      plantuml
      (org :variables
@@ -23,56 +20,49 @@
      markdown
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
-     ;(clojure
-     ; :variables clojure-enable-fancify-symbols t
-     ; )
-     ;swift
+     (clojure
+      :variables clojure-enable-fancify-symbols t)
+
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      shell-scripts
-     ;;spell-checking
      syntax-checking
      version-control
      osx
-     ;; tern
      javascript
      react
      finance
-     ;;deft
      evil-commentary
      (elfeed :variables
              url-queue-timeout 30
              elfeed-enable-web-interface nil
              rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
-     ;; (chinese
-     ;; :variables
-     ;; chinese-default-input-method 'wubi
-     ;; chinese-enable-youdao-dict t)
      restclient
      search-engine
-     ;;xkcd
-     ;;typing-games
-     ;;org-ipython
-
      (mu4e :variables
            mu4e-account-alist t
            mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
 
-     ;; Personal Layers 
-     pelm-org
-     pelm-blog
-     pelm-misc
-     pelm-ibuffer
-     pelm-erc
-     pelm-mail
+     ;;xkcd
+     ;;typing-games
+     ;;org-ipython
+
      ;;notmuch
      ;;stack-exchange
      ;; play with
      ;;evernote
      ;;fasd
-     )
+
+     ;; Personal Layers
+     pelm-org
+    pelm-blog
+     pelm-misc
+     pelm-ibuffer
+     pelm-erc
+     pelm-mail
+          )
 
    dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode)
 
@@ -445,9 +435,10 @@ Consider only documented, non-obsolete functions."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-gcal-dir "~/.emacs.d/.cache/org-gcal/")
- '(org-gcal-logo "org.png")
- '(org-gcal-token-file "~/.emacs.d/.cache/.org-gcal-token"))
+ '(exec-path-from-shell-variables (quote ("PATH")))
+ '(org-gcal-dir "~/.emacs.d/.cache/org-gcal/" t)
+ '(org-gcal-logo "org.png" t)
+ '(org-gcal-token-file "~/.emacs.d/.cache/.org-gcal-token" t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

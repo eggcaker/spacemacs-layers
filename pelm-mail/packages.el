@@ -33,15 +33,8 @@
            (mu4e-refile-folder "/Gmail/[Gmail].Archive")
 
            (user-mail-address "eggcaker@gmail.com")
-           (user-full-name "eggcaker"))
-          ;; ("qq"
-          ;;  (mu4e-sent-messages-behavior sent)
-          ;;  (mu4e-sent-folder "/qq/Sent Items")
-          ;;  (mu4e-drafts-folder "/qq/Drafts")
-          ;;  (user-mail-address "eggcaker@qq.com")
-          ;;  (user-full-name "eggcaker"))
+           (user-full-name "eggcaker"))))
 
-          ))
   (mu4e/mail-account-reset)
   (setq mu4e-maildir "~/.mails"
         mu4e-trash-folder "/Trash"
