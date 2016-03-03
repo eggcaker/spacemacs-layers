@@ -42,7 +42,6 @@
                pelm-org/clock-in-last-task)
     :init
     (progn
-      (evil-leader/set-key "m'" 'org-edit-src-exit)
       (evil-leader/set-key "oj"
         (lambda ()
           (interactive)
@@ -89,11 +88,11 @@
       (defvar pelm-org/org-agenda-contexts
         '(
           ;;(tags-todo "+@phone")
-          (tags-todo "+@work")
+          (tags-todo "+@work-HABIT")
           (tags-todo "+@emacs")
-          (tags-todo "+@market")
           ;;(tags-todo "+@coding")
-          (tags-todo "+@reading")
+          (tags-todo "+@reading-HABIT")
+          (tags-todo "+@learn")
           ;;(tags-todo "+@computer")
           (tags-todo "+@home"))
         "Usual list of contexts.")
@@ -102,7 +101,6 @@
       (setq org-tag-alist '(("@work" . ?w)
                             ("@home" . ?h)
                             ("@emacs" . ?e)
-                            ("@market" . ?m)
                             ;;("@writing" . ?b)
                             ;;("@coding" . ?c)
                             ;;("@phone" . ?p)
@@ -143,7 +141,7 @@
       (defvar pelm-org-mobile-sync-secs (* 60 2))
 
       (defun pelm-org-mobile-sync-pull-and-push ()
-        (org-gcal-sync)
+       ;; (org-gcal-sync)
         (org-mobile-pull)
         (org-mobile-push)
         (when (fboundp 'sauron-add-event)
