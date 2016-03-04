@@ -9,7 +9,7 @@
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
-                      auto-completion-private-snippets-directory "~/.spaemacs.d/snippets/")
+                      auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/")
      erc
      emacs-lisp
      plantuml
@@ -167,6 +167,7 @@
                                   "~/src/work/pacer_android/"
                                   "~/src/work/pacer_groups/"
                                   "~/src/work/mandian_server/"
+                                  "~/.zprezto/"
                                   )
 
    ;; Flycheck
@@ -281,6 +282,7 @@
           :url "https://www.baidu.com/s?wd=%s")
         search-engine-alist)
 
+  (spacemacs//set-monospaced-font   "Source Code Pro" "Hiragino Sans GB" 18 20)
 
   (defun pelm/node-eval ()
     (interactive)
