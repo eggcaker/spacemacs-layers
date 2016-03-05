@@ -414,6 +414,12 @@ Consider only documented, non-obsolete functions."
 
     (key-chord-define-global "HH"    'pelm-shell/describe-random-interactive-function)
 
+
+    ;;FIXME: should be a layer to load package
+    (add-to-list 'load-path "~/.spacemacs.d/pelm-org/local/beancount")
+    (require 'beancount)
+    (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
     ;; Load local
     (when (file-exists-p "~/.local.el")
       (load "~/.local.el")))

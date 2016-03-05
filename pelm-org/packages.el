@@ -10,8 +10,8 @@
 ;;
 ;;; License: GPLv3
 
-(defconst pelm-org-packages '(org org-ac gnuplot ox-reveal) )
-(defvar pelm-org-excluded-packages '())
+(defconst pelm-org-packages '(org org-ac gnuplot ox-reveal ) )
+
 
 (defun pelm-org/init-org-ac()
   (use-package org-ac
@@ -65,6 +65,10 @@
     (progn
 
       ;; start of test code
+
+      ;; end of test code
+
+      
       (defun wicked/org-clock-in-if-starting ()
         "Clock in when the task is marked STARTED."
         (when (and (string= org-state "STARTED")
@@ -86,9 +90,6 @@
           (org-clock-out)))
       (add-hook 'org-after-todo-state-change-hook
                 'wicked/org-clock-out-if-waiting)
-
-
-      ;; end of test code
 
 
       ;; just for fun
