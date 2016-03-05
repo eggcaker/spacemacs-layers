@@ -4,12 +4,7 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
-     (auto-completion :variables
-                      auto-completion-enable-snippets-in-popup t
-                      auto-completion-return-key-behavior 'complete
-                      auto-completion-tab-key-behavior 'cycle
-                      auto-completion-complete-with-key-sequence nil
-                      auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/")
+     auto-completion
      erc
      emacs-lisp
      plantuml
@@ -24,6 +19,7 @@
       :variables clojure-enable-fancify-symbols t)
 
      (shell :variables
+            shell-default-shell 'eshell
             shell-default-height 30
             shell-default-position 'bottom)
      shell-scripts
@@ -282,7 +278,18 @@
           :url "https://www.baidu.com/s?wd=%s")
         search-engine-alist)
 
-  (spacemacs//set-monospaced-font   "Source Code Pro" "Hiragino Sans GB" 18 20)
+  (defun set-font (english chinese english-size chinese-size)
+    (set-face-attribute
+     'default nil :font (format "%s:pixelsize=%d" english english-size))
+    (dolist
+        (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font
+       (frame-parameter nil 'font) charset (font-spec :family chinese :size
+                                                      chinese-size))))
+
+  (when (spacemacs/system-is-mac)
+    (set-font "Source Code Pro" "Hiragino Sans GB" 18 22))
+
 
   (defun pelm/node-eval ()
     (interactive)
@@ -321,7 +328,7 @@
    js2-basic-offset 2
    css-indent-offset 2)
 
-  (global-company-mode)
+ ;; (global-company-mode)
   (turn-off-show-smartparens-mode)
   (setq powerline-default-separator 'arrow)
 
@@ -368,24 +375,6 @@
 
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))))
-
-
-    ;; ;; define the search engine
-    ;; (setq search-engine-alist
-    ;;       '(            (duck-duck-go
-    ;;          :name "Duck Duck Go"
-    ;;          :url "https://duckduckgo.com/?q=%s")
-    ;;         (google
-    ;;          :name "Google"
-    ;;          :url "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s")
-    ;;         (github
-    ;;          :name "Github"
-    ;;          :url "https://github.com/search?ref=simplesearch&q=%s")
-    ;;         (stack-overflow
-    ;;          :name "Stack Overflow"
-    ;;          :url "https://stackoverflow.com/search?q=%s"
-    ;;          )))
-
 
     (use-package nameless
       :defer t
