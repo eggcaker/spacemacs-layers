@@ -10,6 +10,7 @@
      plantuml
      (org :variables
           org-enable-github-support t)
+     spell-checking
      git
      github
      markdown
@@ -376,6 +377,7 @@
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))))
 
+    (setq yas-indent-line (quote none)) ;; do not auto indent snippet
     (use-package nameless
       :defer t
       :init

@@ -1,0 +1,20 @@
+#+TITLE: Pelm-Org layer for spacemacs
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/readtheorg.css" />
+
+
+* Table of Contents                                                                       :TOC_4_org:noexport:
+ - [[Decsription][Description]]
+ - [[Install][Install]]
+ - [[Key bindings][Key bindings]]
+
+* Description
+This layer add ton of personal for org-mode, especially for the [[http://gettingthingsdone.com][GTD]].
+* Install
+To use this contribution add it to your =~/.spacemacs=
+
+#+begin_src emacs-lisp
+  (setq-default dotspacemacs-configuration-layers '(pelm-org))
+#+end_src
+
+* Key bindings
+TBD

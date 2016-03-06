@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: pay
+# key: pay
+# --
+`(format-time-string  "%Y-%m-%d")` * "PacerHealth" | "Payroll"
+  Assets:CN:CMB:Checking                       1994.24 CNY
+  Income:CN:PacerHealth:Salary                -2600.00 CNY
+  Expenses:Life:AccumulationFund                312.00 CNY   ;; 公积金
+  Expenses:Health:Endowment:Insurance           208.00 CNY   ;; 养老
+  Expenses:Health:Unemployed:Insurance            5.20 CNY   ;; 失业
+  Expenses:Health:Medical:Insurance              80.56 CNY   ;; 医疗
+  Assets:CN:PacerHealth:Vacation                     0 VACHR
+  Income:CN:PacerHealth:Vacation                     0 VACHR
+$0
