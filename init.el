@@ -11,7 +11,7 @@
      plantuml
      (org :variables
           org-enable-github-support t)
-     spell-checking
+     ;;spell-checking
      git
      github
      markdown
@@ -291,6 +291,9 @@
 
   (when (spacemacs/system-is-mac)
     (set-font "Source Code Pro" "Hiragino Sans GB" 18 22))
+
+  (when (spacemacs/system-is-linux)
+    (spacemacs//set-monospaced-font "Source Code Pro" "Droid Sans Fallback" 18 22))
 
 
   (defun pelm/node-eval ()
