@@ -2,4 +2,5 @@
 ** Software Development                                                                                 :dev:
 *** Emacs                                                                                   :emacs:mustread:
 **** http://planet.emacsen.org/atom.xml
+**** http://blog.binchen.org/rss.xml
 **  Fun

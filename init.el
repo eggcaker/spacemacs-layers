@@ -5,6 +5,7 @@
    dotspacemacs-configuration-layers
    '(
      auto-completion
+     spacemacs-ivy
      erc
      emacs-lisp
      plantuml
@@ -61,7 +62,7 @@
      pelm-mail
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t))
@@ -421,6 +422,19 @@ Consider only documented, non-obsolete functions."
     (add-to-list 'load-path "~/.spacemacs.d/pelm-org/local/beancount")
     (require 'beancount)
     (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
+
+
+    ;; test the key freq
+;;    (setq keyfreq-excluded-commands
+;;          '(self-insert-command
+;;            abort-recursive-edit
+;;            forward-char
+;;            backward-char
+;;            previous-line
+;;            next-line))
+;;    (keyfreq-mode 1)
+;;    (keyfreq-autosave-mode 1)
 
     ;; Load local
     (when (file-exists-p "~/.local.el")

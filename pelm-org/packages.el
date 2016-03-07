@@ -68,7 +68,6 @@
 
       ;; end of test code
 
-      
       (defun wicked/org-clock-in-if-starting ()
         "Clock in when the task is marked STARTED."
         (when (and (string= org-state "STARTED")
@@ -508,6 +507,19 @@ Captured %<%Y-%m-%d %H:%M>
                      (file+headline "~/.org-files/refile.org" "Inbox")
                      "* TODO %^{Task}\nSCHEDULED: %t\n"
                      :immediate-finish t))
+      (add-to-list 'org-capture-templates
+                   '("l" "Ledger entries"))
+
+      (add-to-list 'org-capture-templates
+                   `("la" "Expense Item" plain
+                     (file+headline "~/.beancount/beancount-2016.beancount" "Expenses")
+                     "%(org-read-date) * \"%^{Payee}\"
+  Assets:CN:Visual:Alipay
+  Expenses:Food:Restaurant  %^{Amount} CNY"
+                     :immediate-finish t))
+
+
+
 
       (add-to-list 'org-capture-templates
                    `("i" "Interrupting task" entry
