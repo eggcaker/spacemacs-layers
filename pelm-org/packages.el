@@ -511,11 +511,11 @@ Captured %<%Y-%m-%d %H:%M>
                    '("l" "Ledger entries"))
 
       (add-to-list 'org-capture-templates
-                   `("la" "Expense Item" plain
-                     (file+headline "~/.beancount/beancount-2016.beancount" "Expenses")
+                   `("lb" "Breakfast entry" plain
+                     (file "~/.ledger/ledger.dat")
                      "%(org-read-date) * \"%^{Payee}\"
-  Assets:CN:Visual:Alipay
-  Expenses:Food:Restaurant  %^{Amount} CNY"
+  Expenses:Food:Restaurant  %^{Amount}
+  Assets:Alipay"
                      :immediate-finish t))
 
 
@@ -1510,7 +1510,7 @@ Callers of this function already widen the buffer view."
                (dot . t)
                (ditaa . t)
                ;;(R . t)
-               ;;(ledger . t)
+               (ledger . t)
                ;;(haskell . t)
                ;;(python . t)
                ;;(ruby . t)
