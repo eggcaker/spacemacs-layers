@@ -5,7 +5,6 @@
    dotspacemacs-configuration-layers
    '(
      (auto-completion :variables
-
                       auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
      erc
@@ -54,6 +53,10 @@
      ;; play with
      ;;evernote
      ;;fasd
+     ;; (geolocation :variables
+     ;;              geolocation-enable-automatic-theme-changer t
+     ;;              geolocation-enable-location-service t
+     ;;              geolocation-enable-weather-forecast t)
 
      spotify
      ;; Personal Layers
