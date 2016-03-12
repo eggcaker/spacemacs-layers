@@ -31,6 +31,9 @@
      osx
      javascript
      react
+     (colors :variables
+             colors-enable-rainbow-identifiers t )
+
      finance
      evil-commentary
      (elfeed :variables
@@ -47,16 +50,10 @@
      ;;xkcd
      ;;typing-games
      ;;org-ipython
-
-     ;;notmuch
      ;;stack-exchange
      ;; play with
      ;;evernote
      ;;fasd
-     ;; (geolocation :variables
-     ;;              geolocation-enable-automatic-theme-changer t
-     ;;              geolocation-enable-location-service t
-     ;;              geolocation-enable-weather-forecast t)
 
      spotify
      ;; Personal Layers
