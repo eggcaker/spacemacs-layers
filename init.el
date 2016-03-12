@@ -53,8 +53,7 @@
      ;;stack-exchange
      ;; play with
      ;;evernote
-     ;;fasd
-
+     fasd
      spotify
      ;; Personal Layers
      pelm-org
