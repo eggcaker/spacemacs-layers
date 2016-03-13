@@ -68,6 +68,13 @@
 
       ;; end of test code
 
+      (defun pelm-org/place-agenda-tags ()
+        "Put the agenda tags by the right border of the agenda window."
+        (setq org-agenda-tags-column (- 2 (window-width)))
+        (org-agenda-align-tags))
+
+      (add-hook 'org-finalize-agenda-hook 'pelm-org/place-agenda-tags)
+
       (defun wicked/org-clock-in-if-starting ()
         "Clock in when the task is marked STARTED."
         (when (and (string= org-state "STARTED")
@@ -337,8 +344,8 @@
        org-track-ordered-property-with-tag t
        org-agenda-dim-blocked-tasks t
        org-habit-preceding-days 7
-       org-habit-graph-column 110
-       org-tags-column -110
+       org-habit-graph-column 150
+       org-tags-column -150
        org-habit-following-days 1
        org-habit-show-habits-only-for-today t
        org-habit-show-all-today t
