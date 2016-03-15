@@ -4,7 +4,8 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
      erc
      emacs-lisp
@@ -30,6 +31,9 @@
      osx
      javascript
      react
+     (colors :variables
+             colors-enable-rainbow-identifiers t )
+
      finance
      evil-commentary
      (elfeed :variables
@@ -46,16 +50,14 @@
      ;;xkcd
      ;;typing-games
      ;;org-ipython
-
-     ;;notmuch
      ;;stack-exchange
      ;; play with
      ;;evernote
-     ;;fasd
-
+     fasd
+     spotify
      ;; Personal Layers
      pelm-org
-    pelm-blog
+     pelm-blog
      pelm-misc
      pelm-ibuffer
      pelm-erc
@@ -220,10 +222,10 @@
    ;; IRC
    erc-autojoin-channels-alist
    '(
-     ;;("irc.gitter.im" "#syl20bnr/spacemacs")
-     ("localhost" "#动动健身" "#动动大集合")
-     ;;("freenode\\.net" "#org-mode")
-     )
+     ("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
+     ("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
+     ;;("localhost" "#动动健身" "#动动大集合")
+     ("freenode\\.net" "#org-mode"))
 
    ;; Theme modifications
    theming-modifications
@@ -333,18 +335,12 @@
    js2-basic-offset 2
    css-indent-offset 2)
 
- ;; (global-company-mode)
+  (global-company-mode)
   (turn-off-show-smartparens-mode)
   (setq powerline-default-separator 'arrow)
 
-  (evil-leader/set-key (kbd "omr") 'recentf-open-files)
-
-  ;; Evalute JavaScript
-  (evil-leader/set-key (kbd "oe") 'pelm/node-eval)
-
   ;; groovy for gradle file
   (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
-
 
   (with-eval-after-load 'web-mode
     (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
@@ -358,17 +354,6 @@
     (setq js2-include-node-externs t)
     (setq js2-include-browser-externs t)
     (setq js2-include-global-externs t)
-
-    ;; key-chord to exit insert mode
-    (require 'key-chord)
-    (setq key-chord-one-key-delay 0.16)
-    (key-chord-mode 1)
-    (key-chord-define evil-insert-state-map  "jk" 'evil-normal-state)
-
-    (key-chord-define-global "UU"     'org-capture)
-
-    ;;TODO: add ledger file open shortkey
-    ;;(key-chord-define-global "KK"     'org-capture)
 
     (setq-default line-spacing 10)
     ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))
@@ -397,11 +382,11 @@
     (spacemacs|define-custom-layout "@ERC"
       :binding "E"
       :body
-      ;;(erc-tls :server "irc.gitter.im" :port "6667" :nick "eggcaker"
-      ;;         :password pelm/gitter-pwd :full-name pelm/full-name)
-      ;;(erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
-       ;;    :password pelm/irc-pwd :full-name pelm/full-name)
-      (erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
+      (erc-tls :server "irc.gitter.im" :port "6697" :nick "eggcaker"
+               :password pelm/gitter-pwd :full-name pelm/full-name)
+      (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
+           :password pelm/irc-pwd :full-name pelm/full-name)
+      ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
       )
 
 
@@ -418,31 +403,22 @@ Consider only documented, non-obsolete functions."
              (setq result (cons s result)))))
         (describe-function (elt result (random (length result))))))
 
-    (key-chord-define-global "HH"    'pelm-shell/describe-random-interactive-function)
+    (evil-leader/set-key "oh" 'pelm-shell/describe-random-interactive-function)
 
-
-    ;;FIXME: should be a layer to load package
-    (add-to-list 'load-path "~/.spacemacs.d/pelm-org/local/beancount")
-    (require 'beancount)
-    (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-
-
-
-    ;; test the key freq
-;;    (setq keyfreq-excluded-commands
-;;          '(self-insert-command
-;;            abort-recursive-edit
-;;            forward-char
-;;            backward-char
-;;            previous-line
-;;            next-line))
-;;    (keyfreq-mode 1)
-;;    (keyfreq-autosave-mode 1)
+   ;; test the key freq
+   (setq keyfreq-excluded-commands
+         '(self-insert-command
+           abort-recursive-edit
+           forward-char
+           backward-char
+           previous-line
+           next-line))
+   (keyfreq-mode 1)
+   (keyfreq-autosave-mode 1)
 
     ;; Load local
     (when (file-exists-p "~/.local.el")
       (load "~/.local.el")))
-
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
