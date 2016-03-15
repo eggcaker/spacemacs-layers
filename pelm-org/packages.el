@@ -98,7 +98,7 @@
 
       ;; end of test code
 
-      (defvar pelm-org/organization-task-id "87043F9F-107D-4AF6-AAC1-D5C31455463A")
+      ;; (defvar pelm-org/organization-task-id "87043F9F-107D-4AF6-AAC1-D5C31455463A")
 
       (defun pelm-org/place-agenda-tags ()
         "Put the agenda tags by the right border of the agenda window."
@@ -107,15 +107,6 @@
 
       (add-hook 'org-finalize-agenda-hook 'pelm-org/place-agenda-tags)
 
-      (defun pelm-org/org-clock-in-if-starting ()
-        "Clock in when the task is marked STARTED."
-        (when (and (string= org-state "STARTED")
-                   (not (string= org-last-state org-state)))
-          (org-clock-in)))
-      (add-hook 'org-after-todo-state-change-hook 'pelm-org/org-clock-in-if-starting)
-      (defadvice org-clock-in (after wicked activate)
-        "Set this task's status to 'STARTED'."
-        (org-todo "STARTED"))
       (defun pelm-org/org-clock-out-if-waiting ()
         "Clock out when the task is marked WAITING."
         (when (and (string= org-state "WAITING")
@@ -1335,10 +1326,6 @@ Callers of this function already widen the buffer view."
             (goto-char parent-task)
             parent-task)))
 
-      (defun pelm-org/clock-in-organization-task-as-default ()
-        (interactive)
-        (org-with-point-at (org-id-find pelm-org/organization-task-id 'marker)
-          (org-clock-in '(16))))
       (defun pelm-org/punch-in (arg)
         "Start continuous clocking and set the default task to the
 selected task.  If no task is selected set the Organization task
@@ -1370,11 +1357,6 @@ as the default task."
         (when (org-clock-is-active)
           (org-clock-out))
         (org-agenda-remove-restriction-lock))
-
-      (defun pelm-org/clock-in-default-task ()
-        (save-excursion
-          (org-with-point-at org-clock-default-task
-            (org-clock-in))))
 
       (defun pelm-org/clock-in-parent-task ()
         "Move point to the parent (project) task if any and clock in"
