@@ -21,7 +21,6 @@
       (org-ac/config-default))))
 
 (defun pelm-org/post-init-org ()
-  ;;   "Initialize my package"
   (use-package org
     :mode ("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode)
     :defer t
@@ -99,6 +98,8 @@
 
       ;; end of test code
 
+      (defvar pelm-org/organization-task-id "87043F9F-107D-4AF6-AAC1-D5C31455463A")
+
       (defun pelm-org/place-agenda-tags ()
         "Put the agenda tags by the right border of the agenda window."
         (setq org-agenda-tags-column (- 2 (window-width)))
@@ -106,17 +107,16 @@
 
       (add-hook 'org-finalize-agenda-hook 'pelm-org/place-agenda-tags)
 
-      (defun wicked/org-clock-in-if-starting ()
+      (defun pelm-org/org-clock-in-if-starting ()
         "Clock in when the task is marked STARTED."
         (when (and (string= org-state "STARTED")
                    (not (string= org-last-state org-state)))
           (org-clock-in)))
-      (add-hook 'org-after-todo-state-change-hook
-                'wicked/org-clock-in-if-starting)
+      (add-hook 'org-after-todo-state-change-hook 'pelm-org/org-clock-in-if-starting)
       (defadvice org-clock-in (after wicked activate)
         "Set this task's status to 'STARTED'."
         (org-todo "STARTED"))
-      (defun wicked/org-clock-out-if-waiting ()
+      (defun pelm-org/org-clock-out-if-waiting ()
         "Clock out when the task is marked WAITING."
         (when (and (string= org-state "WAITING")
                    (equal (marker-buffer org-clock-marker) (current-buffer))
@@ -125,8 +125,7 @@
                       org-clock-marker)
                    (not (string= org-last-state org-state)))
           (org-clock-out)))
-      (add-hook 'org-after-todo-state-change-hook
-                'wicked/org-clock-out-if-waiting)
+      (add-hook 'org-after-todo-state-change-hook 'pelm-org/org-clock-out-if-waiting)
 
 
       ;; just for fun
@@ -375,8 +374,8 @@
        org-track-ordered-property-with-tag t
        org-agenda-dim-blocked-tasks t
        org-habit-preceding-days 7
-       org-habit-graph-column 150
-       org-tags-column -150
+       org-habit-graph-column 110
+       org-tags-column -110
        org-habit-following-days 1
        org-habit-show-habits-only-for-today t
        org-habit-show-all-today t
@@ -1336,6 +1335,10 @@ Callers of this function already widen the buffer view."
             (goto-char parent-task)
             parent-task)))
 
+      (defun pelm-org/clock-in-organization-task-as-default ()
+        (interactive)
+        (org-with-point-at (org-id-find pelm-org/organization-task-id 'marker)
+          (org-clock-in '(16))))
       (defun pelm-org/punch-in (arg)
         "Start continuous clocking and set the default task to the
 selected task.  If no task is selected set the Organization task
@@ -1356,7 +1359,7 @@ as the default task."
           ;;
           (save-restriction
             (widen)
-                                        ; Find the tags on the current task
+            ;; Find the tags on the current task
             (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
                 (org-clock-in '(16))
               (pelm-org/clock-in-organization-task-as-default)))))
@@ -1389,7 +1392,7 @@ as the default task."
                   (pelm-org/clock-in-default-task)))))))
 
 
-      (defun pelm-clock-in-task-by-id (task-id)
+      (defun pelm-org/clock-in-task-by-id (task-id)
         (interactive)
         (org-with-point-at (org-id-find task-id 'marker)
           (org-clock-in '(16))))

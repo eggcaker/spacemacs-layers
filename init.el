@@ -54,7 +54,6 @@
      ;; play with
      ;;evernote
      fasd
-     ;;spotify
      ;; Personal Layers
      pelm-org
      pelm-blog
@@ -67,7 +66,13 @@
    dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
-   dotspacemacs-delete-orphan-packages t))
+   dotspacemacs-delete-orphan-packages t)
+
+  ;; (when
+  ;;     (spacemacs/system-is-mac)
+  ;;   (append dotspacemacs-configuration-layers '(spotify)))
+
+  )
 
 (defun dotspacemacs/init ()
   (setq-default
@@ -290,7 +295,6 @@
       (set-fontset-font
        (frame-parameter nil 'font) charset (font-spec :family chinese :size
                                                       chinese-size))))
-
   (when (spacemacs/system-is-mac)
     (set-font "Source Code Pro" "Hiragino Sans GB" 18 22))
 
@@ -430,7 +434,13 @@ Consider only documented, non-obsolete functions."
 
     ;; Load local
     (when (file-exists-p "~/.local.el")
-      (load "~/.local.el")))
+      (load "~/.local.el"))
+
+    ;; Load temporary test code if exist
+    (when (file-exists-p "~/Desktop/test.el")
+      (load "~/Desktop/test.el"))
+
+    )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
