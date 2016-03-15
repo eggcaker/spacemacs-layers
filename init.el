@@ -32,7 +32,7 @@
      javascript
      react
      (colors :variables
-             colors-enable-rainbow-identifiers t )
+             colors-enable-rainbow-identifiers nil )
 
      finance
      evil-commentary
@@ -54,7 +54,7 @@
      ;; play with
      ;;evernote
      fasd
-     spotify
+     ;;spotify
      ;; Personal Layers
      pelm-org
      pelm-blog
@@ -64,7 +64,7 @@
      pelm-mail
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t))
@@ -295,7 +295,7 @@
     (set-font "Source Code Pro" "Hiragino Sans GB" 18 22))
 
   (when (spacemacs/system-is-linux)
-    (spacemacs//set-monospaced-font "Source Code Pro" "Droid Sans Fallback" 18 22))
+    (set-font "Source Code Pro" "Droid Sans Fallback" 18 22))
 
 
   (defun pelm/node-eval ()
@@ -415,6 +415,18 @@ Consider only documented, non-obsolete functions."
            next-line))
    (keyfreq-mode 1)
    (keyfreq-autosave-mode 1)
+
+   (require 'org-clock-convenience)
+
+   (defun dfeich/org-agenda-mode-fn ()
+     (define-key org-agenda-mode-map
+       (kbd "<S-up>") #'org-clock-convenience-timestamp-up)
+     (define-key org-agenda-mode-map
+       (kbd "<S-down>") #'org-clock-convenience-timestamp-down)
+     (define-key org-agenda-mode-map
+       (kbd "o") #'org-clock-convenience-fill-gap))
+   (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn)
+
 
     ;; Load local
     (when (file-exists-p "~/.local.el")

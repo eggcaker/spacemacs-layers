@@ -65,6 +65,37 @@
     (progn
 
       ;; start of test code
+      ;;TODO:  easy clock-in code should be play with
+      ;;       (defmacro pelm-org/org-with-current-task (&rest body)
+      ;;         "Execute BODY with the point at the subtree of the current task."
+      ;;         `(if (derived-mode-p 'org-agenda-mode)
+      ;;              (save-window-excursion
+      ;;                (org-agenda-switch-to)
+      ;;                ,@body)
+      ;;            ,@body))
+
+      ;;       (defun pelm-org/org-clock-in-and-track ()
+      ;;         "Start the clock running. Clock into Quantified Awesome."
+      ;;         (interactive)
+      ;;         (pelm-org/org-with-current-task
+      ;;          (org-clock-in)
+      ;;          (when (org-entry-get (point) "AUTO")
+      ;;            (org-open-link-from-string (org-entry-get (point) "AUTO")))))
+
+      ;;       (bind-key "!" 'my/org-clock-in-and-track org-agenda-mode-map)
+
+      ;;       (defun pelm-org/org-quick-clock-in-task (location jump)
+      ;;         "Track and clock in on the specified task.
+      ;; If JUMP is non-nil or the function is called with the prefix argument, jump to that location afterwards."
+      ;;         (interactive)
+      ;;         (when location
+      ;;           (if jump
+      ;;               (progn (org-refile 4 nil location) (pelm-org/org-clock-in-and-track))
+      ;;             (save-window-excursion
+      ;;               (org-refile 4 nil location)
+      ;;               (pelm-org/org-clock-in-and-track)))))
+      ;;       (bind-key "C-c q" 'pelm-org/org-quick-clock-in-task)
+
 
       ;; end of test code
 
