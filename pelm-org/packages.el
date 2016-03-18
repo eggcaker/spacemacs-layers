@@ -1374,10 +1374,12 @@ as the default task."
                   (pelm-org/clock-in-default-task)))))))
 
 
-      (defun pelm-org/clock-in-task-by-id (task-id)
-        (interactive)
-        (org-with-point-at (org-id-find task-id 'marker)
-          (org-clock-in '(16))))
+      (defun pelm-org/clock-in-task-by-id (id)
+        "Clock in a task by id"
+        (save-restriction
+          (widen)
+          (org-with-point-at (org-id-find id 'marker)
+            (org-clock-in '(16)))))
 
       (defun pelm-org/clock-out-maybe ()
         (when (and pelm-org/keep-clock-running
