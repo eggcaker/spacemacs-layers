@@ -338,7 +338,7 @@
                           "~/.org-files/books.org"
                           "~/.org-files/habits.org"
                           )
-       org-export-backends '(ascii beamer html latex md rss reveal)
+       org-export-backends '(ascii html md rss reveal icalendar)
        org-show-entry-below (quote ((default)))
        org-agenda-start-on-weekday 7
        org-startup-indented t
@@ -1540,7 +1540,7 @@ Callers of this function already widen the buffer view."
                ;;(python . t)
                ;;(ruby . t)
                ;;(scala . t)
-               (clojure . t)
+               ;;(clojure . t)
                (sh . t)
                (js . t)
                ;; (java . t)
@@ -1548,6 +1548,8 @@ Callers of this function already widen the buffer view."
                ;; (http . t)
                ;;(ipython . t)
                ;;(kotlin . t)
+               (sql . t)
+               (sqlite . t)
                (plantuml . t)
                ;;(latex . t)
                )))

@@ -168,6 +168,7 @@
    git-magit-status-fullscreen t
 
    magit-repository-directories '(
+                                  "~/src/geek/Androidorg/"
                                   "~/.spacemacs.d/"
                                   "~/src/work/pacer_android/"
                                   "~/src/work/pacer_groups/"

@@ -1,6 +1,10 @@
 * Blogs                                                                                               :elfeed:
+
 ** Software Development                                                                                 :dev:
+*** Javascript
+**** http://www.jstips.co/feed.xml
 *** Emacs                                                                                   :emacs:mustread:
 **** http://planet.emacsen.org/atom.xml
 **** http://blog.binchen.org/rss.xml
+
 **  Fun
