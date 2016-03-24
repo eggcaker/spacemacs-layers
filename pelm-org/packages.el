@@ -351,8 +351,8 @@
        org-startup-with-inline-images t
        org-src-fontify-natively t
        org-ellipsis "⤵"
-       org-ditaa-jar-path "~/.emacs.d/private/pelm-org/vendor/ditaa.jar"
-       org-plantuml-jar-path "~/.emacs.d/private/pelm-org/vendor/plantuml.jar"
+       org-ditaa-jar-path "~/.spacemacs.d/pelm-org/vendor/ditaa.jar"
+       org-plantuml-jar-path "~/.spacemacs.d/pelm-org/vendor/plantuml.jar"
        org-agenda-clockreport-parameter-plist (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80))
 
        org-alphabetical-lists t

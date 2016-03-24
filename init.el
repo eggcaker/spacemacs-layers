@@ -8,6 +8,7 @@
                       auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
      erc
+     twitter
      emacs-lisp
      plantuml
      (org :variables
