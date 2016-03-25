@@ -166,7 +166,10 @@
 
    ;; Magit
    magit-popup-show-common-commands nil
-   git-magit-status-fullscreen t
+   git-magit-status-fullscreen nil
+   magit-refresh-status-buffer nil
+   magit-commit-show-diff nil
+   magit-revert-buffers t
 
    magit-repository-directories '(
                                   "~/src/geek/Androidorg/"
