@@ -1,6 +1,7 @@
 (defun dotspacemacs/layers ()
   (setq-default
    dotspacemacs-distribution 'spacemacs
+   dotspacemacs-enable-lazy-installation t
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
@@ -105,7 +106,6 @@
    dotspacemacs-auto-resume-layouts nil
    dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 10
-   dotspacemacs-use-ido nil
    dotspacemacs-helm-resize nil
    dotspacemacs-helm-no-header nil
    dotspacemacs-helm-position 'bottom
@@ -290,6 +290,11 @@
   (push '(baidu
           :name "Baidu - 百度"
           :url "https://www.baidu.com/s?wd=%s")
+        search-engine-alist)
+
+  (push '(ciba
+          :name "iCIBA - 词霸"
+          :url "http://iciba.com/%s")
         search-engine-alist)
 
   (defun set-font (english chinese english-size chinese-size)

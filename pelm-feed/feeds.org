@@ -4,6 +4,7 @@
 *** Javascript
 **** http://www.jstips.co/feed.xml
 *** Emacs                                                                                   :emacs:mustread:
+**** http://oremacs.com/atom.xml
 **** http://www.lunaryorn.com/emacs.atom
 **** http://planet.emacsen.org/atom.xml
 **** http://blog.binchen.org/rss.xml
