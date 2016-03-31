@@ -65,7 +65,7 @@
      pelm-mail
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t)
@@ -167,7 +167,7 @@
    ;; Magit
    magit-popup-show-common-commands nil
    git-magit-status-fullscreen nil
-   magit-refresh-status-buffer nil
+   magit-refresh-status-buffer t
    magit-commit-show-diff nil
    magit-revert-buffers t
 
@@ -346,8 +346,13 @@
    truncate-lines t
    company-idle-delay 0.0
    tab-width 2
-   js2-basic-offset 2
+      js2-basic-offset 2
    css-indent-offset 2)
+
+  (add-hook 'java-mode-hook (lambda ()
+                              (setq c-basic-offset 2
+                                    tab-width 2
+                                    indent-tabs-mode t)))
 
   (global-company-mode)
   (turn-off-show-smartparens-mode)
