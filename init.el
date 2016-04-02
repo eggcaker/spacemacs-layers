@@ -24,7 +24,8 @@
       :variables clojure-enable-fancify-symbols t)
 
      (shell :variables
-            shell-default-shell 'eshell
+            shell-default-term-shell "/usr/local/bin/zsh"
+            shell-default-shell 'ansi-term
             shell-default-height 30
             shell-default-position 'bottom)
      shell-scripts
@@ -89,7 +90,7 @@
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(monokai spacemacs-dark  spacemacs-light)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("PragmataPro"
                                :size 18
                                :weight normal
                                :width normal
@@ -130,6 +131,9 @@
 
 (defun dotspacemacs/user-init ()
   (setq-default
+
+   ;; remove the 4m from shell
+   system-uses-terminfo nil
 
    ;; Miscellaneous
    vc-follow-symlinks t
@@ -172,6 +176,7 @@
    magit-revert-buffers t
 
    magit-repository-directories '(
+                                  "~/.emacs.d/"
                                   "~/src/geek/Androidorg/"
                                   "~/.spacemacs.d/"
                                   "~/src/work/pacer_android/"
@@ -306,10 +311,10 @@
        (frame-parameter nil 'font) charset (font-spec :family chinese :size
                                                       chinese-size))))
   (when (spacemacs/system-is-mac)
-    (set-font "Source Code Pro" "Hiragino Sans GB" 18 22))
+    (set-font "PragmataPro" "Source Han Sans SC" 18 20))
 
   (when (spacemacs/system-is-linux)
-    (set-font "Source Code Pro" "Droid Sans Fallback" 18 22))
+    (set-font "Source Code Pro" "Droid Sans Fallback" 18 20))
 
 
   (defun pelm/node-eval ()
