@@ -9,7 +9,7 @@
                       auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
      erc
-     twitter
+   ;;  twitter
      emacs-lisp
      plantuml
      (org :variables
@@ -20,8 +20,8 @@
      markdown
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
-     (clojure
-      :variables clojure-enable-fancify-symbols t)
+     ;; (clojure
+     ;;  :variables clojure-enable-fancify-symbols t)
 
      (shell :variables
             shell-default-term-shell "/usr/local/bin/zsh"
@@ -33,12 +33,15 @@
      version-control
      osx
      javascript
+     (python :variables
+             python-enable-yapf-format-on-save t)
      react
+
+     evil-commentary
      (colors :variables
              colors-enable-rainbow-identifiers nil )
 
      finance
-     evil-commentary
      (elfeed :variables
              url-queue-timeout 30
              elfeed-enable-web-interface nil
@@ -49,14 +52,15 @@
      (mu4e :variables
            mu4e-account-alist t
            mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
+     fasd
 
+     ;;; just for fun
      ;;xkcd
      ;;typing-games
      ;;org-ipython
      ;;stack-exchange
      ;; play with
      ;;evernote
-     fasd
      ;; Personal Layers
      pelm-org
      pelm-blog
@@ -64,9 +68,10 @@
      pelm-ibuffer
      pelm-erc
      pelm-mail
+     ;;pelm-slack
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup hexo)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t)
@@ -182,6 +187,7 @@
                                   "~/src/work/pacer_android/"
                                   "~/src/work/pacer_groups/"
                                   "~/src/work/mandian_server/"
+                                  "~/src/personal/yep8.org/"
                                   "~/.zprezto/"
                                   )
 
@@ -237,10 +243,13 @@
    ;; IRC
    erc-autojoin-channels-alist
    '(
-     ("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
-     ("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
+     ;;("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
+     ;;("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
+     ("irc.gitter.im"  "#eggcaker/emacs-hubot")
      ;;("localhost" "#动动健身" "#动动大集合")
-     ("freenode\\.net" "#org-mode"))
+     ;; ("freenode\\.net" "#org-mode")
+     )
+
 
    ;; Theme modifications
    theming-modifications
@@ -301,6 +310,13 @@
           :name "iCIBA - 词霸"
           :url "http://iciba.com/%s")
         search-engine-alist)
+
+
+  (defun hexo-my-blog ()
+    (interactive)
+    (hexo "~/src/personal/hexo/"))
+
+  (evil-leader/set-key "ab" 'hexo-my-blog)
 
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute
@@ -413,6 +429,14 @@
       ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
       )
 
+    ;; slack
+    (slack-register-team
+     :name "Yep8"
+     :default t
+     :client-id pelm/slack-client-id
+     :client-secret pelm/slack-client-secret
+     :token pelm/slack-token
+     :subscribed-channels '(review general))
 
     (defun pelm-shell/describe-random-interactive-function ()
       (interactive)
@@ -464,3 +488,18 @@ Consider only documented, non-obsolete functions."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   (quote
+    ("/Users/eggcaker/.org-files/bookmarks.org" "/Users/eggcaker/.org-files/books.org" "/Users/eggcaker/.org-files/business.org" "/Users/eggcaker/.org-files/contacts.org" "/Users/eggcaker/.org-files/emacs.org" "/Users/eggcaker/.org-files/geek.org" "/Users/eggcaker/.org-files/google.org" "/Users/eggcaker/.org-files/habits.org" "/Users/eggcaker/.org-files/mobileorg.org" "/Users/eggcaker/.org-files/notes.org" "/Users/eggcaker/.org-files/personal.org" "/Users/eggcaker/.org-files/refile.org" "/Users/eggcaker/.org-files/work.org"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))

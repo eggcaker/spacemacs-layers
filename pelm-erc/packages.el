@@ -11,7 +11,8 @@
   (setq-default
    erc-timestamp-format-left "\n%A %B %e, %Y\n\n"
    erc-timestamp-format-right "%H:%M"
-   erc-timestamp-right-column 80
+   erc-timestamp-right-column 112
+   erc-fill-column 110
    erc-prompt-for-nickserv-password nil
    erc-image-inline-rescale 300
    erc-hide-list '("JOIN" "PART" "QUIT" "NICK")
