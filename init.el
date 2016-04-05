@@ -33,6 +33,7 @@
      version-control
      osx
      javascript
+     java
      (python :variables
              python-enable-yapf-format-on-save t)
      react
@@ -99,7 +100,7 @@
                                :size 18
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.2)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-leader-key "M-m"
    dotspacemacs-major-mode-leader-key ","
@@ -300,6 +301,10 @@
       (term :foreground nil :background nil)))))
 
 (defun dotspacemacs/user-config ()
+
+  (setq eclim-eclipse-dirs "/Applications/Eclipse.app/Contents/Eclipse"
+        eclim-executable "/Applications/Eclipse.app/Contents/Eclipse/eclim")
+
   (global-git-commit-mode t)
   (push '(baidu
           :name "Baidu - 百度"
@@ -310,13 +315,6 @@
           :name "iCIBA - 词霸"
           :url "http://iciba.com/%s")
         search-engine-alist)
-
-
-  (defun hexo-my-blog ()
-    (interactive)
-    (hexo "~/src/personal/hexo/"))
-
-  (evil-leader/set-key "ab" 'hexo-my-blog)
 
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute
@@ -430,13 +428,13 @@
       )
 
     ;; slack
-    (slack-register-team
-     :name "Yep8"
-     :default t
-     :client-id pelm/slack-client-id
-     :client-secret pelm/slack-client-secret
-     :token pelm/slack-token
-     :subscribed-channels '(review general))
+    ;; (slack-register-team
+    ;;  :name "Yep8"
+    ;;  :default t
+    ;;  :client-id pelm/slack-client-id
+    ;;  :client-secret pelm/slack-client-secret
+    ;;  :token pelm/slack-token
+    ;;  :subscribed-channels '(review general))
 
     (defun pelm-shell/describe-random-interactive-function ()
       (interactive)
