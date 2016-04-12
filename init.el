@@ -5,6 +5,8 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
+     sql
+     vimscript
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
@@ -25,7 +27,7 @@
 
      (shell :variables
             shell-default-term-shell "/usr/local/bin/zsh"
-            shell-default-shell 'ansi-term
+            shell-default-shell 'multiterm
             shell-default-height 30
             shell-default-position 'bottom)
      shell-scripts
@@ -34,6 +36,8 @@
      osx
      javascript
      java
+     scala
+     swift
      (python :variables
              python-enable-yapf-format-on-save t)
      react
@@ -54,7 +58,7 @@
            mu4e-account-alist t
            mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
      fasd
-
+     imenu-list
      ;;; just for fun
      ;;xkcd
      ;;typing-games
@@ -69,10 +73,11 @@
      pelm-ibuffer
      pelm-erc
      pelm-mail
+     pelm-kotlin
      ;;pelm-slack
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup hexo)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t)
@@ -393,6 +398,7 @@
     (setq js2-include-browser-externs t)
     (setq js2-include-global-externs t)
 
+    (setq display-time-mode t)
     (setq-default line-spacing 10)
     ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))
     (setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
