@@ -490,7 +490,6 @@ Consider only documented, non-obsolete functions."
     ;; Load temporary test code if exist
     (when (file-exists-p "~/Desktop/test.el")
       (load "~/Desktop/test.el"))
-
     )
 
 ;; Do not write anything past this comment. This is where Emacs will
