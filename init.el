@@ -495,18 +495,3 @@ Consider only documented, non-obsolete functions."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   (quote
-    ("/Users/eggcaker/.org-files/bookmarks.org" "/Users/eggcaker/.org-files/books.org" "/Users/eggcaker/.org-files/business.org" "/Users/eggcaker/.org-files/contacts.org" "/Users/eggcaker/.org-files/emacs.org" "/Users/eggcaker/.org-files/geek.org" "/Users/eggcaker/.org-files/google.org" "/Users/eggcaker/.org-files/habits.org" "/Users/eggcaker/.org-files/mobileorg.org" "/Users/eggcaker/.org-files/notes.org" "/Users/eggcaker/.org-files/personal.org" "/Users/eggcaker/.org-files/refile.org" "/Users/eggcaker/.org-files/work.org"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
