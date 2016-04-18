@@ -5,12 +5,15 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
+     octave
+     ruby
      sql
      vimscript
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t)
      spacemacs-ivy
      erc
+     vinegar
    ;;  twitter
      emacs-lisp
      plantuml
