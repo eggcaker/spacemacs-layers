@@ -1545,7 +1545,7 @@ Callers of this function already widen the buffer view."
                (js . t)
                ;; (java . t)
                (org . t)
-               ;; (http . t)
+               ;;(http . t)
                ;;(ipython . t)
                ;;(kotlin . t)
                (sql . t)

@@ -5,6 +5,7 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
+     nginx
      octave
      ruby
      sql
@@ -23,6 +24,7 @@
      git
      github
      markdown
+     dockerfile
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
      ;; (clojure
@@ -38,7 +40,7 @@
      version-control
      osx
      javascript
-     java
+     ;;java
      scala
      swift
      (python :variables
@@ -56,6 +58,9 @@
              rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
      restclient
+     ;;(restclient :variables
+      ;;           restclient-use-org t)
+
      search-engine
      (mu4e :variables
            mu4e-account-alist t
@@ -76,7 +81,7 @@
      pelm-ibuffer
      pelm-erc
      pelm-mail
-     pelm-kotlin
+    ;; pelm-kotlin
      ;;pelm-slack
           )
 
@@ -139,7 +144,7 @@
    dotspacemacs-smart-close-parenthesis nil
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("ag" "ack" "grep")
    dotspacemacs-default-package-repository nil
    dotspacemacs-whitespace-cleanup 'changed))
 
@@ -184,7 +189,8 @@
 
    ;; Magit
    magit-popup-show-common-commands nil
-   git-magit-status-fullscreen nil
+   git-commit-summary-max-length 60
+   git-magit-status-fullscreen t
    magit-refresh-status-buffer t
    magit-commit-show-diff nil
    magit-revert-buffers t
@@ -310,8 +316,8 @@
 
 (defun dotspacemacs/user-config ()
 
-  (setq eclim-eclipse-dirs "/Applications/Eclipse.app/Contents/Eclipse"
-        eclim-executable "/Applications/Eclipse.app/Contents/Eclipse/eclim")
+;;  (setq eclim-eclipse-dirs "/Applications/Eclipse.app/Contents/Eclipse"
+ ;;//       eclim-executable "/Applications/Eclipse.app/Contents/Eclipse/eclim")
 
   (global-git-commit-mode t)
   (push '(baidu
@@ -404,9 +410,9 @@
     (setq display-time-mode t)
     (setq-default line-spacing 10)
     ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))
-    (setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
+    ;;(setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
 
-    ;;(setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
+    (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
     (setq ledger-post-amount-alignment-column 68)
     (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
 
