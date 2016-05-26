@@ -12,7 +12,7 @@
      vimscript
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t)
-     spacemacs-ivy
+     ivy
      erc
      vinegar
    ;;  twitter
