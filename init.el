@@ -85,7 +85,7 @@
      ;;pelm-slack
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup)
+   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup counsel-osx-app)
 
    dotspacemacs-excluded-packages '(julia-mode  toc-org )
    dotspacemacs-delete-orphan-packages t)
@@ -261,6 +261,7 @@
      ;;("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
      ;;("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
      ("irc.gitter.im"  "#eggcaker/emacs-hubot")
+     ("irc.gitter.im"  "#mandian/ci")
      ;;("localhost" "#动动健身" "#动动大集合")
      ;; ("freenode\\.net" "#org-mode")
      )
@@ -437,8 +438,8 @@
       :body
       (erc-tls :server "irc.gitter.im" :port "6697" :nick "eggcaker"
                :password pelm/gitter-pwd :full-name pelm/full-name)
-      (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
-           :password pelm/irc-pwd :full-name pelm/full-name)
+      ;;(erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
+      ;;    :password pelm/irc-pwd :full-name pelm/full-name)
       ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
       )
 
@@ -487,6 +488,11 @@ Consider only documented, non-obsolete functions."
      (define-key org-agenda-mode-map
        (kbd "o") #'org-clock-convenience-fill-gap))
    (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn)
+
+
+   (evil-leader/set-key "aj" 'counsel-osx-app)
+
+
 
 
     ;; Load local
