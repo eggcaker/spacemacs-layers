@@ -14,6 +14,7 @@
 ;; which require an initialization must be listed explicitly in the list.
 (setq pelm-misc-packages
     '(
+      (kotlin-mode  :location local)
       org-gcal
       ledger-mode
       ;;discover-my-major
@@ -43,3 +44,9 @@
     :mode "\\.dat"
     :config
     (add-to-list 'evil-emacs-state-modes 'ledger-report-mode)))
+
+(defun pelm-misc/init-kotlin-mode()
+  (use-package kotlin-mode
+    :init
+    (setq kotlin-tab-width 2 )
+    :mode (("\\.kt\\'" . kotlin-mode))))

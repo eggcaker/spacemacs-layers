@@ -223,7 +223,7 @@
         (interactive)
         (cancel-timer pelm-org-mobile-sync-timer))
 
-      (pelm-org-mobile-sync-start)
+;;      (pelm-org-mobile-sync-start)
 
 
       (defvar pelm-org/keep-clock-running nil)
@@ -305,7 +305,7 @@
       (eval-after-load 'org-indent
         '(spacemacs|hide-lighter org-indent-mode))
 
-      (let ((dir (configuration-layer/get-layer-property 'pelm-org :dir)))
+      (let ((dir (configuration-layer/get-layer-local-dir 'pelm-org)))
         (setq org-export-async-init-file (concat dir "org-async-init.el")))
 
       (defvar org-gtd-other-files '("~/src/personal/yep8.org/blog/index.org"))
@@ -1532,9 +1532,10 @@ Callers of this function already widen the buffer view."
       (org-babel-do-load-languages
        (quote org-babel-load-languages)
        (quote ((emacs-lisp . t)
+               (calc . t)
                (dot . t)
                (ditaa . t)
-               ;;(R . t)
+               (R . t)
                (ledger . t)
                ;;(haskell . t)
                ;;(python . t)

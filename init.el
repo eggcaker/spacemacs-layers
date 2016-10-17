@@ -5,9 +5,12 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
-     nginx
+     selectric
      octave
+     nginx
+     ;;octave
      ruby
+     ess
      sql
      vimscript
      (auto-completion :variables
@@ -24,7 +27,7 @@
      git
      github
      markdown
-     dockerfile
+     ;;dockerfile
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
      ;; (clojure
@@ -41,12 +44,11 @@
      osx
      javascript
      ;;java
-     scala
+     ;;scala
      swift
      (python :variables
              python-enable-yapf-format-on-save t)
      react
-
      evil-commentary
      (colors :variables
              colors-enable-rainbow-identifiers nil )
@@ -81,7 +83,7 @@
      pelm-ibuffer
      pelm-erc
      pelm-mail
-    ;; pelm-kotlin
+     pelm-kotlin
      ;;pelm-slack
           )
 
@@ -107,7 +109,7 @@
    dotspacemacs-startup-lists '(recents bookmarks projects)
    dotspacemacs-startup-recent-list-size 5
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(monokai spacemacs-dark  spacemacs-light darkokai)
+   dotspacemacs-themes '(monokai spacemacs-dark darkokai material)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("PragmataPro"
                                :size 18
@@ -489,11 +491,7 @@ Consider only documented, non-obsolete functions."
        (kbd "o") #'org-clock-convenience-fill-gap))
    (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn)
 
-
    (evil-leader/set-key "aj" 'counsel-osx-app)
-
-
-
 
     ;; Load local
     (when (file-exists-p "~/.local.el")
