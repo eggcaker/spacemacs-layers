@@ -10,20 +10,8 @@
 ;;
 ;;; License: GPLv3
 
-(defvar typing-games-packages
-  '(
-    ;; package typing-gamess go here
-    speed-type
-    typing
-    )
-  "List of all packages to install and/or initialize. Built-in packages
-which require an initialization must be listed explicitly in the list.")
+(defvar typing-games-packages '(speed-type typing))
 
-(defvar typing-games-excluded-packages '()
-  "List of packages to exclude.")
-
-;; For each package, define a function typing-games/init-<package-typing-games>
-;;
 (defun typing-games/init-speed-type ()
   "Initialize my package"
   (use-package speed-type

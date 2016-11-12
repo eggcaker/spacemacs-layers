@@ -1,5 +1,4 @@
 (setq pelm-ibuffer-packages '(ibuffer))
-(setq pelm-ibuffer-excluded-packages '())
 
 (defun pelm-ibuffer/post-init-ibuffer ()
   (setq ibuffer-show-empty-filter-groups nil))

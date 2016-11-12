@@ -11,10 +11,6 @@
 
 (setq pelm-blog-packages '(org))
 
-;; List of packages to exclude.
-(setq pelm-blog-excluded-packages '())
-
-
 (defun pelm-blog/post-init-org()
   (use-package org
     :commands (pelm/create-blog-post)

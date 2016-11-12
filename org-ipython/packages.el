@@ -18,9 +18,6 @@
       ob-ipython
       ))
 
-;; List of packages to exclude.
-(setq org-ipython-excluded-packages '())
-
 ;; For each package, define a function org-ipython/init-<package-name>
 ;;
 (defun org-ipython/init-ob-ipython ()

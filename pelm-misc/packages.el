@@ -20,9 +20,6 @@
       ;;discover-my-major
       ))
 
-;; List of packages to exclude.
-(setq pelm-misc-excluded-packages '())
-
 ;; For each package, define a function pelm-misc/init-<package-name>
 ;;
 (defun pelm-misc/init-org-gcal ()
