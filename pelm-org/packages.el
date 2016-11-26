@@ -1528,22 +1528,20 @@ Callers of this function already widen the buffer view."
 
 
       (advice-add 'org-capture :around 'kk/org-set-tags-no-helm)
-
-
       (org-babel-do-load-languages
        (quote org-babel-load-languages)
        (quote ((emacs-lisp . t)
                (calc . t)
                (dot . t)
                (ditaa . t)
-               (R . t)
+               ;;(R . t)
                (ledger . t)
                ;;(haskell . t)
                ;;(python . t)
                ;;(ruby . t)
                ;;(scala . t)
                ;;(clojure . t)
-               (sh . t)
+               (shell . t)
                (js . t)
                ;; (java . t)
                (org . t)
@@ -1556,8 +1554,6 @@ Callers of this function already widen the buffer view."
                (plantuml . t)
                ;;(latex . t)
                )))
-
-
       )
   ))
 
@@ -1577,7 +1573,7 @@ Callers of this function already widen the buffer view."
           (display-buffer buf))))))
 
 
-(defun pelm-org/init-ox-reveal()
+(defun pelm-org/post-init-ox-reveal()
   (use-package ox-reveal
     :mode ("\\.org$" . org-mode)
     :defer t

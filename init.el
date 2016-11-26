@@ -7,20 +7,20 @@
    dotspacemacs-configuration-layers
    '(
      spacemacs-purpose
-     csv
-     selectric
-     octave
-     nginx
+     ;;csv
+     ;;selectric
      ;;octave
-     ruby
-     ess
+     ;;nginx
+     ;;octave
+     ;;ruby
+    ;; ess
      sql
-     vimscript
+     ;;vimscript
      (auto-completion :variables
                       auto-completion-enable-sort-by-usage t)
      ivy
      erc
-     vinegar
+    ;; vinegar
    ;;  twitter
      emacs-lisp
      plantuml
@@ -56,7 +56,7 @@
      (colors :variables
              colors-enable-rainbow-identifiers nil )
 
-     finance
+     ;;finance
      (elfeed :variables
              url-queue-timeout 30
              elfeed-enable-web-interface nil
@@ -70,7 +70,7 @@
      (mu4e :variables
            mu4e-account-alist t
            mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
-     fasd
+     ;;fasd
      imenu-list
      ;;; just for fun
      ;;xkcd
@@ -92,13 +92,8 @@
 
    dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup counsel-osx-app)
    dotspacemacs-frozen-packages '()
-   dotspacemacs-excluded-packages '(julia-mode  toc-org )
+   dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only)
-
-  ;; (when
-  ;;     (spacemacs/system-is-mac)
-  ;;   (append dotspacemacs-configuration-layers '(spotify)))
-
   )
 
 (defun dotspacemacs/init ()
