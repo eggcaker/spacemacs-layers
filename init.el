@@ -25,7 +25,9 @@
      emacs-lisp
      plantuml
      (org :variables
-          org-enable-github-support t)
+          org-enable-github-support t
+          org-enable-bootstrap-support t
+          org-enable-reveal-js-support t)
      ;;spell-checking
      git
      github
@@ -80,7 +82,7 @@
      ;; play with
      ;;evernote
      ;; Personal Layers
-     pelm-org
+     ;;pelm-org
      pelm-blog
      pelm-misc
      pelm-ibuffer
@@ -512,19 +514,21 @@ Consider only documented, non-obsolete functions."
 
 
     )
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (yapfify yaml-mode xterm-color ws-butler window-numbering which-key wgrep web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package tagedit swift-mode sql-indent spacemacs-theme spaceline smex smeargle slim-mode shell-pop selectric-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe reveal-in-osx-finder restart-emacs rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode plantuml-mode pip-requirements persp-mode pcre2el pbcopy paradox spinner ox-gfm osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-plus-contrib org-gcal request-deferred request deferred org-download org-clock-convenience org-bullets org-ac auto-complete-pcmp yaxception open-junk-file ob-restclient ob-http nginx-mode neotree nameless multi-term mu4e-maildirs-extension mu4e-alert alert log4e gntp move-text mmm-mode minitest markdown-toc markdown-mode magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode skewer-mode live-py-mode linum-relative link-hint less-css-mode ledger-mode launchctl keyfreq key-chord json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc ivy-purpose window-purpose ivy-hydra insert-shebang info+ indent-guide imenu-list ido-vertical-mode ibuffer-projectile hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-make helm helm-core haml-mode groovy-mode google-translate golden-ratio gnuplot gitignore-mode github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gist gh marshal logito pcache ht gh-md flycheck-pos-tip pos-tip flycheck-ledger flycheck flx-ido flx fish-mode fill-column-indicator fasd grizzl fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-mc evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-commentary evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight ess-smart-equals ess-R-object-popup ess-R-data-view ctable ess julia-mode eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks engine-mode emmet-mode elisp-slime-nav elfeed-web simple-httpd elfeed-org org elfeed-goodies ace-jump-mode noflet powerline popwin elfeed dumb-jump diminish diff-hl dactyl-mode cython-mode csv-mode counsel-projectile projectile pkg-info epl counsel-osx-app counsel swiper ivy company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-restclient restclient know-your-http-well company-anaconda company column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode chruby buttercup bundler inf-ruby bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed async anaconda-mode pythonic f dash s aggressive-indent adaptive-wrap ace-window ace-link avy ac-ispell auto-complete popup quelpa package-build monokai-theme))))
+ '(org-agenda-files (quote ("~/.org-files/"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+)
