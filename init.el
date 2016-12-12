@@ -16,8 +16,15 @@
     ;; ess
      sql
      ;;vimscript
-     (auto-completion :variables
-                      auto-completion-enable-sort-by-usage t)
+     (auto-completion
+      :variables
+      auto-completion-enable-snippets-in-popup t
+      auto-completion-return-key-behavior nil
+      auto-completion-tab-key-behavior 'cycle
+      auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/"
+      auto-completion-enable-help-tooltip 'manual
+      :disabled-for org erc)
+
      ivy
      erc
     ;; vinegar
@@ -46,6 +53,7 @@
      shell-scripts
      syntax-checking
      version-control
+     jabber
      osx
      javascript
      ;;java
@@ -82,7 +90,7 @@
      ;; play with
      ;;evernote
      ;; Personal Layers
-     ;;pelm-org
+     pelm-org
      pelm-blog
      pelm-misc
      pelm-ibuffer
@@ -92,7 +100,18 @@
      ;;pelm-slack
           )
 
-   dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup counsel-osx-app)
+   dotspacemacs-additional-packages
+   '(key-chord
+     ox-reveal
+     nameless
+     elfeed-org
+     groovy-mode
+     keyfreq
+     org-clock-convenience
+     buttercup
+     editorconfig
+     evil-embrace
+     counsel-osx-app)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only)
@@ -103,16 +122,14 @@
    dotspacemacs-elpa-https t
    dotspacemacs-elpa-timeout 10
    dotspacemacs-check-for-update t
-   ;;dotspacemacs-elpa-subdirectory t
+   dotspacemacs-elpa-subdirectory 'emacs-version
    dotspacemacs-editing-style 'vim
    dotspacemacs-verbose-loading nil
-   dotspacemacs-startup-banner 'official
-   dotspacemacs-startup-lists '((recents . 15)
-                      (bookmarks . 5)
-                      (projects . 6))
+   dotspacemacs-startup-banner nil
+   dotspacemacs-startup-lists '( bookmarks (recents . 15) projects)
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(monokai spacemacs-dark darkokai material eink)
+   dotspacemacs-themes '(monokai spacemacs-dark darkokai material )
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("PragmataPro"
                                :size 18
@@ -140,10 +157,10 @@
    dotspacemacs-large-file-size 1
    dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 10
-   dotspacemacs-helm-resize nil
-   dotspacemacs-helm-no-header nil
+   dotspacemacs-helm-resize t
+   dotspacemacs-helm-no-header t
    dotspacemacs-helm-position 'bottom
-   dotspacemacs-enable-paste-transient-state nil
+   dotspacemacs-enable-paste-transient-state t
    dotspacemacs-helm-use-fuzzy 'always
    dotspacemacs-which-key-delay 0.4
    dotspacemacs-which-key-position 'bottom
@@ -183,6 +200,7 @@
    system-time-locale "C"
    paradox-github-token t
    open-junk-file-find-file-function 'find-file
+   custom-file  (concat dotspacemacs-directory "custom.el")
 
    ;; Backups
    backup-directory-alist `((".*" . ,temporary-file-directory))
@@ -218,16 +236,15 @@
 
    magit-repository-directories '(
                                   "~/.emacs.d/"
-                                  "~/src/geek/Androidorg/"
                                   "~/.spacemacs.d/"
                                   "~/src/work/pacer_android/"
                                   "~/src/work/pacer_groups/"
                                   "~/src/work/mandian_server/"
-                                  "~/src/personal/yep8.org/"
                                   "~/.zprezto/"
                                   )
 
    ;; Flycheck
+   avy-all-windows 'all-frames
    flycheck-check-syntax-automatically '(save mode-enabled)
 
    ;; Avy
@@ -287,54 +304,9 @@
      ;; ("freenode\\.net" "#org-mode")
      )
 
-
    ;; Theme modifications
-   theming-modifications
-   '((monokai
-      ;; Font locking
-      (font-lock-comment-face :slant italic)
-      (font-lock-string-face :slant italic)
-      (font-lock-doc-face :slant italic)
-      (font-lock-keyword-face :weight bold)
-      (font-lock-builtin-face :foreground "#ff9eb8")
-      (font-lock-warning-face :underline nil)
-      (web-mode-html-attr-value-face
-       :inherit font-lock-string-face :foreground nil)
-      (web-mode-html-attr-name-face
-       :inherit font-lock-variable-name-face :foreground nil)
-      (web-mode-html-tag-face
-       :inherit font-lock-builtin-face :foreground nil :weight bold)
-      (web-mode-html-tag-bracket-face
-       :inherit web-mode-html-tag-face :foreground nil)
-      (web-mode-comment-face
-       :inherit font-lock-comment-face :foreground nil)
-
-      ;; Modeline
-      (mode-line :box (:color "#999999" :line-width 1 :style released-button))
-      (powerline-active1 :box (:color "#999999" :line-width 1 :style released-button)
-                         :background "#5a5a5a")
-      (powerline-active2 :box (:color "#999999" :line-width 1 :style released-button))
-      (mode-line-inactive :box (:color "#666666" :line-width 1 :style released-button))
-      (powerline-inactive1 :box (:color "#666666" :line-width 1 :style released-button))
-      (powerline-inactive2 :box (:color "#666666" :line-width 1 :style released-button))
-      (helm-prefarg :foreground "PaleGreen")
-
-      ;; Flycheck
-      (flycheck-fringe-error :background nil)
-      (flycheck-fringe-warning :background nil)
-      (flycheck-fringe-info :background nil)
-
-      ;; Other
-      (company-tooltip-annotation
-       :foreground "#ff9eb8" :background "#49483e")
-      (company-tooltip-annotation-selection :background "#66d9ef")
-      (erc-timestamp-face
-       :inherit font-lock-comment-face :foreground nil)
-      (evil-search-highlight-persist-highlight-face
-       :background "#fc5fef" :foreground "#000000")
-      (region :background "#998f84")
-      (spacemacs-transient-state-title-face :background nil :foreground nil :inherit font-lock-warning-face)
-      (term :foreground nil :background nil)))))
+   theming-modifications '()
+   ))
 
 (defun dotspacemacs/user-config ()
   (global-git-commit-mode t)
@@ -362,25 +334,19 @@
   (when (spacemacs/system-is-linux)
     (set-font "Source Code Pro" "Droid Sans Fallback" 18 20))
 
-
-  (defun pelm/node-eval ()
-    (interactive)
-    (let ((debug-on-error t) (start 1) (end 1))
-      (cond
-       (mark-active
-        (setq start (point))
-        (setq end (mark)))
-       (t
-        (setq start (point-min))
-        (setq end (point-max))))
-      (call-process-region
-       start end     ; seems the order does not matter
-       "node"        ; node.js
-       nil           ; don't delete region
-       "*node.js eval*"     ; output buffer
-       nil)          ; no redisply during output
-      (message "Region or buffer evaluated!")
-      (setq deactivate-mark nil)))
+  ;; Diminish
+  (spacemacs|diminish holy-mode)
+  (spacemacs|diminish hybrid-mode)
+  (spacemacs|diminish which-key-mode)
+  (spacemacs|diminish evil-mc-mode)
+  (spacemacs|diminish helm-gtags-mode)
+  (spacemacs|diminish ggtags-mode)
+  (with-eval-after-load 'emoji-cheat-sheet-plus
+    (diminish 'emoji-cheat-sheet-plus-display-mode))
+  (with-eval-after-load 'racer
+    (diminish 'racer-mode))
+  (with-eval-after-load 'command-log-mode
+    (diminish 'command-log-mode))
 
   (defun offlineimap-get-password (host port)
     (require 'netrc)
@@ -404,6 +370,11 @@
                               (setq c-basic-offset 2
                                     tab-width 2
                                     indent-tabs-mode t)))
+
+  (evil-set-initial-state 'term-mode 'emacs)
+  (evil-set-initial-state 'calculator-mode 'emacs)
+  (push 'term-mode evil-escape-excluded-major-modes)
+  (evil-define-key 'emacs term-raw-map (kbd "C-c") 'term-send-raw)
 
   (global-company-mode)
   (turn-off-show-smartparens-mode)
@@ -506,29 +477,26 @@ Consider only documented, non-obsolete functions."
        (kbd "o") #'org-clock-convenience-fill-gap))
    (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn)
 
-   (evil-leader/set-key "aj" 'counsel-osx-app)
+   (evil-leader/set-key "aa" 'counsel-osx-app)
+
+   (defmacro bb|wrap-func (func)
+     (let ((advice-name (intern (format "%s--advice" func)))
+           (target-name (intern (format "%s/%s" func system-name))))
+       `(progn
+          (defun ,advice-name (&rest args)
+            (when (fboundp ',target-name)
+              (apply ',target-name args)))
+          (advice-add ',func :after ',advice-name))))
+
+   (bb|wrap-func dotspacemacs/layers)
+   (bb|wrap-func dotspacemacs/init)
+   (bb|wrap-func dotspacemacs/user-init)
+   (bb|wrap-func dotspacemacs/user-config)
+
 
     ;; Load local
     (when (file-exists-p "~/.local.el")
       (load "~/.local.el"))
 
-
     )
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/.org-files/"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+
