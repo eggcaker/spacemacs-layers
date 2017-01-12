@@ -6,6 +6,8 @@
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/")
    dotspacemacs-configuration-layers
    '(
+     lua
+     octave
      spacemacs-purpose
      ;;csv
      ;;selectric
@@ -18,19 +20,22 @@
      ;;vimscript
      (auto-completion
       :variables
-      auto-completion-enable-snippets-in-popup t
-      auto-completion-return-key-behavior nil
+      auto-completion-return-key-behavior 'complete
       auto-completion-tab-key-behavior 'cycle
       auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/"
-      auto-completion-enable-help-tooltip 'manual
+      auto-completion-complete-with-key-sequence "jj"
+      auto-completion-complete-with-key-sequence-delay 0.1
+      auto-completion-enable-snippets-in-popup t
+      auto-completion-enable-help-tooltip t
+      auto-completion-enable-sort-by-usage t
       :disabled-for org erc)
 
      ivy
-     erc
+     ;erc
     ;; vinegar
    ;;  twitter
      emacs-lisp
-     plantuml
+     ;;plantuml
      (org :variables
           org-enable-github-support t
           org-enable-bootstrap-support t
@@ -38,7 +43,7 @@
      ;;spell-checking
      git
      github
-     markdown
+     (markdown :variables markdown-live-preview-engine 'vmd)
      ;;dockerfile
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
@@ -53,18 +58,18 @@
      shell-scripts
      syntax-checking
      version-control
-     jabber
+     ;;jabber
      osx
      javascript
      ;;java
      ;;scala
-     swift
+     ;;swift
      (python :variables
              python-enable-yapf-format-on-save t)
      react
      evil-commentary
-     (colors :variables
-             colors-enable-rainbow-identifiers nil )
+     ;; (colors :variables
+     ;;         colors-enable-rainbow-identifiers nil )
 
      ;;finance
      (elfeed :variables
@@ -90,12 +95,12 @@
      ;; play with
      ;;evernote
      ;; Personal Layers
-     pelm-org
-     pelm-blog
+    ;; pelm-blog
      pelm-misc
-     pelm-ibuffer
-     pelm-erc
-     pelm-mail
+     pelm-org
+     ;;pelm-ibuffer
+    ;; pelm-erc
+     ;;pelm-mail
      ;;pelm-kotlin
      ;;pelm-slack
           )
@@ -114,8 +119,7 @@
      counsel-osx-app)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
-   dotspacemacs-install-packages 'used-only)
-  )
+   dotspacemacs-install-packages 'used-only))
 
 (defun dotspacemacs/init ()
   (setq-default
@@ -123,6 +127,7 @@
    dotspacemacs-elpa-timeout 10
    dotspacemacs-check-for-update t
    dotspacemacs-elpa-subdirectory 'emacs-version
+   dotspacemacs-helm-use-fuzzy 'source
    dotspacemacs-editing-style 'vim
    dotspacemacs-verbose-loading nil
    dotspacemacs-startup-banner nil
@@ -235,12 +240,11 @@
    magit-revert-buffers t
 
    magit-repository-directories '(
-                                  "~/.emacs.d/"
-                                  "~/.spacemacs.d/"
                                   "~/src/work/pacer_android/"
-                                  "~/src/work/pacer_groups/"
-                                  "~/src/work/mandian_server/"
-                                  "~/.zprezto/"
+                                  "~/src/geek/wechathubot/"
+                                  ;;"~/.spacemacs.d/"
+                                  ;;"~/src/work/pacer_groups/"
+                                  ;"~/src/work/mandian_server/"
                                   )
 
    ;; Flycheck
@@ -251,8 +255,8 @@
    avy-all-windows 'all-frames
 
    ;; Spaceline
-   spaceline-buffer-encoding-abbrev-p nil
-   spaceline-version-control-p nil
+   ;;spaceline-buffer-encoding-abbrev-p nil
+   ;;spaceline-version-control-p nil
 
    ;; Shell
    shell-default-term-shell "/usr/local/bin/zsh"
@@ -298,7 +302,7 @@
    '(
      ;;("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
      ;;("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
-     ("irc.gitter.im"  "#eggcaker/emacs-hubot")
+     ;;("irc.gitter.im"  "#eggcaker/emacs-hubot")
      ("irc.gitter.im"  "#mandian/ci")
      ;;("localhost" "#动动健身" "#动动大集合")
      ;; ("freenode\\.net" "#org-mode")
@@ -391,7 +395,7 @@
 
     ;; clojure fancify symbols
     (setq clojure-enable-fancify-symbols t)
-
+    (setq smerge-command-prefix "m")
     (setq js2-include-node-externs t)
     (setq js2-include-browser-externs t)
     (setq js2-include-global-externs t)
@@ -500,3 +504,23 @@ Consider only documented, non-obsolete functions."
 
     )
 
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yapfify yaml-mode xterm-color ws-butler window-numbering which-key wgrep web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org tagedit swift-mode sql-indent spacemacs-theme spaceline smex smeargle slim-mode shell-pop scss-mode sass-mode reveal-in-osx-finder restart-emacs rainbow-mode rainbow-identifiers rainbow-delimiters quelpa pyvenv pytest pyenv-mode py-isort pug-mode plantuml-mode pip-requirements persp-mode pcre2el pbcopy paradox ox-twbs ox-reveal ox-gfm osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-plus-contrib org-gcal org-download org-clock-convenience org-bullets open-junk-file ob-restclient ob-http neotree nameless multi-term mu4e-maildirs-extension mu4e-alert move-text monokai-theme mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode launchctl keyfreq key-chord json-mode js2-refactor js-doc jabber ivy-purpose ivy-hydra insert-shebang info+ indent-guide ido-vertical-mode ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-make groovy-mode google-translate golden-ratio gnuplot gitignore-mode github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gist gh-md flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-commentary evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks engine-mode emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies dumb-jump diff-hl darkokai-theme cython-mode counsel-projectile counsel-osx-app company-web company-tern company-statistics company-shell company-restclient company-anaconda column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode buttercup auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)

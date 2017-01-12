@@ -40,3 +40,13 @@
 (defface pelm-org-closedpo-kwd
   '((t (:weight bold :box nil :foreground "#969696" :background nil)))
   "Face used to display CLOSED purchase order.")
+
+(defvar org-agenda-dir ""
+  "gtd org files location")
+
+(defvar deft-dir ""
+  "deft org files locaiton")
+
+(setq-default
+ org-agenda-dir "~/.org-files"
+ deft-dir "~/.org-files")
