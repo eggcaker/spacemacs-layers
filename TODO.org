@@ -1,5 +1,0 @@
-* Todos
-** TODO  added short key for ledgerfile open
-<2016-03-02 Wed 10:46>
-
- Link: file:~/.spacemacs.d/init.el
