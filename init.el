@@ -120,9 +120,9 @@ values."
      ;; play with
      ;;evernote
      ;; Personal Layers
-    ;; pelm-blog
      pelm-misc
      pelm-org
+     pelm-blog
      ;;pelm-ibuffer
     ;; pelm-erc
      ;;pelm-mail

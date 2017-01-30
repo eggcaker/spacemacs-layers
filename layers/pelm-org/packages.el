@@ -224,8 +224,8 @@ unwanted space when exporting org-mode to html."
               ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
               ("b" "Blog" tags-todo "BLOG")
               ("p" . "项目安排")
-              ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"pacer\"")
-              ("ph" tags-todo "PROJECT+DREAM+CATEGORY=\"eggcaker\"")
+              ("pw" tags-todo "+WORK+CATEGORY=\"Pacer\"")
+              ("ph" tags-todo "+CATEGORY=\"Me\"")
               ("W" "Weekly Review"
                ((stuck "") ;; review stuck projects as designated by org-stuck-projects
                 (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)

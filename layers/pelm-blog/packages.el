@@ -9,20 +9,17 @@
 ;;
 ;;; License: MIT
 
-(setq pelm-blog-packages '(org))
+(defconst pelm-blog-packages '(blog-admin))
 
-(defun pelm-blog/post-init-org()
-  (use-package org
-    :commands (pelm/create-blog-post)
-    :init
-    (progn
-
-      (defun pelm/create-blog-post ()
-         (interactive "P")
-         (message "create new post" nil)
-         )
-
-      (evil-leader/set-key "aop" 'pelm/create-blog-post))
-      ))
+(defun pelm-blog/init-blog-admin()
+(use-package blog-admin
+  :init
+  (progn
+    (setq blog-admin-backend-path "~/src/personal/yep8.org")
+    (setq blog-admin-backend-type 'hexo)
+    (setq blog-admin-backend-new-post-in-drafts t) ;; create new post in drafts by default
+    (setq blog-admin-backend-new-post-with-same-name-dir t) ;; create same-name directory with new post
+    (setq blog-admin-backend-hexo-config-file "_config.yml") ;; default assumes _config.yml
+    )))
 
 ;;; packages.el ends here
