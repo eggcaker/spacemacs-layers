@@ -40,7 +40,7 @@ values."
      ;;nginx
      ;;octave
      ;;ruby
-    ;; ess
+     ;; ess
      sql
      ;;vimscript
      (auto-completion
@@ -67,7 +67,7 @@ values."
           org-enable-reveal-js-support t)
      ;;spell-checking
      git
-     github
+     ;; github
      (markdown :variables markdown-live-preview-engine 'vmd)
      ;;dockerfile
      yaml
@@ -97,19 +97,19 @@ values."
      ;;         colors-enable-rainbow-identifiers nil )
 
      ;;finance
-     (elfeed :variables
-             url-queue-timeout 30
-             elfeed-enable-web-interface nil
-             rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
+     ;; (elfeed :variables
+     ;;         url-queue-timeout 30
+     ;;         elfeed-enable-web-interface nil
+     ;;         rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
-     restclient
-     ;;(restclient :variables
-      ;;           restclient-use-org t)
+     ;; restclient
+     (restclient :variables
+                 restclient-use-org t)
 
-     search-engine
-     (mu4e :variables
-           mu4e-account-alist t
-           mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
+     ;; search-engine
+     ;; (mu4e :variables
+     ;;       mu4e-account-alist t
+     ;;       mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
      ;;fasd
      imenu-list
      ;;; just for fun
@@ -432,15 +432,6 @@ values."
 
 (defun dotspacemacs/user-config ()
   (global-git-commit-mode t)
-  (push '(baidu
-          :name "Baidu - 百度"
-          :url "https://www.baidu.com/s?wd=%s")
-        search-engine-alist)
-
-  (push '(ciba
-          :name "iCIBA - 词霸"
-          :url "http://iciba.com/%s")
-        search-engine-alist)
 
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute

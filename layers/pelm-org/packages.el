@@ -148,7 +148,7 @@
       (org-babel-do-load-languages
        'org-babel-load-languages
        '((ruby . t)
-         (sh . t)
+         (shell . t)
          (dot . t)
          (js . t)
          (latex .t)
