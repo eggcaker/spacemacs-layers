@@ -175,10 +175,10 @@ unwanted space when exporting org-mode to html."
 
       ;; define the refile targets
       (setq org-agenda-file-note (expand-file-name "notes.org" org-agenda-dir))
-      (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-agenda-dir))
+      (setq org-agenda-file-refile (expand-file-name "refile.org" org-agenda-dir))
       (setq org-agenda-file-journal (expand-file-name "journal.org" org-agenda-dir))
       (setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-agenda-dir))
-      (setq org-default-notes-file (expand-file-name "gtd.org" org-agenda-dir))
+      (setq org-default-notes-file (expand-file-name "notes.org" org-agenda-dir))
       (setq org-agenda-files (list org-agenda-dir))
 
       (with-eval-after-load 'org-agenda
@@ -190,7 +190,7 @@ unwanted space when exporting org-mode to html."
       ;;http://www.howardism.org/Technical/Emacs/journaling-org.html
       ;;add multi-file journal
       (setq org-capture-templates
-            '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Workspace")
+            '(("t" "Todo" entry (file+headline org-agenda-file-refile "Workspace")
                "* TODO [#B]  %?\n  %i\n"
                :empty-lines 1)
               ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
@@ -202,7 +202,7 @@ unwanted space when exporting org-mode to html."
               ("s" "Code Snippet" entry
                (file org-agenda-file-code-snippet)
                "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
-              ("w" "work" entry (file+headline org-agenda-file-gtd "pacer")
+              ("w" "work" entry (file+headline org-agenda-file-refile "pacer")
                "* TODO [#A]  %?\n  %i\n %U"
                :empty-lines 1)
               ("c" "Chrome" entry (file+headline org-agenda-file-note "Quick notes")
@@ -218,6 +218,66 @@ unwanted space when exporting org-mode to html."
 
       (setq org-agenda-custom-commands
             '(
+              ("c" todo ""
+               ((org-agenda-overriding-header "Tasks to refile: ")
+                (org-agenda-files (list
+                                    (concat org-agenda-dir "/refile.org")
+                                    (concat org-agenda-dir "/mobileorg.org")))))
+              ("." "Today"
+                     (
+                      ;; Events.
+                      (agenda ""
+                              ((org-agenda-entry-types '(:timestamp :sexp))
+                               (org-agenda-overriding-header
+                                (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
+                               (org-agenda-span 'day)))
+
+                      ;; Unscheduled new tasks (waiging to be prioritized and scheduled).
+                      ;; (todo "TODO"
+                      ;;       ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
+                      ;;        (org-agenda-files (list (concat org-agenda-dir "/mobileorg.org")
+                      ;;                                (concat org-agenda-dir "/refile.org")
+                      ;;                                ))))
+
+                      (tags-todo "TODO={STARTED\\|LEARN}"
+                                 ((org-agenda-overriding-header "STARTED TASKS")
+                                  (org-agenda-skip-function
+                                   '(org-agenda-skip-entry-if 'deadline))))
+
+                      ;; List of all TODO entries with deadline before today.
+                      (tags-todo "DEADLINE<=\"<+0d>\"|SCHEDULED<=\"<+0d>\""
+                                 ((org-agenda-overriding-header "OVERDUE")
+                                  ;;(org-agenda-skip-function
+                                  ;; '(org-agenda-skip-entry-if 'notdeadline))
+                                  (org-agenda-sorting-strategy '(priority-down))))
+
+                      (tags-todo "TODO={WAIT}"
+                                 ((org-agenda-overriding-header "Waiting For")
+                                  ;;(org-agenda-skip-function
+                                  ;; '(org-agenda-skip-entry-if 'notdeadline))
+                                  (org-agenda-sorting-strategy '(priority-down))))
+
+                      (agenda ""
+                              ((org-agenda-entry-types '(:scheduled))
+                               (org-agenda-overriding-header "SCHEDULED")
+                               (org-agenda-skip-function
+                                '(org-agenda-skip-entry-if 'todo 'done))
+                               (org-agenda-sorting-strategy
+                                '(priority-down time-up))
+                               (org-agenda-span 'day)
+                               (org-agenda-start-on-weekday nil)
+                               (org-agenda-time-grid nil)))
+                      ;; List of all TODO entries completed today.
+                      (todo "TODO|DONE|CANCELLED" ; Includes repeated tasks (back in TODO).
+                            ((org-agenda-overriding-header "COMPLETED TODAY")
+                             (org-agenda-skip-function
+                              '(org-agenda-skip-entry-if
+                                'notregexp
+                                (format-time-string pelm-org-completed-date-regexp)))
+                             (org-agenda-sorting-strategy '(priority-down)))))
+                     ((org-agenda-format-date "")
+                      (org-agenda-start-with-clockreport-mode nil)))
+
               ("w" . "任务安排")
               ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
               ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")

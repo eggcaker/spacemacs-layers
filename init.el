@@ -33,7 +33,7 @@ values."
    '(
      lua
      octave
-     spacemacs-purpose
+     osx
      ;;csv
      ;;selectric
      ;;octave
@@ -84,7 +84,6 @@ values."
      syntax-checking
      version-control
      ;;jabber
-     osx
      javascript
      ;;java
      ;;scala
@@ -311,9 +310,9 @@ values."
 
 (defun dotspacemacs/user-init ()
   (setq-default
-
    ;; remove the 4m from shell
    system-uses-terminfo nil
+   exec-path-from-shell-check-startup-files nil
 
    ;; Miscellaneous
    vc-follow-symlinks t
@@ -432,7 +431,6 @@ values."
 
 (defun dotspacemacs/user-config ()
   (global-git-commit-mode t)
-
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute
      'default nil :font (format "%s:pixelsize=%d" english english-size))

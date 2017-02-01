@@ -50,3 +50,13 @@
 (setq-default
  org-agenda-dir "~/.org-files"
  deft-dir "~/.org-files")
+
+(defconst pelm-org-completed-date-regexp
+  (concat "\\("
+          "CLOSED: \\[%Y-%m-%d"
+          "\\|"
+          "- State \"\\(DONE\\|CANCELLED\\)\" * from .* \\[%Y-%m-%d"
+          "\\|"
+          "- State .* ->  *\"\\(DONE\\|CANCELLED\\)\" * \\[%Y-%m-%d"
+          "\\)")
+  "Matches any completion time stamp.")
