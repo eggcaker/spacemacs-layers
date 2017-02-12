@@ -11,8 +11,7 @@
   (setq-default
    erc-timestamp-format-left "\n%A %B %e, %Y\n\n"
    erc-timestamp-format-right "%H:%M"
-   erc-timestamp-right-column 112
-   erc-fill-column 110
+   erc-timestamp-right-column 80
    erc-prompt-for-nickserv-password nil
    erc-image-inline-rescale 300
    erc-hide-list '("JOIN" "PART" "QUIT" "NICK")
@@ -21,13 +20,19 @@
      "\\[Github\\].* forked"
      "\\[Github\\].* synchronize a Pull Request"
      "\\[Github\\].* labeled an issue in"
+     "\\[Github\\].* unlabeled an issue in"
+     "\\[Github\\].* opened an issue in"
+     "\\[Github\\].* edited an issue in"
      "\\[Github\\].* labeled a Pull Request"
-     "\\[Github\\].* unlabeled an issue in"))
+     "\\[Github\\].* unlabeled a Pull Request"
+     "\\[Github\\].* opened a Pull Request to"
+     "\\[Github\\].* closed a Pull Request to"
+     "\\[Github\\].* commented in"))
 
   (add-hook 'erc-mode-hook
             (lambda () (setq-local global-hl-line-mode nil)))
 
-  (add-hook 'erc-insert-pre-hook 'pelm/erc-foolish-filter)
+  (add-hook 'erc-insert-pre-hook 'bb/erc-foolish-filter)
 
   (evil-set-initial-state 'erc-mode 'normal)
 
@@ -35,7 +40,6 @@
     (setq erc-insert-modify-hook
           '(erc-controls-highlight
             erc-button-add-buttons
-            pelm/erc-github-filter
             erc-fill
             erc-match-message
             erc-add-timestamp
@@ -48,7 +52,7 @@
   (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode))
 
 (defun pelm-erc/post-init-persp-mode ()
-  (add-hook 'erc-mode-hook 'pelm/add-buffer-to-erc-persp))
+  (add-hook 'erc-mode-hook 'bb/add-buffer-to-erc-persp))
 
 (defun pelm-erc/post-init-typo ()
   (add-hook 'erc-mode-hook 'typo-mode))
