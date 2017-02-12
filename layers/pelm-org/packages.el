@@ -149,6 +149,7 @@
        'org-babel-load-languages
        '((ruby . t)
          (shell . t)
+         (sql . t )
          (dot . t)
          (js . t)
          (latex .t)
@@ -184,7 +185,13 @@ unwanted space when exporting org-mode to html."
       (with-eval-after-load 'org-agenda
         (define-key org-agenda-mode-map (kbd "P") 'org-pomodoro)
         (spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
-          "." 'spacemacs/org-agenda-transient-state/body))
+          "." 'spacemacs/org-agenda-transient-state/body)
+        (add-hook 'org-finalize-agenda-hook 'place-agenda-tags)
+        (defun place-agenda-tags ()
+          "Put the agenda tags by the right border of the agenda window."
+          (setq org-agenda-tags-column (- 4 (window-width)))
+          (org-agenda-align-tags))
+        )
 
       ;; the %i would copy the selected text into the template
       ;;http://www.howardism.org/Technical/Emacs/journaling-org.html
