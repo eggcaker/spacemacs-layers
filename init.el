@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     csv
      vimscript
      lua
      octave
@@ -124,6 +125,7 @@ values."
      pelm-org
      pelm-blog
      google-calendar
+     spotify
      ;;pelm-ibuffer
     ;; pelm-erc
      ;;pelm-mail
@@ -520,7 +522,10 @@ values."
     (setq org-gcal-file-alist '(("eggcaker@gmail.com" . "~/.org-files/google.org")))
     (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                      (org-agenda-files :maxlevel . 9))))
-
+    (setq cfw:org-capture-template
+          '("c" "calfw2org" entry
+            (file "~/.org-files/refile.org")
+            "*  %?\n %(cfw:org-capture-day)"))
     (setq yas-indent-line (quote none)) ;; do not auto indent snippet
     (use-package nameless
       :defer t
