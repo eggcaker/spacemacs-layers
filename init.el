@@ -449,6 +449,64 @@ values."
   (when (spacemacs/system-is-linux)
     (set-font "Source Code Pro" "Droid Sans Fallback" 18 20))
 
+  (setq calendar-holidays
+        '(
+          (holiday-fixed 1 1 "元旦")
+          (holiday-fixed 3 8 "妇女节")
+          (holiday-fixed 3 9 " 妞妞生日")
+          (holiday-fixed 4 1 "愚人节")
+          (holiday-fixed 5 1 "劳动节")
+          (holiday-fixed 2 5 "元宵节")
+          (holiday-fixed 4 4 "清明节")
+          (holiday-fixed 4 21 "鬼节")
+          (holiday-fixed 6 22 "端午节")
+          (holiday-fixed 9 3 "我的生日")
+          (holiday-fixed 9 28 "中秋节")
+          (holiday-fixed 10 10 "老婆生日")
+          (holiday-float 5 0 2 "母亲节")
+          (holiday-float 6 0 3 "父亲节")
+          (holiday-fixed 10 1 "国庆节")
+          (holiday-fixed 12 25 "圣诞节")))
+
+  ;; configuration for org-page
+  (progn
+    (setq op/category-config-alist
+          '(("blog" ;; this is the default configuration
+             :show-meta t
+             :show-comment t
+             :uri-generator op/generate-uri
+             :uri-template "/blog/%y/%m/%d/%t/"
+             :sort-by :date     ;; how to sort the posts
+             :category-index t) ;; generate category index or not
+            ("wiki"
+             :show-meta t
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/wiki/%t/"
+             :sort-by :mod-date
+             :category-index t)
+            ("index"
+             :show-meta nil
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/"
+             :sort-by :date
+             :category-index nil)
+            ("books"
+             :show-meta nil
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/books/"
+             :sort-by :date
+             :category-index nil)
+            ("about"
+             :show-meta nil
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/about/"
+             :sort-by :date
+             :category-index nil))))
+
   ;; Diminish
   (spacemacs|diminish holy-mode)
   (spacemacs|diminish hybrid-mode)
@@ -490,7 +548,7 @@ values."
   (evil-set-initial-state 'calculator-mode 'emacs)
   (push 'term-mode evil-escape-excluded-major-modes)
   (evil-define-key 'emacs term-raw-map (kbd "C-c") 'term-send-raw)
-
+  (setq org-confirm-babel-evaluate nil)
   (global-company-mode)
   (turn-off-show-smartparens-mode)
   (setq powerline-default-separator 'arrow)
