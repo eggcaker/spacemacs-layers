@@ -61,7 +61,8 @@
 
       (setq org-todo-keywords
             (quote ((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
-                    (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)"))))
+                    (sequence "BUG(b)" "FIXING(f)" "FIXED(x)" "|" "CANCELLED(c@/!)")
+                    (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" ))))
 
       ;; Org clock
 
@@ -200,13 +201,6 @@ unwanted space when exporting org-mode to html."
             '(("t" "Todo" entry (file+headline org-agenda-file-refile "Workspace")
                "* TODO [#B]  %?\n  %i\n"
                :empty-lines 1)
-
-              ;;("g" "Google Calendar Entry " entry
-              ;; (file (concat org-directory "/google.org")) "* %^{Task}\n %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n" :immediate-finish t)
-
-              ("x" "CLI todo" entry
-               (file org-agenda-file-refile) "* TODO [#B]  %i\n%U" :immediate-finish t)
-
               ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
                "* %?\n  %i\n %U"
                :empty-lines 1)

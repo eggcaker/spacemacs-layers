@@ -458,7 +458,6 @@ values."
           (holiday-fixed 5 1 "劳动节")
           (holiday-fixed 2 5 "元宵节")
           (holiday-fixed 4 4 "清明节")
-          (holiday-fixed 4 21 "鬼节")
           (holiday-fixed 6 22 "端午节")
           (holiday-fixed 9 3 "我的生日")
           (holiday-fixed 9 28 "中秋节")
@@ -467,45 +466,6 @@ values."
           (holiday-float 6 0 3 "父亲节")
           (holiday-fixed 10 1 "国庆节")
           (holiday-fixed 12 25 "圣诞节")))
-
-  ;; configuration for org-page
-  (progn
-    (setq op/category-config-alist
-          '(("blog" ;; this is the default configuration
-             :show-meta t
-             :show-comment t
-             :uri-generator op/generate-uri
-             :uri-template "/blog/%y/%m/%d/%t/"
-             :sort-by :date     ;; how to sort the posts
-             :category-index t) ;; generate category index or not
-            ("wiki"
-             :show-meta t
-             :show-comment nil
-             :uri-generator op/generate-uri
-             :uri-template "/wiki/%t/"
-             :sort-by :mod-date
-             :category-index t)
-            ("index"
-             :show-meta nil
-             :show-comment nil
-             :uri-generator op/generate-uri
-             :uri-template "/"
-             :sort-by :date
-             :category-index nil)
-            ("books"
-             :show-meta nil
-             :show-comment nil
-             :uri-generator op/generate-uri
-             :uri-template "/books/"
-             :sort-by :date
-             :category-index nil)
-            ("about"
-             :show-meta nil
-             :show-comment nil
-             :uri-generator op/generate-uri
-             :uri-template "/about/"
-             :sort-by :date
-             :category-index nil))))
 
   ;; Diminish
   (spacemacs|diminish holy-mode)
