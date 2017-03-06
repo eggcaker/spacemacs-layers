@@ -174,3 +174,16 @@
       (insert output-string))
     output-string))
 
+(require 'cl)
+(require 'ido)
+
+(defun pelm/growl-notification (title message &optional sticky)
+  "Send a Growl notification"
+  (do-applescript
+   (format "tell application \"GrowlHelperApp\" \n
+              notify with name \"Emacs Notification\" title \"%s\" description \"%s\" application name \"Emacs.app\" sticky \"%s\"
+              end tell
+              "
+           title
+           message
+           (if sticky "yes" "no"))))

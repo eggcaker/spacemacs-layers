@@ -65,6 +65,7 @@ values."
      ;;plantuml
      (org :variables
           org-enable-github-support t
+          org-enable-org-journal-support t
           org-enable-bootstrap-support t
           org-enable-reveal-js-support t)
      ;;spell-checking
@@ -448,6 +449,16 @@ values."
 
   (when (spacemacs/system-is-linux)
     (set-font "Source Code Pro" "Droid Sans Fallback" 18 20))
+
+  (setq spaceline-org-clock-p t)
+  (setq org-enable-org-journal-support t
+        org-journal-dir "~/.journal/"
+        org-journal-file-format "%Y-%m-%d"
+        org-journal-date-prefix "#+TITLE: "
+        org-journal-date-format "%A, %B %d %Y"
+        org-journal-time-prefix "* "
+        org-journal-time-format "")
+
 
   (setq calendar-holidays
         '(

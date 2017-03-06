@@ -28,8 +28,7 @@
   (progn
     (add-hook 'org-pomodoro-finished-hook '(lambda () (pelm/growl-notification "Pomodoro Finished" "☕️ Have a break!" t)))
     (add-hook 'org-pomodoro-short-break-finished-hook '(lambda () (pelm/growl-notification "Short Break" "🐝 Ready to Go?" t)))
-    (add-hook 'org-pomodoro-long-break-finished-hook '(lambda () (pelm/growl-notification "Long Break" " 💪 Ready to Go?" t)))
-    ))
+    (add-hook 'org-pomodoro-long-break-finished-hook '(lambda () (pelm/growl-notification "Long Break" " 💪 Ready to Go?" t)))))
 
 (defun pelm-org/post-init-org ()
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
