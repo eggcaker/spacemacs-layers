@@ -363,8 +363,7 @@ values."
 
    magit-repository-directories '(
                                   "~/src/work/pacer_android/"
-                                  "~/src/geek/wechathubot/"
-                                  ;;"~/.spacemacs.d/"
+                                  "~/.spacemacs.d/"
                                   ;;"~/src/work/pacer_groups/"
                                   ;"~/src/work/mandian_server/"
                                   )
@@ -453,11 +452,7 @@ values."
   (setq spaceline-org-clock-p t)
   (setq org-enable-org-journal-support t
         org-journal-dir "~/.journal/"
-        org-journal-file-format "%Y-%m-%d"
-        org-journal-date-prefix "#+TITLE: "
-        org-journal-date-format "%A, %B %d %Y"
-        org-journal-time-prefix "* "
-        org-journal-time-format "")
+        org-journal-file-format "%Y-%m-%d")
 
 
   (setq calendar-holidays
@@ -644,6 +639,10 @@ Consider only documented, non-obsolete functions."
     ;; Load local
     (when (file-exists-p "~/.local.el")
       (load "~/.local.el"))
+
+    ;; Load lab code
+    (when (file-exists-p "~/Desktop/test.el")
+      (load "~/Desktop/test.el"))
 
     )
 

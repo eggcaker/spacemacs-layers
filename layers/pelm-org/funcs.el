@@ -187,3 +187,14 @@
            title
            message
            (if sticky "yes" "no"))))
+
+(defun pelm-org-clock-increment-property (prop-name)
+  (interactive)
+  (save-excursion
+    (org-clock-goto)
+    (pelm-org-increment-property-value prop-name)))
+
+(defun pelm-org-increment-property-value (prop-name)
+  (let*  ((prop-value (car (org-property--local-values prop-name t))))
+    (when (eq prop-value nil) (setq prop-value "0"))
+    (org-set-property prop-name (number-to-string (1+ (string-to-number prop-value))))))
