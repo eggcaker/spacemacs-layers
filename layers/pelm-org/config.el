@@ -60,3 +60,11 @@
           "- State .* ->  *\"\\(DONE\\|CANCELLED\\)\" * \\[%Y-%m-%d"
           "\\)")
   "Matches any completion time stamp.")
+
+(add-hook 'org-pomodoro-started-hook '(lambda () (interactive) (pelm-org-clock-increment-property "Pomodoro_Started")))
+(add-hook 'org-pomodoro-finished-hook '(lambda () (interactive) (pelm-org-clock-increment-property "Pomodoro_Finished")))
+(add-hook 'org-pomodoro-killed-hook '(lambda () (interactive) (pelm-org-clock-increment-property "Pomodoro_Killed")))
+
+;; (add-hook 'org-after-todo-state-change-hook '(lambda () (interactive)
+;;                                                (when (-contains? org-done-keywords org-state)
+;;                                                  (org-pomodoro-finished))))

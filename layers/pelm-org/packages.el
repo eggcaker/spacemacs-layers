@@ -26,9 +26,11 @@
 
 (defun pelm-org/post-init-org-pomodoro ()
   (progn
-    (add-hook 'org-pomodoro-finished-hook '(lambda () (pelm/growl-notification "Pomodoro Finished" "☕️ Have a break!" t)))
-    (add-hook 'org-pomodoro-short-break-finished-hook '(lambda () (pelm/growl-notification "Short Break" "🐝 Ready to Go?" t)))
-    (add-hook 'org-pomodoro-long-break-finished-hook '(lambda () (pelm/growl-notification "Long Break" " 💪 Ready to Go?" t)))))
+    ;; (add-hook 'org-pomodoro-finished-hook '(lambda () (pelm/growl-notification "Pomodoro Finished" "☕️ Have a break!" t)))
+    ;; (add-hook 'org-pomodoro-short-break-finished-hook '(lambda () (pelm/growl-notification "Short Break" "🐝 Ready to Go?" t)))
+    ;; (add-hook 'org-pomodoro-long-break-finished-hook '(lambda () (pelm/growl-notification "Long Break" " 💪 Ready to Go?" t)))
+
+  ))
 
 (defun pelm-org/post-init-org ()
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
@@ -193,33 +195,27 @@ unwanted space when exporting org-mode to html."
           (org-agenda-align-tags))
         )
 
-      ;; the %i would copy the selected text into the template
-      ;;http://www.howardism.org/Technical/Emacs/journaling-org.html
-      ;;add multi-file journal
       (setq org-capture-templates
-            '(("t" "Todo" entry (file+headline org-agenda-file-refile "Workspace")
+            '(("t" "Todo" entry (file+headline "~/.org-files/refile.org" "Workspace")
                "* TODO [#B]  %?\n  %i\n"
                :empty-lines 1)
-              ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
+              ("n" "notes" entry (file+headline "~/.org-files/notes.org" "Quick notes")
                "* %?\n  %i\n %U"
                :empty-lines 1)
-              ("b" "Blog Ideas" entry (file+headline org-agenda-file-note "Blog Ideas")
-               "* TODO [#B]  %?\n  %i\n %U"
-               :empty-lines 1)
               ("s" "Code Snippet" entry
-               (file org-agenda-file-code-snippet)
+               (file "~/.org-files/snippet.org")
                "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
-              ("w" "work" entry (file+headline org-agenda-file-refile "pacer")
+              ("w" "work" entry (file+headline "~/.org-files/notes.org" "Pacer")
                "* TODO [#A]  %?\n  %i\n %U"
                :empty-lines 1)
-              ("c" "Chrome" entry (file+headline org-agenda-file-note "Quick notes")
+              ("c" "Chrome" entry (file+headline "~/.org-files/notes.org" "Quick notes ")
                "* TODO [#C]  %?\n %(pelm/retrieve-chrome-current-tab-url)\n %i\n %U"
                :empty-lines 1)
-              ("l" "links" entry (file+headline org-agenda-file-note "Quick notes")
+              ("l" "links" entry (file+headline "~/.org-files/notes.org" "Quick notes")
                "* TODO [#C]  %?\n  %i\n %a \n %U"
                :empty-lines 1)
               ("j" "Journal Entry"
-               entry (file+datetree org-agenda-file-journal)
+               entry (file+datetree  "~/.org-files/journal.org")
                "* %?"
                :empty-lines 1)))
 
@@ -238,14 +234,6 @@ unwanted space when exporting org-mode to html."
                                (org-agenda-overriding-header
                                 (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
                                (org-agenda-span 'day)))
-
-                      ;; Unscheduled new tasks (waiging to be prioritized and scheduled).
-                      ;; (todo "TODO"
-                      ;;       ((org-agenda-overriding-header "COLLECTBOX (Unscheduled)")
-                      ;;        (org-agenda-files (list (concat org-agenda-dir "/mobileorg.org")
-                      ;;                                (concat org-agenda-dir "/refile.org")
-                      ;;                                ))))
-
                       (tags-todo "TODO={STARTED\\|LEARN}"
                                  ((org-agenda-overriding-header "STARTED TASKS")
                                   (org-agenda-skip-function
