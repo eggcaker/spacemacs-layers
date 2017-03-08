@@ -47,9 +47,7 @@
 
       (setq org-refile-use-outline-path 'file)
       (setq org-outline-path-complete-in-steps nil)
-      (setq org-refile-targets
-            '((nil :maxlevel . 4)
-              (org-agenda-files :maxlevel . 4)))
+      (setq org-refile-targets '((org-agenda-files . (:maxlevel . 3))))
 
       ;; config stuck project
       (setq org-stuck-projects
@@ -58,6 +56,13 @@
       (setq org-agenda-inhibit-startup t)   ;; ~50x speedup
       (setq org-agenda-use-tag-inheritance nil) ;; 3-4x speedup
       (setq org-agenda-window-setup 'current-window)
+      (setq org-ctrl-k-protect-subtree t)                                   ;; Protect my subtrees!
+      (setq org-blank-before-new-entry
+            '((heading . t) (plain-list-item . nil)))                       ;; Insert empty line before new headlines, but not before list item
+      (setq org-footnote-auto-adjust t)                                     ;; Automatically renumber footnotes
+      (setq org-goto-auto-isearch nil)
+      (setq org-refile-allow-creating-parent-nodes t)                       ;; Allow interactive refile
+      (setq org-special-ctrl-a/e t)                                         ;; Use Ctrl-a/e in a smarter way for Org.
       (setq org-log-done t)
 
       (setq org-todo-keywords
@@ -65,7 +70,14 @@
                     (sequence "BUG(b)" "FIXING(f)" "FIXED(x)" "|" "CANCELLED(c@/!)")
                     (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" ))))
 
-      ;; Org clock
+
+      ;; org-refile to find a task
+      (defun pelm-org-goto-task ()
+        (interactive)
+        (let ((current-prefix-arg '(4)))
+          (call-interactively 'org-refile)))
+
+      (spacemacs/set-leader-keys "oj" 'pelm-org-goto-task)
 
       ;; Change task state to STARTED when clocking in
       (setq org-clock-in-switch-to-state "STARTED")
