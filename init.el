@@ -44,6 +44,7 @@ values."
      ;;ruby
      ;; ess
      sql
+     docker
      ;;vimscript
      (auto-completion
       :variables
@@ -127,6 +128,7 @@ values."
      pelm-blog
      google-calendar
      spotify
+     slack
      ;;pelm-ibuffer
     ;; pelm-erc
      ;;pelm-mail
@@ -362,8 +364,8 @@ values."
    magit-revert-buffers t
 
    magit-repository-directories '(
-                                  "~/src/work/pacer_android/"
                                   "~/.spacemacs.d/"
+                                  "~/src/work/pacer_android/"
                                   ;;"~/src/work/pacer_groups/"
                                   ;"~/src/work/mandian_server/"
                                   )
@@ -434,6 +436,12 @@ values."
    ))
 
 (defun dotspacemacs/user-config ()
+
+
+  ;; Load local.el first
+  (when (file-exists-p "~/.local.el")
+    (load "~/.local.el"))
+
   (global-git-commit-mode t)
   (defun set-font (english chinese english-size chinese-size)
     (set-face-attribute
@@ -574,13 +582,13 @@ values."
       )
 
     ;; slack
-    ;; (slack-register-team
-    ;;  :name "Yep8"
-    ;;  :default t
-    ;;  :client-id pelm/slack-client-id
-    ;;  :client-secret pelm/slack-client-secret
-    ;;  :token pelm/slack-token
-    ;;  :subscribed-channels '(review general))
+    (slack-register-team
+     :name "mandian"
+     :default t
+     :client-id pacer/slack-client-id
+     :client-secret pacer/slack-client-secret
+     :token pacer/slack-token
+     :subscribed-channels '(ci general))
 
     (defun pelm-shell/describe-random-interactive-function ()
       (interactive)
@@ -635,12 +643,7 @@ Consider only documented, non-obsolete functions."
    (bb|wrap-func dotspacemacs/user-init)
    (bb|wrap-func dotspacemacs/user-config)
 
-
-    ;; Load local
-    (when (file-exists-p "~/.local.el")
-      (load "~/.local.el"))
-
-    ;; Load lab code
+   ;; Load lab code
     (when (file-exists-p "~/Desktop/test.el")
       (load "~/Desktop/test.el"))
 
