@@ -13,3 +13,9 @@
                   "copy theResult to the end of links\n"
                   "return links as string\n"))))
     (format "%s" (s-chop-suffix "\"" (s-chop-prefix "\"" result)))))
+
+
+(defun pelm/add-ssh-key()
+  "Add the ssh key to keychine"
+  (interactive)
+  (shell-command "ssh-add ~/.ssh/github_rsa; ssh-add ~/.ssh/bitbucket_rsa" nil))
