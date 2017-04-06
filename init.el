@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ruby
      csv
      vimscript
      lua
@@ -89,7 +90,7 @@ values."
      version-control
      ;;jabber
      javascript
-     ;;java
+     java
      ;;scala
      ;;swift
      (python :variables
@@ -100,10 +101,10 @@ values."
      ;;         colors-enable-rainbow-identifiers nil )
 
      ;;finance
-     ;; (elfeed :variables
-     ;;         url-queue-timeout 30
-     ;;         elfeed-enable-web-interface nil
-     ;;         rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
+     (elfeed :variables
+             url-queue-timeout 30
+             elfeed-enable-web-interface nil
+             rmh-elfeed-org-files (list "~/.spacemacs.d/pelm-feed/feeds.org"))
 
      ;; restclient
      (restclient :variables
@@ -126,6 +127,7 @@ values."
      pelm-misc
      pelm-org
      pelm-blog
+     pelm-finance
      google-calendar
      spotify
      slack
@@ -311,7 +313,7 @@ values."
    dotspacemacs-smart-close-parenthesis nil
    dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
-   dotspacemacs-search-tools '("ag" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
    dotspacemacs-default-package-repository nil
    dotspacemacs-whitespace-cleanup 'changed))
 
