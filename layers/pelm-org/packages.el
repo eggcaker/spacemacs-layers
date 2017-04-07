@@ -72,10 +72,24 @@
 
 
       ;; org-refile to find a task
+      (defun pelm-org--get-visible-buffers ()
+        (let* ((cur-mode 'org-mode))
+          (delq nil
+                (mapcar
+                 (lambda (buffer)
+                   (when (and (equal cur-mode (buffer-local-value 'major-mode buffer))
+                              (get-buffer-window buffer))
+                     `(,(buffer-file-name buffer) :maxlevel . 3)))
+                 (buffer-list)))))
+
       (defun pelm-org-goto-task ()
         (interactive)
-        (let ((current-prefix-arg '(4)))
-          (call-interactively 'org-refile)))
+        (setq current-prefix-arg '(4)) ; C-u
+        (if current-prefix-arg
+            (call-interactively #'org-refile)
+          (let* ((visible-org-files (pelm-org--get-visible-buffers))
+                 (org-refile-targets visible-org-files))
+            (call-interactively #'org-refile))))
 
       (spacemacs/set-leader-keys "oj" 'pelm-org-goto-task)
 
