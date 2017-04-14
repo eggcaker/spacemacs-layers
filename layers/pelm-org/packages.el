@@ -84,7 +84,6 @@
 
       (defun pelm-org-goto-task ()
         (interactive)
-        (setq current-prefix-arg '(4)) ; C-u
         (if current-prefix-arg
             (call-interactively #'org-refile)
           (let* ((visible-org-files (pelm-org--get-visible-buffers))
@@ -180,7 +179,7 @@
          (sql . t )
          (dot . t)
          (js . t)
-         (latex .t)
+         (latex . t)
          (python . t)
          (emacs-lisp . t)
          (plantuml . t)
