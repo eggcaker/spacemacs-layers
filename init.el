@@ -73,7 +73,7 @@ values."
           org-enable-reveal-js-support t)
      ;;spell-checking
      git
-     ;; github
+     github
      (markdown :variables markdown-live-preview-engine 'vmd)
      ;;dockerfile
      yaml
@@ -214,7 +214,7 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark spacemacs-light rebecca )
+   dotspacemacs-themes '(spacemacs-dark doom doom-one)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
