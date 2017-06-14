@@ -58,7 +58,7 @@
       (setq org-agenda-window-setup 'current-window)
       (setq org-ctrl-k-protect-subtree t)                                   ;; Protect my subtrees!
       (setq org-blank-before-new-entry
-            '((heading . t) (plain-list-item . nil)))                       ;; Insert empty line before new headlines, but not before list item
+            '((heading . ni) (plain-list-item . nil)))                       ;; Insert empty line before new headlines, but not before list item
       (setq org-footnote-auto-adjust t)                                     ;; Automatically renumber footnotes
       (setq org-goto-auto-isearch nil)
       (setq org-refile-allow-creating-parent-nodes t)                       ;; Allow interactive refile
@@ -174,20 +174,21 @@
 
       (org-babel-do-load-languages
        'org-babel-load-languages
-       '((ruby . t)
-         (shell . t)
-         (sql . t )
-         (dot . t)
-         (js . t)
-         (latex . t)
-         (python . t)
-         (emacs-lisp . t)
-         (plantuml . t)
-         (C . t)
-         (ditaa . t)))
+				'((ruby . t)
+					 (shell . t)
+					 (sql . t )
+					 (dot . t)
+					 (js . t)
+					 (latex . t)
+					 (python . t)
+					 (ipython . t)
+					 (emacs-lisp . t)
+					 (plantuml . t)
+					 (C . t)
+					 (ditaa . t)))
 
 
-      (require 'ox-md nil t)
+			(require 'ox-md nil t)
       ;; copy from chinese layer
       (defadvice org-html-paragraph (before org-html-paragraph-advice
                                             (paragraph contents info) activate)
