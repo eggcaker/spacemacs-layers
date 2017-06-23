@@ -181,6 +181,7 @@
 					 (js . t)
 					 (latex . t)
 					 (python . t)
+					 (restclient . t)
 					 (ipython . t)
 					 (emacs-lisp . t)
 					 (plantuml . t)
