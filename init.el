@@ -85,7 +85,7 @@ values."
 
        (shell :variables
          shell-default-term-shell "/usr/local/bin/zsh"
-         shell-default-shell 'multiterm
+         shell-default-shell 'shell
          shell-default-height 30
          shell-default-position 'bottom)
        shell-scripts
@@ -93,6 +93,8 @@ values."
        version-control
        ;;jabber
        javascript
+       restructuredtext
+       docker
        java
        ;;scala
        ;;swift
