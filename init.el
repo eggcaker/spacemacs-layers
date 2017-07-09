@@ -135,6 +135,7 @@ values."
        ;; Personal Layers
        pelm-misc
        pelm-org
+       pelm-org-trello
        ;;pelm-blog
        ;;pelm-finance
        ;;google-calendar
