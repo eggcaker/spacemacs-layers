@@ -4,15 +4,8 @@
     '(
       (kotlin-mode  :location local)
       ledger-mode
-      evil-lion
       ;;discover-my-major
       ))
-
-(defun pelm-misc/init-evil-lion()
-  (use-package evil-lion
-  :ensure t
-  :config
-  (evil-lion-mode)))
 
 (defun pelm-misc/post-init-ledger-mode ()
   (use-package ledger-mode
