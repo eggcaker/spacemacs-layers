@@ -226,15 +226,9 @@ unwanted space when exporting org-mode to html."
             '(("t" "Todo" entry (file+headline "~/.org-files/refile.org" "Workspace")
                "* TODO [#B]  %?\n  %i\n"
                :empty-lines 1)
-              ("n" "notes" entry (file+headline "~/.org-files/notes.org" "Quick notes")
-               "* %?\n  %i\n %U"
-               :empty-lines 1)
-              ("s" "Code Snippet" entry
-               (file "~/.org-files/snippet.org")
-               "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
-              ("w" "work" entry (file+headline "~/.org-files/notes.org" "Pacer")
-               "* TODO [#A]  %?\n  %i\n %U"
-               :empty-lines 1)
+							 ("w" "Web site" entry
+								 (file "")
+								 "* %a :website:\n\n%U %?\n\n%:initial")
               ("c" "Chrome" entry (file+headline "~/.org-files/notes.org" "Quick notes ")
                "* TODO [#C]  %?\n %(pelm/retrieve-chrome-current-tab-url)\n %i\n %U"
                :empty-lines 1)

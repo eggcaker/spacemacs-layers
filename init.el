@@ -30,7 +30,7 @@ values."
     dotspacemacs-configuration-layer-path '()
     ;; List of configuration layers to load.
     dotspacemacs-configuration-layers
-    '(
+    '(nginx
        (typescript :variables
          typescript-fmt-on-save t)
        html
@@ -48,7 +48,7 @@ values."
        ;;ruby
        ;; ess
        sql
-       ;;docker
+       docker
        ;;vimscript
        (auto-completion
          :variables
@@ -207,7 +207,7 @@ values."
     ;; directory. A string value must be a path to an image format supported
     ;; by your Emacs build.
     ;; If the value is nil then no banner is displayed. (default 'official)
-    dotspacemacs-startup-banner nil
+    dotspacemacs-startup-banner 'official
     ;; List of items to show in startup buffer or an association list of
     ;; the form `(list-type . list-size)`. If nil then it is disabled.
     ;; Possible values for list-type are:
@@ -482,6 +482,13 @@ values."
   (setq org-enable-org-journal-support t
     org-journal-dir "~/.journal/"
     org-journal-file-format "%Y-%m-%d")
+
+	(setq org-trello--config-filename "%s.el")
+
+  (setq org-trello--config-dir  (format "%s.cache/%s" user-emacs-directory ".trello"))
+
+  (setq org-trello--config-file (expand-file-name (format "%s/%s" org-trello--config-dir org-trello--config-filename)))
+
 
 
   (setq calendar-holidays
