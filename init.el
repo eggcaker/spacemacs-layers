@@ -375,11 +375,12 @@ values."
     magit-revert-buffers t
 
     magit-repository-directories '(
-                                    "~/.spacemacs.d/"
+                                    ;; "~/.spacemacs.d/"
                                     "~/src/work/pacer_android/"
+																		"~/.dotfiles"
                                     ;;"~/src/work/pacer_groups/"
-                                        ;"~/src/work/mandian_server/"
-                                    )
+																		;;"~/src/work/mandian_server/"
+																		)
 
     ;; Flycheck
     avy-all-windows 'all-frames
