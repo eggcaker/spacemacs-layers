@@ -30,7 +30,9 @@ values."
     dotspacemacs-configuration-layer-path '()
     ;; List of configuration layers to load.
     dotspacemacs-configuration-layers
-    '(nginx
+    '(vimscript
+			 python
+			 nginx
        (typescript :variables
          typescript-fmt-on-save t)
        html
@@ -52,8 +54,8 @@ values."
        ;;vimscript
        (auto-completion
          :variables
-         auto-completion-return-key-behavior 'complete
-         auto-completion-tab-key-behavior 'cycle
+         auto-completion-return-key-behavior nil
+         auto-completion-tab-key-behavior 'complete
          auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/"
          auto-completion-complete-with-key-sequence "jj"
          auto-completion-complete-with-key-sequence-delay 0.1
@@ -85,9 +87,11 @@ values."
 
        (shell :variables
          shell-default-term-shell "/usr/local/bin/zsh"
-         shell-default-shell 'shell
+         shell-default-shell 'eshell
+				 shell-enable-smart-eshell t
          shell-default-height 30
-         shell-default-position 'bottom)
+				 shell-protect-eshell-prompt nil
+         shell-default-position 'right)
        shell-scripts
        syntax-checking
        version-control
@@ -100,11 +104,11 @@ values."
        ;;swift
        ipython-notebook
        org-ipython
-       (python :variables
-         python-fill-column 110
-         python-sort-imports-on-save t
-         python-enable-yapf-format-on-save t)
-       ;;react
+			 (python :variables
+				 python-fill-column 110
+				 python-sort-imports-on-save t
+				 python-enable-yapf-format-on-save t)
+			 ;;react
        evil-commentary
        ;; (colors :variables
        ;;         colors-enable-rainbow-identifiers nil )
@@ -327,6 +331,67 @@ values."
     dotspacemacs-whitespace-cleanup 'changed))
 
 (defun dotspacemacs/user-init ()
+  (defun set-indent (n)
+    (setq-default
+			evil-shift-width n
+			tab-width n
+			default-tab-width n
+			standard-indent n
+			c-basic-offset n
+			js-indent-level n
+			js2-basic-offset n
+			javascript-indent-level n
+			css-indent-offset n
+			prolog-indent-width n
+			coffee-tab-width n
+			web-mode-markup-indent-offset n
+			web-mode-css-indent-offset n
+			web-mode-code-indent-offset n
+			web-mode-markup-indent-offset n
+			web-mode-css-indent-offset n
+			web-mode-code-indent-offset n
+			web-mode-attr-indent-offset n))
+  (set-indent 2)
+
+	(setq-default
+		python-indent-offset 4
+		python-indent 4)
+
+  (defun set-tab-width (n)
+    (dolist (var '(evil-shift-width
+                   default-tab-width
+                   tab-width
+                   c-basic-offset
+                   cmake-tab-width
+                   coffee-tab-width
+                   cperl-indent-level
+                   css-indent-offset
+                   elixir-smie-indent-basic
+                   enh-ruby-indent-level
+                   erlang-indent-level
+                   javascript-indent-level
+                   js-indent-level
+                   js2-basic-offset
+                   js3-indent-level
+                   lisp-indent-offset
+                   livescript-tab-width
+                   mustache-basic-offset
+                   nxml-child-indent
+                   perl-indent-level
+                   puppet-indent-level
+                   python-indent-offset
+                   ruby-indent-level
+                   rust-indent-offset
+                   scala-indent:step
+                   sgml-basic-offset
+                   sh-basic-offset
+                   web-mode-code-indent-offset
+                   web-mode-css-indent-offset
+                   web-mode-markup-indent-offset))
+      (set (make-local-variable var) n)))
+  (set-tab-width 2)
+  (add-hook 'python-mode-hook (lambda () (set-indent 4)))
+
   (setq-default
     ;; remove the 4m from shell
     system-uses-terminfo nil
@@ -395,9 +460,10 @@ values."
 
     ;; Shell
     shell-default-term-shell "/usr/local/bin/zsh"
+		explicit-shell-file-name "/usr/local/bin/zsh"
+		shell-file-name "zsh"
+		explicit-bash.exe-args '("--noediting" "--login" "-i")
 
-    ;;python
-    python-indent-offset 2
     ;; Web
     web-mode-markup-indent-offset 2
     web-mode-css-indent-offset 2
@@ -451,13 +517,17 @@ values."
     ))
 
 (defun dotspacemacs/user-config ()
-  (add-hook 'python-mode-hook
-    (lambda ()
-      (setq indent-tabs-mode nil)
-      (setq python-indent 4)
-      (setq evil-auto-indent nil)
-      (setq tab-width 4))
-    (untabify (point-min) (point-max)))
+  ;; (add-hook 'python-mode-hook
+  ;;   (lambda ()
+  ;;     (setq indent-tabs-mode nil)
+  ;;     (setq python-indent 4)
+  ;;     (setq evil-auto-indent nil)
+  ;;     (setq tab-width 4))
+  ;;   (untabify (point-min) (point-max)))
+
+	(setenv "SHELL" shell-file-name)
+	(add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+
 
   ;; Load local.el first
   (when (file-exists-p "~/.local.el")
@@ -483,14 +553,6 @@ values."
   (setq org-enable-org-journal-support t
     org-journal-dir "~/.journal/"
     org-journal-file-format "%Y-%m-%d")
-
-	(setq org-trello--config-filename "%s.el")
-
-  (setq org-trello--config-dir  (format "%s.cache/%s" user-emacs-directory ".trello"))
-
-  (setq org-trello--config-file (expand-file-name (format "%s/%s" org-trello--config-dir org-trello--config-filename)))
-
-
 
   (setq calendar-holidays
     '(
