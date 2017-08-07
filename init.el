@@ -344,6 +344,7 @@ values."
 			css-indent-offset n
 			prolog-indent-width n
 			coffee-tab-width n
+		    yaml-indent-offset n
 			web-mode-markup-indent-offset n
 			web-mode-css-indent-offset n
 			web-mode-code-indent-offset n
@@ -379,6 +380,7 @@ values."
                    nxml-child-indent
                    perl-indent-level
                    puppet-indent-level
+				   yaml-indent-offset
                    python-indent-offset
                    ruby-indent-level
                    rust-indent-offset
