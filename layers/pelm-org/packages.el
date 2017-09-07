@@ -181,6 +181,8 @@ unwanted space when exporting org-mode to html."
 
 							 (tags "fix_now"
 								 ((org-agenda-overriding-header "DO IT NOW!")
+									 (org-agenda-skip-function
+										 '(org-agenda-skip-entry-if 'todo 'done))
 									 (org-agenda-files '("~/Desktop/.pacer_android_bug.org"))))
 
 							 ;; List of all TODO entries with deadline before today.
