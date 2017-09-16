@@ -55,15 +55,15 @@ values."
        ;;vimscript
        (auto-completion
          :variables
-         auto-completion-return-key-behavior nil
-         auto-completion-tab-key-behavior 'complete
+         auto-completion-return-key-behavior 'complete
+         auto-completion-tab-key-behavior 'cycle
          auto-completion-private-snippets-directory "~/.spacemacs.d/snippets/"
          auto-completion-complete-with-key-sequence "jj"
          auto-completion-complete-with-key-sequence-delay 0.1
          auto-completion-enable-snippets-in-popup t
          auto-completion-enable-help-tooltip t
          auto-completion-enable-sort-by-usage t
-         :disabled-for org erc)
+         :disabled-for org erc sh)
 
        ivy
        ;;erc
@@ -103,8 +103,8 @@ values."
        java
        ;;scala
        ;;swift
-       ipython-notebook
-       org-ipython
+      ;; ipython-notebook
+       ;org-ipython
 			 (python :variables
 				 python-fill-column 110
 				 python-sort-imports-on-save t
@@ -141,6 +141,7 @@ values."
        pelm-misc
        pelm-org
        pelm-org-trello
+			 pelm-contact
        ;;pelm-blog
        ;;pelm-finance
        ;;google-calendar
