@@ -113,15 +113,13 @@
 				'(
 					 (shell . t)
 					 (sql . t )
-					 (dot . t)
+					 ;; (dot . t)
 					 (js . t)
 					 ;; (latex . t)
-					 (python . t)
+					 ;;(python . t)
 					 (restclient . t)
-					 (ipython . t)
 					 (emacs-lisp . t)
 					 (plantuml . t)
-					 (C . t)
 					 (ditaa . t)))
 
 
