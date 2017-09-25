@@ -13,7 +13,6 @@
 
 (defconst pelm-org-packages
 	'((org :location built-in)
-		 org-mac-link
 		 ;;org-pomodoro
 		 deft
 		 ;; org-tree-slide
@@ -230,7 +229,7 @@ unwanted space when exporting org-mode to html."
 						 ((agenda "" ((org-agenda-ndays 1)))
 							 ;; limits the agenda display to a single day
 							 (tags-todo "+PRIORITY=\"A\"")
-							 (tags-todo "@computer|@office|@phone")
+							 (tags-todo "@office|@phone")
 							 (tags "project+CATEGORY=\"pacer_server\"")
 							 ;; limits the tag search to the file circuspeanuts.org
 							 (todo "WAITING"))
@@ -336,16 +335,6 @@ holding contextual information."
 									(org-html--container headline info)))))))
 
 			)))
-
-(defun pelm-org/init-org-mac-link ()
-	(use-package org-mac-link
-		:commands org-mac-grab-link
-		:init
-		(progn
-			(add-hook 'org-mode-hook
-				(lambda ()
-					(define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link))))
-		:defer t))
 
 (defun pelm-org/post-init-ox-reveal ()
 	(setq org-reveal-root "file:///Users/guanghui/.emacs.d/reveal-js"))

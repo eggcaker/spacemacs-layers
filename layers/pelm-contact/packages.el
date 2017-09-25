@@ -14,7 +14,7 @@
 ;;; Code:
 
 (defconst pelm-contact-packages
-	'(ebdb counsel-ebdb ebdb-company))
+	'(ebdb counsel-ebdb company-ebdb))
 
 (defun pelm-contact/init-ebdb()
 	(use-package ebdb
@@ -65,7 +65,7 @@
 		:init (spacemacs/set-leader-keys
 						"cs" 'counsel-ebdb)))
 
-(defun pelm-contact/init-ebdb-company()
+(defun pelm-contact/init-company-ebdb()
 	(use-package company-ebdb
 		:defer t
 		:init (spacemacs|add-company-backends
