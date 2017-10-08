@@ -63,7 +63,7 @@
 			(setq org-special-ctrl-a/e t)                                         ;; Use Ctrl-a/e in a smarter way for Org.
 			(setq org-log-done t)
 
-			(setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+			(setq org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
 
 			;; org-refile to find a task
 			(defun pelm-org--get-visible-buffers ()
