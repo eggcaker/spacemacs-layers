@@ -104,8 +104,8 @@
 			(setq org-default-properties (cons "RESET_SUBTASKS" org-default-properties))
 
 			(setq org-plantuml-jar-path
-				(expand-file-name "~/.spacemacs.d/pelm-org/vendor/plantuml.jar"))
-			(setq org-ditaa-jar-path "~/.spacemacs.d/pelm-org/vendor/ditaa.jar")
+				(expand-file-name "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"))
+			(setq org-ditaa-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/dijtaa.jar")
 
 			(org-babel-do-load-languages
 				'org-babel-load-languages
