@@ -32,7 +32,7 @@
     :post-config
     ;; Code
     (use-package ob-ipython)
-    (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+    (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append )
     )
   )
 ;;
