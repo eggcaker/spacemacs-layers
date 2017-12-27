@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: sqlite code block
+# key: sqlite
+# --
+
+#+name: sqlite-hello
+#+header: :list
+#+header: :separator \ 
+#+header: :results raw
+#+header: :dir /tmp/
+#+header: :db test-sqlite.db
+#+begin_src sqlite
+$0
+#+end_src
