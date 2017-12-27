@@ -2,7 +2,6 @@
 
 (setq pelm-misc-packages
     '(
-      (kotlin-mode  :location local)
       ledger-mode
       ;;discover-my-major
       ))
@@ -17,8 +16,3 @@
     :config
     (add-to-list 'evil-emacs-state-modes 'ledger-report-mode)))
 
-(defun pelm-misc/init-kotlin-mode()
-  (use-package kotlin-mode
-    :init
-    (setq kotlin-tab-width 2 )
-    :mode (("\\.kt\\'" . kotlin-mode))))
