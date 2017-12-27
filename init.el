@@ -106,7 +106,7 @@ This function should only modify configuration layer settings."
        osx
        ;;swift
        ;; ipython-notebook
-                                        ;org-ipython
+       ;; org-ipython
        (python :variables
          python-fill-column 110
          python-sort-imports-on-save t
@@ -239,23 +239,21 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+    dotspacemacs-themes '( spacemacs-dark spacemacs-light material)
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
 
-    dotspacemacs-default-font '("CodeNewRoman Nerd Font"
-                       ;; dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
-                               :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
-   ;; The leader key (default "SPC")
-   dotspacemacs-leader-key "SPC"
-   ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
+    ;; dotspacemacs-default-font '("PragmataPro"
+    ;;                            :size 18
+    ;;                            :weight normal
+    ;;                            :width normal
+    ;;                            :powerline-scale 1.1)
+    ;; The leader key (default "SPC")
+    dotspacemacs-leader-key "SPC"
+    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
    ;; (default "SPC")
    dotspacemacs-emacs-command-key "SPC"
    ;; The key used for Vim Ex commands (default ":")
