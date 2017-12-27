@@ -13,12 +13,18 @@
 
 ;;; Code:
 
-(defconst pelm-kotlin-packages '(kotlin-mode))
-
+(defconst pelm-kotlin-packages '(kotlin-mode ob-kotlin))
+(defun pelm-kotlin/init-ob-kotlin()
+  (use-package ob-kotlin
+    :ensure t
+    :defer t))
 
 (defun pelm-kotlin/init-kotlin-mode()
   (use-package kotlin-mode
     :defer t
+    :init
+    (setq  kotlin-tab-width 2)
+    :mode (("\\.kt\\'" . kotlin-mode))
     :config
     (progn
       (spacemacs/set-leader-keys-for-major-mode 'kotlin-mode

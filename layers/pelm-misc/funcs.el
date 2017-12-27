@@ -19,3 +19,20 @@
   "Add the ssh key to keychine"
   (interactive)
   (shell-command "ssh-add ~/.ssh/gitlab_rsa;ssh-add ~/.ssh/github_rsa; ssh-add ~/.ssh/bitbucket_rsa" nil))
+
+
+
+                                          
+                                                                                                       
+               
+            
+                                       
+                                                                 
+                                                                                
+      
+                                                                
+                                
+           
+                        
+                                          
+         
