@@ -1,0 +1,1 @@
+#+TBLFM: $0='(format-time-string "%Y-%m-%d %H:%M:%S" (seconds-to-time  (/ (string-to-number $1) 1000)))
