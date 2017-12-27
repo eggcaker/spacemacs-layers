@@ -107,14 +107,18 @@
             (expand-file-name "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"))
       (setq org-ditaa-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/dijtaa.jar")
 
+      (require 'ob-sqlite)
+
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
          (shell . t)
          (sql . t )
+         (sqlite . t)
          (dot . t)
          (js . t)
          (org . t )
+         (clojure . t )
          (restclient . t)
          (emacs-lisp . t)
          (python . t)
@@ -251,7 +255,8 @@ unwanted space when exporting org-mode to html."
       ;; used by pelm/org-clock-sum-today-by-tags
 
       (define-key org-mode-map (kbd "s-p") 'org-priority)
-      (define-key org-mode-map (kbd ",,")  'org-ctrl-c-ctrl-c)
+
+
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "tl" 'org-toggle-link-display)
       (define-key evil-normal-state-map (kbd "C-c C-w") 'org-refile)
