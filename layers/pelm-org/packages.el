@@ -109,6 +109,15 @@
 
       (require 'ob-sqlite)
 
+      (setenv "NODE_PATH"
+              (concat
+               (getenv "HOME") "/.npm-packages/lib/node_modules" ":"
+               (getenv "HOME") "/.n/lib/node_modules" ":"
+               "/usr/local/lib/node_modules" ":"
+               (getenv "HOME") "/.org-files/node_modules"  ":"
+               (getenv "NODE_PATH")
+               ))
+
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
