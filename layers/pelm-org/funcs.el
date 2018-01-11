@@ -2,6 +2,9 @@
 
 (require 'cl)
 
+(defun pelm-add-schedule-date(gap)
+  (format-time-string "SCHEDULED: <%Y-%m-%d %a>" (time-add (current-time ) (* (line-number-at-pos) (* gap 86400)))))
+
 (defun pelm/directory-parent (directory)
   (let ((parent (file-name-directory (directory-file-name directory))))
     (if (not (equal directory parent))

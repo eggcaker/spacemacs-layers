@@ -106,8 +106,8 @@ This function should only modify configuration layer settings."
        ;;csv
        osx
        ;;swift
-       ;; ipython-notebook
-       ;; org-ipython
+       ipython-notebook
+       org-ipython
        (python :variables
          python-fill-column 110
          python-sort-imports-on-save t
@@ -117,7 +117,7 @@ This function should only modify configuration layer settings."
        ;; (colors :variables
        ;;         colors-enable-rainbow-identifiers nil )
 
-       ;;finance
+       finance
        (elfeed :variables
          url-queue-timeout 30
          elfeed-enable-web-interface nil
@@ -246,11 +246,11 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
 
-    ;; dotspacemacs-default-font '("PragmataPro"
-    ;;                            :size 18
-    ;;                            :weight normal
-    ;;                            :width normal
-    ;;                            :powerline-scale 1.1)
+   dotspacemacs-default-font '("Source Code Pro"
+                               :size 18
+                               :weight normal
+                               :width normal
+                               :powerline-scale 1.1)
     ;; The leader key (default "SPC")
     dotspacemacs-leader-key "SPC"
     ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
@@ -275,7 +275,7 @@ It should only modify the values of Spacemacs settings."
    ;; works in the GUI. (default nil)
    dotspacemacs-distinguish-gui-tab nil
    ;; If non-nil `Y' is remapped to `y$' in Evil states. (default nil)
-   dotspacemacs-remap-Y-to-y$ nil
+   dotspacemacs-remap-Y-to-y$ t
    ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
    ;; there. (default t)
    dotspacemacs-retain-visual-state-on-shift t
@@ -642,20 +642,9 @@ It should only modify the values of Spacemacs settings."
     ))
 
 (defun dotspacemacs/user-config ()
-  ;; (add-hook 'python-mode-hook
-  ;;   (lambda ()
-  ;;     (setq indent-tabs-mode nil)
-  ;;     (setq python-indent 4)
-  ;;     (setq evil-auto-indent nil)
-  ;;     (setq tab-width 4))
-  ;;   (untabify (point-min) (point-max)))
-
-  ;; emms
-;;  (setq emms-player-mpd-server-port "6600")
- ;; (emms-player-mpd-connect)
-
   (setenv "SHELL" shell-file-name)
   (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+  (setq org-agenda-show-future-repeats nil)
 
   ;; Load local.el first
   (when (file-exists-p "~/.local.el")
@@ -866,17 +855,6 @@ Consider only documented, non-obsolete functions."
   ;; Load lab code
   (when (file-exists-p "~/Desktop/test.el")
     (load "~/Desktop/test.el"))
-
-  ;; roswell 
-  (setq inferior-lisp-program "ros -Q run")
-  (load (expand-file-name "~/.roswell/helper.el"))
-  (setf slime-lisp-implementations
-    `((sbcl    ("sbcl" "--dynamic-space-size" "2000"))
-       (roswell ("ros" "-Q" "run"))))
-  (setf slime-default-lisp 'roswell)
-  (setq inferior-lisp-program "ros -L sbcl -Q -l ~/.sbclrc run")
-
-
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
