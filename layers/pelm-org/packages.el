@@ -15,11 +15,51 @@
   '((org :location built-in)
     ;;org-pomodoro
     deft
+    org-brain
     ;; org-tree-slide
     ;; ox-reveal
     ;; worf
     ;; org-download
     ))
+
+
+
+
+(defun pelm-org/post-init-org-brain()
+  :init
+  (setq org-brain-path "~/.org-brain")
+  :config
+  (defun org-brain-insert-resource-icon (link)
+    "Insert an icon, based on content of org-mode LINK."
+    (insert (format "%s "
+                    (cond ((string-prefix-p "http" link)
+                           (cond ((string-match "wikipedia\\.org" link)
+                                  (all-the-icons-faicon "wikipedia-w"))
+                                 ((string-match "github\\.com" link)
+                                  (all-the-icons-octicon "mark-github"))
+                                 ((string-match "vimeo\\.com" link)
+                                  (all-the-icons-faicon "vimeo"))
+                                 ((string-match "youtube\\.com" link)
+                                  (all-the-icons-faicon "youtube"))
+                                 (t
+                                  (all-the-icons-faicon "globe"))))
+                          ((string-prefix-p "brain:" link)
+                           (all-the-icons-fileicon "brain"))
+                          (t
+                           (all-the-icons-icon-for-file link))))))
+
+  (add-hook 'org-brain-after-resource-button-functions #'org-brain-insert-resource-icon)
+
+  (setq org-id-track-globally t)
+  (setq org-id-locations-file "~/.emacs.d/.cache/.org-id-locations")
+  (with-eval-after-load 'org
+    (progn
+      (push '("b" "Brain" plain (function org-brain-goto-end)
+              "* %i%?" :empty-lines 1)
+            org-capture-templates)))
+
+   (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-title-max-length 12))
 
 (defun pelm-org/post-init-org-pomodoro ()
   (progn
@@ -118,9 +158,12 @@
                (getenv "NODE_PATH")
                ))
 
+      (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+      (add-hook 'org-mode-hook 'org-display-inline-images) 
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
+         (R . t)
          (shell . t)
          (sql . t )
          (sqlite . t)
