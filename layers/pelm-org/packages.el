@@ -178,23 +178,6 @@ unwanted space when exporting org-mode to html."
                                    (concat org-agenda-dir "/mobileorg.org")))))
               ("." "Today"
                (
-                ;; Events.
-                (agenda ""
-                        ((org-agenda-entry-types '(:timestamp :sexp))
-                         (org-agenda-overriding-header
-                          (concat "CALENDAR Today " (format-time-string "%a %d" (current-time))))
-                         (org-agenda-span 'day)))
-                ;; (tags-todo "TODO={STARTED\\|LEARN}"
-                ;; 	 ((org-agenda-overriding-header "STARTED TASKS")
-                ;; 		 (org-agenda-skip-function
-                ;; 			 '(org-agenda-skip-entry-if 'deadline))))
-
-                (tags "fix_now"
-                      ((org-agenda-overriding-header "DO IT NOW!")
-                       (org-agenda-skip-function
-                        '(org-agenda-skip-entry-if 'todo 'done))
-                       (org-agenda-files '("~/Desktop/.pacer_android_bug.org"))))
-
                 ;; List of all TODO entries with deadline before today.
                 (tags-todo "DEADLINE<=\"<+0d>\"|SCHEDULED<=\"<+0d>\""
                            ((org-agenda-overriding-header "OVERDUE")
@@ -254,14 +237,9 @@ unwanted space when exporting org-mode to html."
                 (org-agenda-time-grid nil)
                 (org-agenda-repeating-timestamp-show-all t)   ;; [3]
                 (org-agenda-entry-types '(:timestamp :sexp))))  ;; [4]
-
-              ("p"  "工作任务安排" tags-todo "@office"
-               ((org-agenda-files '("~/.org-files/gtd.org" "~/Desktop/.pacer_android_bug.org"))
-                (org-agenda-sorting-strategy '(priority-up effort-down)))
-               ("~/Desktop/gtd/work.html"))))
+              ))
 
       (add-hook 'org-after-todo-statistics-hook 'pelm/org-summary-todo)
-      ;; used by pelm/org-clock-sum-today-by-tags
 
       (define-key org-mode-map (kbd "s-p") 'org-priority)
 
