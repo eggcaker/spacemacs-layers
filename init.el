@@ -40,7 +40,7 @@ This function should only modify configuration layer settings."
        ;;octave
        ;;nginx
        ;;octave
-       ;; ess
+       ess
        sql
        ;;docker
        ;;vimscript
@@ -159,7 +159,7 @@ This function should only modify configuration layer settings."
     ;; wrapped in a layer. If you need some configuration for these
     ;; packages, then consider creating a layer. You can also put the
     ;; configuration in `dotspacemacs/user-config'.
-    dotspacemacs-additional-packages '(key-chord ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+    dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
     ;; A list of packages that cannot be updated.
     dotspacemacs-frozen-packages '()
     ;; A list of packages that will not be installed and loaded.
