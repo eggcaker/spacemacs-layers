@@ -29,7 +29,7 @@ This function should only modify configuration layer settings."
     dotspacemacs-configuration-layer-path '()
     ;; List of configuration layers to load.
     dotspacemacs-configuration-layers
-    '(ruby
+    '(
       vimscript
       clojure
        react
@@ -40,7 +40,6 @@ This function should only modify configuration layer settings."
        ;;octave
        ;;nginx
        ;;octave
-       ;;ruby
        ;; ess
        sql
        ;;docker
@@ -99,15 +98,14 @@ This function should only modify configuration layer settings."
        kotlin
        ;;vimscript
        ;;nginx
-       ;;ruby
        ;;html
        ;;lua
        ;;(typescript :variables
        ;; typescript-fmt-on-save t)
-       ;;csv
+       ;; csv
        osx
-       ;;swift
-       ipython-notebook
+       ;; swift
+       ;; ipython-notebook
        org-ipython
        (python :variables
          python-fill-column 110
@@ -154,7 +152,7 @@ This function should only modify configuration layer settings."
        ;;slack
        ;;pelm-ibuffer
        ;; pelm-erc
-       ;;pelm-mail
+       pelm-mail
        ;;pelm-slack
        )
     ;; List of additional packages that will be installed without being
@@ -755,10 +753,7 @@ It should only modify the values of Spacemacs settings."
 
   (setq display-time-mode t)
   (setq-default line-spacing 10)
-  ;;(setq org-bullets-bullet-list '("☯" "☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" ))
-  ;;(setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
-
-  (setq org-bullets-bullet-list '("✺" "✹" "✸" "✷" "✶" "✭" "✦" "■" "▲" "●" ))
+  (setq org-bullets-bullet-list '("☯" "☰" "☵" "☶" "☳" "☴" "☲" "☷" "☱" ))
   (setq ledger-post-amount-alignment-column 68)
   (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
   (setq org-gcal-file-alist '(("eggcaker@gmail.com" . "~/.org-files/google.org")))
