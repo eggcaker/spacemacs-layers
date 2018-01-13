@@ -514,7 +514,7 @@ It should only modify the values of Spacemacs settings."
   (set-tab-width 2)
   (add-hook 'python-mode-hook (lambda () (set-indent 4)))
 
-;;  (setq google-translate-default-target-language "zh-CN")
+  (setenv "LANG" "en_US.UTF-8")
 
   (setq-default
     ;; remove the 4m from shell
