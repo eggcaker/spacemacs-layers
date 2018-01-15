@@ -145,7 +145,7 @@
 
       (setq org-plantuml-jar-path
             (expand-file-name "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"))
-      (setq org-ditaa-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/dijtaa.jar")
+      (setq org-ditaa-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/ditaa.jar")
 
       (require 'ob-sqlite)
 
@@ -170,6 +170,7 @@
          (dot . t)
          (js . t)
          (org . t )
+         (gnuplot . t)
          (clojure . t )
          (restclient . t)
          (emacs-lisp . t)
