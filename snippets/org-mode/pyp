@@ -1,12 +1,7 @@
-#+BEGIN_SRC python :session test :var fname="/tmp/chart.png" :results file
-import pandas as pd 
-import numpy as np
-import matplotlib.pyplot as plt
-
-fig = plt.figure()
-
+# -*- mode: snippet -*-
+# name: ipython block
+# key: pyp
+# --
+#+BEGIN_SRC ipython :session ${1::ipyfile ${2:$$(let ((temporary-file-directory "./")) (make-temp-file "py" nil ".png"))} } :exports ${3:both} :results raw drawer
 $0
-
-fig.savefig(fname)
-fname
 #+END_SRC
