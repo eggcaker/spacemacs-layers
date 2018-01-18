@@ -66,6 +66,7 @@ This function should only modify configuration layer settings."
        ;;common-lisp
        plantuml
        (org :variables
+         org-want-todo-bindings t
          org-enable-github-support t
          org-enable-org-journal-support t
          org-enable-bootstrap-support t
@@ -245,7 +246,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
 
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("Fira Code"
                                :size 18
                                :weight normal
                                :width normal
@@ -659,7 +660,7 @@ It should only modify the values of Spacemacs settings."
         (frame-parameter nil 'font) charset (font-spec :family chinese :size
                                               chinese-size))))
   (when (spacemacs/system-is-mac)
-    (set-font "Source Code Pro" "Source Han Sans SC" 18 20))
+    (set-font "Fira Code" "Hiragino Sans GB" 17 20))
 
   (when (spacemacs/system-is-linux)
     (set-font "Source Code Pro" "Droid Sans Fallback" 18 20))

@@ -58,7 +58,7 @@
               "* %i%?" :empty-lines 1)
             org-capture-templates)))
 
-   (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-visualize-default-choices 'all)
   (setq org-brain-title-max-length 12))
 
 (defun pelm-org/post-init-org-pomodoro ()
