@@ -2,9 +2,15 @@
 
 (setq pelm-misc-packages
     '(
-      ledger-mode
+      youdao-dictionary
+      ;;ledger-mode
       ;;discover-my-major
       ))
+
+(defun pelm-misc/post-init-youdao-dictionary()
+  (use-package youdao-dictionary
+    :init
+    (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)))
 
 (defun pelm-misc/post-init-ledger-mode ()
   (use-package ledger-mode
