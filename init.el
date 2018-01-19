@@ -144,6 +144,7 @@ This function should only modify configuration layer settings."
        ;;stack-exchange
        ;; play with
        ;;evernote
+       gnus
        ;; Personal Layers
        pelm-misc
        pelm-org
@@ -157,7 +158,7 @@ This function should only modify configuration layer settings."
        ;;slack
        ;;pelm-ibuffer
        ;; pelm-erc
-       pelm-mail
+       ;; pelm-mail
        ;;pelm-slack
        )
     ;; List of additional packages that will be installed without being
@@ -646,6 +647,55 @@ It should only modify the values of Spacemacs settings."
     ))
 
 (defun dotspacemacs/user-config ()
+  (setq gnus-secondary-select-methods
+        '(
+          (nntp "gmane"
+                (nntp-address "news.gmane.org"))
+          (nntp "news.eternal-september.org")
+          (nntp "nntp.aioe.org")
+          (nntp "news.gwene.org")
+          ))
+
+  (setq gnus-secondary-select-methods
+        '(
+          (nnimap "gmail"
+                  (nnimap-address
+                   "imap.gmail.com")
+                  (nnimap-server-port 993)
+                  (nnimap-stream ssl))))
+
+  (setq user-full-name "Tongzhu, Zhang")
+  (setq user-mail-address "eggcaker@gmail.com")
+  ;; gmail setup
+  (setq smtpmail-smtp-server "smtp.gmail.com")
+  (setq smtpmail-smtp-service 587)
+  (setq smtpmail-smtp-user "eggcaker@gmail.com")
+
+  (setq send-mail-function 'smtpmail-send-it) ; not for Gnus
+  (setq message-send-mail-function 'smtpmail-send-it
+    smtpmail-stream-type 'starttls
+    starttls-use-gnutls t) ; for Gnus
+  (setq smtpmail-default-smtp-server "smtp.gmail.com")
+  (setq smtpmail-local-domain "smtp.gmail.com")
+  (setq smtpmail-sendto-domain "smtp.gmail.com")
+  (setq smtpmail-debug-info t) ; only to debug problems
+
+  ;; Archive outgoing email in Sent folder on imap.gmail.com:
+  (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+        gnus-message-archive-group "[Gmail]/Sent Mail")
+
+  (setq gnus-posting-styles
+        '(((header "to" "eggcaker@gmail.com")
+           (address "eggcaker@gmail.com"))
+          ((header "to" "eggcaker@gmail.com")
+           (address "address@gmail.com"))))
+
+  ;; store email in ~/gmail directory
+  (setq nnml-directory "~/.gmail")
+  (setq message-directory "~/.gmail")
+
+
+
   (setenv "SHELL" shell-file-name)
   (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
   (setq org-agenda-show-future-repeats nil)
