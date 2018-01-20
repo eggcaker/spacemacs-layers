@@ -68,7 +68,7 @@ This function should only modify configuration layer settings."
      ;;erc
      ;;vinegar
      ;; twitter
-     emacs-lisp
+     (emacs-lisp :variables emacs-lisp-hide-namespace-prefix t)
      ;;common-lisp
      plantuml
      (org :variables
@@ -144,6 +144,7 @@ This function should only modify configuration layer settings."
      ;;evernote
      gnus
      ;; Personal Layers
+     ;; pelm-lsp
      pelm-misc
      pelm-org
      pelm-org-trello
@@ -226,7 +227,7 @@ It should only modify the values of Spacemacs settings."
    ;; with `:variables' keyword (similar to layers). Check the editing styles
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
-   dotspacemacs-editing-style 'vim
+   dotspacemacs-editing-style 'hybrid
 
    ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
@@ -254,6 +255,10 @@ It should only modify the values of Spacemacs settings."
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
 
+   ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
+   ;; (default nil)
+   dotspacemacs-initial-scratch-message nil
+
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
@@ -267,7 +272,7 @@ It should only modify the values of Spacemacs settings."
    ;; to create your own spaceline theme. Value can be a symbol or list with\
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.2)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.25)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -522,75 +527,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-pretty-docs nil))
 
 (defun dotspacemacs/user-init ()
-
-  ;; (setq configuration-layer-elpa-archives
-  ;;    '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
-  ;;       ("org-cn"   . "http://elpa.emacs-china.org/org/")
-  ;;      ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
-
-  (defun set-indent (n)
-    (setq-default
-     evil-shift-width n
-     tab-width n
-     default-tab-width n
-     standard-indent n
-     c-basic-offset n
-     js-indent-level n
-     js2-basic-offset n
-     javascript-indent-level n
-     css-indent-offset n
-     prolog-indent-width n
-     coffee-tab-width n
-     yaml-indent-offset n
-     web-mode-markup-indent-offset n
-     web-mode-css-indent-offset n
-     web-mode-code-indent-offset n
-     web-mode-markup-indent-offset n
-     web-mode-css-indent-offset n
-     web-mode-code-indent-offset n
-     web-mode-attr-indent-offset n))
-  (set-indent 2)
-
-  (setq-default
-   python-indent-offset 2
-   python-indent 2)
-
-  (defun set-tab-width (n)
-    (dolist (var '(evil-shift-width
-                   default-tab-width
-                   tab-width
-                   c-basic-offset
-                   cmake-tab-width
-                   coffee-tab-width
-                   cperl-indent-level
-                   css-indent-offset
-                   elixir-smie-indent-basic
-                   enh-ruby-indent-level
-                   erlang-indent-level
-                   javascript-indent-level
-                   js-indent-level
-                   js2-basic-offset
-                   js3-indent-level
-                   lisp-indent-offset
-                   livescript-tab-width
-                   mustache-basic-offset
-                   nxml-child-indent
-                   perl-indent-level
-                   puppet-indent-level
-                   yaml-indent-offset
-                   python-indent-offset
-                   ruby-indent-level
-                   rust-indent-offset
-                   scala-indent:step
-                   sgml-basic-offset
-                   sh-basic-offset
-                   web-mode-code-indent-offset
-                   web-mode-css-indent-offset
-                   web-mode-markup-indent-offset))
-      (set (make-local-variable var) n)))
-  (set-tab-width 2)
-  (add-hook 'python-mode-hook (lambda () (set-indent 4)))
-
+  (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
 
   (setq-default
@@ -598,6 +535,7 @@ It should only modify the values of Spacemacs settings."
    system-uses-terminfo nil
    exec-path-from-shell-check-startup-files nil
    google-translate-default-target-language "zh"
+
    ;; Miscellaneous
    vc-follow-symlinks t
    ring-bell-function 'ignore
@@ -606,7 +544,6 @@ It should only modify the values of Spacemacs settings."
    system-time-locale "C"
    paradox-github-token t
    open-junk-file-find-file-function 'find-file
-   custom-file  (concat dotspacemacs-directory "custom.el")
 
    ;; Backups
    backup-directory-alist `((".*" . ,temporary-file-directory))
@@ -631,6 +568,8 @@ It should only modify the values of Spacemacs settings."
    sp-highlight-pair-overlay nil
    sp-highlight-wrap-overlay nil
    sp-highlight-wrap-tag-overlay nil
+   sp-escape-wrapped-region nil
+   sp-escape-quotes-after-insert nil
 
    ;; Magit
    magit-popup-show-common-commands nil
@@ -641,7 +580,7 @@ It should only modify the values of Spacemacs settings."
    magit-revert-buffers t
 
    magit-repository-directories '(
-                                  ;; "~/.spacemacs.d/"
+                                  "~/.spacemacs.d/"
                                   "~/src/work/pacer_android/"
                                   "~/.dotfiles"
                                   ;;"~/src/work/pacer_groups/"
@@ -665,44 +604,12 @@ It should only modify the values of Spacemacs settings."
    shell-file-name "zsh"
    explicit-bash.exe-args '("--noediting" "--login" "-i")
 
-   ;; Web
-   web-mode-markup-indent-offset 2
-   web-mode-css-indent-offset 2
-   web-mode-style-padding 2
-   web-mode-script-padding 2
-   web-mode-code-indent-offset 2
-   web-mode-markup-indent-offset 2
-
-
-   ;; Js
-   js-indent-level 2
-   js2-basic-offset 2
-   js-switch-indent-offset 2
-   js2-indent-switch-body 2
-
    ;; flycheck
    flycheck-jshintrc "~/.jshintrc"
    flycheck-jscsrc "~/.jscsrc"
    flycheck-eslintrc "~/.eslintrc"
 
-   ;; js2-mode
-   js2-basic-offset 2
-   css-indent-offset 2
-
-   ;; Emacs Lisp
-   nameless-global-aliases
-   '(("sm" . "spacemacs")
-     ("dsm" . "dotspacemacs")
-     ("cfl" . "configuration-layer")
-     ("sl" . "spaceline")
-     ("eip" . "evil-indent-plus"))
-
-   nameless-discover-current-name nil
-   nameless-prefix ""
-   nameless-separator nil
-
    ;; IRC
-
    erc-autojoin-channels-alist
    '(
      ;;("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
@@ -776,7 +683,7 @@ It should only modify the values of Spacemacs settings."
 
   (when (spacemacs/system-is-mac)
     (spacemacs//set-monospaced-font "Fira Code" "Hiragino Sans GB" 17 20))
-  
+
 
   (when (spacemacs/system-is-linux)
     (spacemacs//set-monospaced-font "Source Code Pro" "Droid Sans Fallback" 18 20))
@@ -829,19 +736,7 @@ It should only modify the values of Spacemacs settings."
   (setq-default
    plantuml-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"
    puml-plantuml-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"
-   org-plantuml-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar"
-   js2-strict-trailing-comma-warning nil
-   js2-highlight-external-variables nil
-   truncate-lines t
-   company-idle-delay 0.0
-   tab-width 2
-   js2-basic-offset 2
-   css-indent-offset 2)
-
-  (add-hook 'java-mode-hook (lambda ()
-                              (setq c-basic-offset 2
-                                    tab-width 2
-                                    indent-tabs-mode t)))
+   org-plantuml-jar-path "~/.spacemacs.d/layers/pelm-org/vendor/plantuml.jar")
 
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'calculator-mode 'emacs)
@@ -854,21 +749,8 @@ It should only modify the values of Spacemacs settings."
   ;; groovy for gradle file
   (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
 
-  (with-eval-after-load 'web-mode
-    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
-
-
-  ;; clojure fancify symbols
-  (setq clojure-enable-fancify-symbols t)
-  (setq smerge-command-prefix "m")
-  (setq js2-include-node-externs t)
-  (setq js2-include-browser-externs t)
-  (setq js2-include-global-externs t)
-
   (setq display-time-mode t)
-  (setq-default line-spacing 10)
+  (setq-default line-spacing 12)
   (setq org-bullets-bullet-list '("☯" "☰" "☵" "☶" "☳" "☴" "☲" "☷" "☱" ))
   (setq ledger-post-amount-alignment-column 68)
   (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
@@ -880,16 +762,6 @@ It should only modify the values of Spacemacs settings."
           (file "~/.org-files/refile.org")
           "*  %?\n %(cfw:org-capture-day)"))
   (setq yas-indent-line (quote none)) ;; do not auto indent snippet
-  (use-package nameless
-    :defer t
-    :init
-    (progn
-      (add-hook 'emacs-lisp-mode-hook 'nameless-mode-from-hook)
-      (spacemacs|add-toggle nameless
-        :status nameless-mode
-        :on (nameless-mode)
-        :off (nameless-mode -1)
-        :evil-leader-for-mode (emacs-lisp-mode . "o:"))))
 
   ;; IRC
   (spacemacs|define-custom-layout "@ERC"
@@ -902,30 +774,6 @@ It should only modify the values of Spacemacs settings."
     ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
     )
 
-  ;; slack
-  ;; (slack-register-team
-  ;;   :name "mandian"
-  ;;   :default t
-  ;;   :client-id pacer/slack-client-id
-  ;;   :client-secret pacer/slack-client-secret
-  ;;   :token pacer/slack-token
-  ;;   :subscribed-channels '(ci general))
-
-  (defun pelm-shell/describe-random-interactive-function ()
-    (interactive)
-    "Show the documentation for a random interactive function.
-Consider only documented, non-obsolete functions."
-    (let (result)
-      (mapatoms
-       (lambda (s)
-         (when (and (commandp s)
-                    (documentation s t)
-                    (null (get s 'byte-obsolete-info)))
-           (setq result (cons s result)))))
-      (describe-function (elt result (random (length result))))))
-
-  (evil-leader/set-key "oh" 'pelm-shell/describe-random-interactive-function)
-
   ;; test the key freq
   (setq keyfreq-excluded-commands
         '(self-insert-command
@@ -937,20 +785,9 @@ Consider only documented, non-obsolete functions."
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
 
-  (require 'org-clock-convenience)
-
-  (defun dfeich/org-agenda-mode-fn ()
-    (define-key org-agenda-mode-map
-      (kbd "<S-up>") #'org-clock-convenience-timestamp-up)
-    (define-key org-agenda-mode-map
-      (kbd "<S-down>") #'org-clock-convenience-timestamp-down)
-    (define-key org-agenda-mode-map
-      (kbd "o") #'org-clock-convenience-fill-gap))
-  (add-hook 'org-agenda-mode-hook #'dfeich/org-agenda-mode-fn)
-
   (evil-leader/set-key "aa" 'counsel-osx-app)
 
-  (defmacro bb|wrap-func (func)
+  (defmacro pelm|wrap-func (func)
     (let ((advice-name (intern (format "%s--advice" func)))
           (target-name (intern (format "%s/%s" func system-name))))
       `(progn
@@ -959,10 +796,10 @@ Consider only documented, non-obsolete functions."
              (apply ',target-name args)))
          (advice-add ',func :after ',advice-name))))
 
-  (bb|wrap-func dotspacemacs/layers)
-  (bb|wrap-func dotspacemacs/init)
-  (bb|wrap-func dotspacemacs/user-init)
-  (bb|wrap-func dotspacemacs/user-config)
+  (pelm|wrap-func dotspacemacs/layers)
+  (pelm|wrap-func dotspacemacs/init)
+  (pelm|wrap-func dotspacemacs/user-init)
+  (pelm|wrap-func dotspacemacs/user-config)
 
   ;; Load lab code
   (when (file-exists-p "~/Desktop/test.el")

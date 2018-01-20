@@ -1,3 +1,12 @@
 [submodule "pelm-org/extensions/restclient"]
 	path = pelm-org/extensions/restclient
 	url = https://github.com/yimacs/restclient.el
+[submodule "layers/pelm-lsp/local/lsp-mode"]
+	path = layers/pelm-lsp/local/lsp-mode
+	url = git://github.com/emacs-lsp/lsp-mode.git
+[submodule "layers/pelm-lsp/local/lsp-ui"]
+	path = layers/pelm-lsp/local/lsp-ui
+	url = git://github.com/emacs-lsp/lsp-ui.git
+[submodule "layers/pelm-lsp/local/cquery"]
+	path = layers/pelm-lsp/local/cquery
+	url = git://github.com/cquery-project/emacs-cquery.git
