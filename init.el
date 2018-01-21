@@ -64,6 +64,8 @@ This function should only modify configuration layer settings."
 
      ivy
      (javascript :variables
+                 js2-basic-offset 2
+                 js-indent-level 2
                  tern-command '("node" "/usr/local/bin/tern"))
      ;;erc
      ;;vinegar
@@ -529,7 +531,7 @@ It should only modify the values of Spacemacs settings."
 (defun dotspacemacs/user-init ()
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
-
+  (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
   (setq-default
    ;; remove the 4m from shell
    system-uses-terminfo nil
