@@ -272,7 +272,7 @@ It should only modify the values of Spacemacs settings."
    ;; to create your own spaceline theme. Value can be a symbol or list with\
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.25)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -814,19 +814,20 @@ It should only modify the values of Spacemacs settings."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(org-trello-current-prefix-keybinding "C-c o")
-   '(package-selected-packages
-     (quote
-      (orgit org-trello org-projectile org-category-capture org-present org-pomodoro org-journal org-download org-clock-convenience org-bullets org-brain org-plus-contrib yapfify yaml-mode xterm-color ws-butler winum which-key wgrep web-mode web-beautify volatile-highlights vmd-mode vimrc-mode vi-tilde-fringe uuidgen use-package toc-org tagedit symon string-inflection sql-indent spaceline smex smeargle slim-mode shell-pop scss-mode sayid sass-mode reveal-in-osx-finder restart-emacs request-deferred rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode plantuml-mode pippel pip-requirements persp-mode pcre2el pbcopy password-generator paradox ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary open-junk-file ob-restclient ob-http neotree nameless mvn multi-term move-text mmm-mode meghanada maven-test-mode material-theme markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint less-css-mode launchctl kotlin-mode keyfreq key-chord json-mode js2-refactor js-doc ivy-rich ivy-purpose ivy-hydra insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-make groovy-mode groovy-imports gradle-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flycheck-kotlin flycheck-bashate flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-search-highlight-persist evil-org evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-embrace evil-ediff evil-commentary evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help ensime emms emmet-mode elisp-slime-nav elfeed-web elfeed-org elfeed-goodies editorconfig dumb-jump diminish diff-hl dactyl-mode cython-mode csv-mode counsel-projectile counsel-osx-app counsel-ebdb counsel-css company-web company-tern company-statistics company-shell company-restclient company-quickhelp company-emacs-eclim company-ebdb company-anaconda column-enforce-mode coffee-mode clojure-snippets clojure-cheatsheet clj-refactor clean-aindent-mode cider-eval-sexp-fu buttercup browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile alert aggressive-indent adaptive-wrap ace-window ace-link ac-ispell))))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
-  )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-trello-current-prefix-keybinding "C-c o")
+ '(package-selected-packages
+   (quote
+    (org-trello request-deferred emms counsel-ebdb company-ebdb ebdb youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key wgrep web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toc-org symon string-inflection sql-indent spaceline-all-the-icons smex smeargle shell-pop reveal-in-osx-finder restart-emacs request rainbow-delimiters pyvenv pytest pyim pyenv-mode py-isort popwin plantuml-mode pippel pip-requirements persp-mode pcre2el pbcopy password-generator paradox pangu-spacing ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-mime org-journal org-download org-clock-convenience org-bullets org-brain open-junk-file ob-restclient ob-ipython ob-http neotree nameless mvn multi-term move-text mmm-mode meghanada maven-test-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint ledger-mode launchctl kotlin-mode keyfreq key-chord json-mode js2-refactor js-doc ivy-purpose ivy-hydra insert-shebang info+ indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag groovy-mode groovy-imports gradle-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flycheck-ledger flycheck-kotlin flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fill-column-indicator fancy-battery eyebrowse exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-embrace evil-ediff evil-commentary evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help ensime elisp-slime-nav elfeed-org editorconfig dumb-jump diminish diff-hl define-word dash-at-point cython-mode csv-mode counsel-projectile counsel-osx-app counsel-dash company-tern company-statistics company-shell company-restclient company-quickhelp company-emacs-eclim company-anaconda column-enforce-mode coffee-mode clean-aindent-mode buttercup browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
+ '(tramp-syntax (quote default) nil (tramp)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)

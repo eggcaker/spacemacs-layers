@@ -2,7 +2,7 @@
 
 (setq pelm-misc-packages
     '(
-      youdao-dictionary
+      ;;youdao-dictionary
       ;;ledger-mode
       ;;discover-my-major
       ))
