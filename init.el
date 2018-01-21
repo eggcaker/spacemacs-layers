@@ -144,12 +144,12 @@ This function should only modify configuration layer settings."
      ;;stack-exchange
      ;; play with
      ;;evernote
-     gnus
+     ;;gnus
      ;; Personal Layers
      ;; pelm-lsp
      pelm-misc
      pelm-org
-     pelm-org-trello
+     ;;pelm-org-trello
      pelm-contact
      pelm-music
      ;;pelm-blog
@@ -167,7 +167,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless elfeed-org groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+   dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -529,6 +529,9 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-pretty-docs nil))
 
 (defun dotspacemacs/user-init ()
+  ;; Set the Emacs customization file path. Must be done here in user-init.
+  (setq custom-file "~/.spacemacs.d/custom.el")
+
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
   (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
@@ -627,7 +630,8 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
-  ;; (setq 'default-frame-alist '((ns-transparent-titlebar . t) (ns-appearance . 'nil)))
+  (setq dotspacemacs-scratch-mode 'org-mode)
+
   (setq gnus-secondary-select-methods
         '(
           (nntp "gmane"
