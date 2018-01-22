@@ -72,6 +72,13 @@
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
   (with-eval-after-load 'org
     (progn
+      (require 'org-crypt)
+      (org-crypt-use-before-save-magic)
+      (setq org-crypt-tag-matcher "secret")
+      (setq org-tags-exclude-from-inheritance (quote ("secret")))
+
+      (setq org-crypt-key nil)
+
       (spacemacs|disable-company org-mode)
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "," 'org-priority)
