@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
      ;;stack-exchange
      ;; play with
      ;;evernote
-     ;;gnus
+     gnus
      ;; Personal Layers
      ;; pelm-lsp
      pelm-misc
@@ -172,7 +172,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(exec-path-from-shell)
+   dotspacemacs-excluded-packages '()
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -264,8 +264,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(spacemacs-dark spacemacs-light doom-one)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
@@ -274,7 +273,7 @@ It should only modify the values of Spacemacs settings."
    ;; to create your own spaceline theme. Value can be a symbol or list with\
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.3)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -631,7 +630,7 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-config ()
   (setq dotspacemacs-scratch-mode 'org-mode)
-
+  (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
   (setq gnus-secondary-select-methods
         '(
           (nntp "gmane"
@@ -756,7 +755,7 @@ It should only modify the values of Spacemacs settings."
   (add-to-list 'auto-mode-alist '("\.gradle$" . groovy-mode))
 
   (setq display-time-mode t)
-  (setq-default line-spacing 12)
+  (setq-default line-spacing 10)
   (setq org-bullets-bullet-list '("☯" "☰" "☵" "☶" "☳" "☴" "☲" "☷" "☱" ))
   (setq ledger-post-amount-alignment-column 68)
   (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
@@ -792,20 +791,6 @@ It should only modify the values of Spacemacs settings."
   (keyfreq-autosave-mode 1)
 
   (evil-leader/set-key "aa" 'counsel-osx-app)
-
-  (defmacro pelm|wrap-func (func)
-    (let ((advice-name (intern (format "%s--advice" func)))
-          (target-name (intern (format "%s/%s" func system-name))))
-      `(progn
-         (defun ,advice-name (&rest args)
-           (when (fboundp ',target-name)
-             (apply ',target-name args)))
-         (advice-add ',func :after ',advice-name))))
-
-  (pelm|wrap-func dotspacemacs/layers)
-  (pelm|wrap-func dotspacemacs/init)
-  (pelm|wrap-func dotspacemacs/user-init)
-  (pelm|wrap-func dotspacemacs/user-config)
 
   ;; Load lab code
   (when (file-exists-p "~/Desktop/test.el")
