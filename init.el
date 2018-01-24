@@ -67,7 +67,7 @@ This function should only modify configuration layer settings."
                  js2-basic-offset 2
                  js-indent-level 2
                  tern-command '("node" "/usr/local/bin/tern"))
-     ;;erc
+     erc
      ;;vinegar
      ;; twitter
      (emacs-lisp :variables emacs-lisp-hide-namespace-prefix t)
@@ -100,6 +100,10 @@ This function should only modify configuration layer settings."
      ;;jabber
      ;;restructuredtext
      ;;docker
+     (go :variables
+         go-tab-width 2
+         gofmt-command "goimports"
+         go-use-gometalinter t)
      java
      kotlin
      ;;vimscript
@@ -138,7 +142,8 @@ This function should only modify configuration layer settings."
      ;;fasd
      imenu-list
      ;;; just for fun
-     ;;xkcd
+     ;; games
+     ;; xkcd
      ;;typing-games
      ;;org-ipython
      ;;stack-exchange
@@ -158,7 +163,7 @@ This function should only modify configuration layer settings."
      ;;spotify
      ;;slack
      ;;pelm-ibuffer
-     ;; pelm-erc
+     pelm-erc
      ;; pelm-mail
      ;;pelm-slack
      )
@@ -505,7 +510,7 @@ It should only modify the values of Spacemacs settings."
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%I@%S"
+   dotspacemacs-frame-title-format "%F%I@%S"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -520,7 +525,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
-   dotspacemacs-zone-out-when-idle nil
+   dotspacemacs-zone-out-when-idle 120
 
    ;; Run `spacemacs/prettify-org-buffer' when
    ;; visiting README.org files of Spacemacs.
@@ -616,12 +621,9 @@ It should only modify the values of Spacemacs settings."
    ;; IRC
    erc-autojoin-channels-alist
    '(
-     ;;("1\\.0\\.0" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
-     ;;("irc.gitter.im" "#syl20bnr/spacemacs" "#eggcaker/emacs-hubot")
-     ;;("irc.gitter.im"  "#eggcaker/emacs-hubot")
-     ("irc.gitter.im"  "#mandian/ci")
-     ;;("localhost" "#动动健身" "#动动大集合")
-     ;; ("freenode\\.net" "#org-mode")
+     ("irc.gitter.im" "#syl20bnr/spacemacs" )
+     ("irc.gitter.im" "#magit/magit" )
+     ("freenode\\.net" "#org-mode")
      )
 
    ;; Theme modifications
@@ -650,7 +652,7 @@ It should only modify the values of Spacemacs settings."
   (setq smtpmail-smtp-server "smtp.gmail.com")
   (setq smtpmail-smtp-service 587)
   (setq smtpmail-smtp-user "eggcaker@gmail.com")
-
+  
   (setq send-mail-function 'smtpmail-send-it) ; not for Gnus
   (setq message-send-mail-function 'smtpmail-send-it
         smtpmail-stream-type 'starttls
@@ -774,10 +776,33 @@ It should only modify the values of Spacemacs settings."
     :body
     (erc-tls :server "irc.gitter.im" :port "6697" :nick "eggcaker"
              :password pelm/gitter-pwd :full-name pelm/full-name)
-    ;;(erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
-    ;;    :password pelm/irc-pwd :full-name pelm/full-name)
+    (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
+        :password pelm/irc-pwd :full-name pelm/full-name)
     ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
     )
+
+  (setq zone-programs [
+                       zone-pgm-jitter
+                       zone-pgm-putz-with-case
+                       zone-pgm-dissolve
+                       ;; zone-pgm-explode
+                       zone-pgm-whack-chars
+                       zone-pgm-rotate
+                       ;; zone-pgm-rotate-LR-lockstep
+                       ;; zone-pgm-rotate-RL-lockstep
+                       ;; zone-pgm-rotate-LR-variable
+                       ;; zone-pgm-rotate-RL-variable
+                       zone-pgm-drip
+                       zone-pgm-drip-fretfully
+                       zone-pgm-five-oclock-swan-dive
+                       zone-pgm-martini-swan-dive
+                       ;; zone-pgm-rat-race
+                       zone-pgm-paragraph-spaz
+                       zone-pgm-stress
+                       zone-pgm-stress-destress
+                       zone-pgm-random-life
+                       ])
+
 
   ;; test the key freq
   (setq keyfreq-excluded-commands

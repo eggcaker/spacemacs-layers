@@ -32,7 +32,7 @@
   (add-hook 'erc-mode-hook
             (lambda () (setq-local global-hl-line-mode nil)))
 
-  (add-hook 'erc-insert-pre-hook 'bb/erc-foolish-filter)
+  (add-hook 'erc-insert-pre-hook 'pelm/erc-foolish-filter)
 
   (evil-set-initial-state 'erc-mode 'normal)
 
@@ -52,7 +52,7 @@
   (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode))
 
 (defun pelm-erc/post-init-persp-mode ()
-  (add-hook 'erc-mode-hook 'bb/add-buffer-to-erc-persp))
+  (add-hook 'erc-mode-hook 'pelm/add-buffer-to-erc-persp))
 
 (defun pelm-erc/post-init-typo ()
   (add-hook 'erc-mode-hook 'typo-mode))
