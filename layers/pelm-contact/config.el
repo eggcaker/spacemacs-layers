@@ -1,1 +1,1 @@
-(setq ebdb-sources "~/.org-files/references/dbdb")
+(setq ebdb-sources "~/.org-files/contacts/contact.db")
