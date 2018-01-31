@@ -29,16 +29,17 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(html
      ;; vimscript
      ;; clojure
      ;; react
+     bm
      csv
      treemacs
      ;; html
      (chinese :variables
-              chinese-enable-youdao-dict t
-              )
+              chinese-enable-avy-pinyin nil
+              chinese-enable-youdao-dict t)
      (dash :variables
            helm-dash-docset-newpath "~/Library/Application Support/Dash/DocSets")
      ;;csv
@@ -70,7 +71,7 @@ This function should only modify configuration layer settings."
      erc
      ;;vinegar
      ;; twitter
-     (emacs-lisp :variables emacs-lisp-hide-namespace-prefix t)
+     emacs-lisp
      ;;common-lisp
      plantuml
      (org :variables
@@ -100,12 +101,12 @@ This function should only modify configuration layer settings."
      ;;jabber
      ;;restructuredtext
      ;;docker
-     (go :variables
-         go-tab-width 2
-         gofmt-command "goimports"
-         go-use-gometalinter t)
+     ;; (go :variables
+     ;;     go-tab-width 2
+     ;;     gofmt-command "goimports"
+     ;;     go-use-gometalinter t)
      java
-     kotlin
+     ;; kotlin
      ;;vimscript
      ;;nginx
      ;;lua
@@ -156,7 +157,7 @@ This function should only modify configuration layer settings."
      pelm-org
      ;;pelm-org-trello
      pelm-contact
-     pelm-music
+     ;;pelm-music
      ;;pelm-blog
      ;;pelm-finance
      ;;google-calendar
