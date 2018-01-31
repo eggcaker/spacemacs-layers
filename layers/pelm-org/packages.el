@@ -170,6 +170,7 @@
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
+         (latex . t)
          (R . t)
          (shell . t)
          (sql . t )
