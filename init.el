@@ -10,6 +10,7 @@ This function should only modify configuration layer settings."
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
    dotspacemacs-distribution 'spacemacs
+
    ;; Lazy installation of layers (i.e. layers are installed only when a file
    ;; with a supported type is opened). Possible values are `all', `unused'
    ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
@@ -63,7 +64,9 @@ This function should only modify configuration layer settings."
       auto-completion-enable-help-tooltip t
       auto-completion-enable-sort-by-usage t
       :disabled-for org erc sh)
-     ivy
+     (ivy :variables
+          ivy-extra-directories nil)
+
      (javascript :variables
                  js2-basic-offset 2
                  js-indent-level 2
@@ -209,9 +212,15 @@ It should only modify the values of Spacemacs settings."
    ;; (default 5)
    dotspacemacs-elpa-timeout 5
 
+   ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
+   ;; This is an advanced option and should not be changed unless you suspect
+   ;; performance issues due to garbage collection operations.
+   ;; (default '(100000000 0.1))
+   dotspacemacs-gc-cons '(100000000 0.1)
+
    ;; If non-nil then Spacelpa repository is the primary source to install
-   ;; a locked version of packages. If nil then Spacemacs will install the lastest
-   ;; version of packages from MELPA. (default nil)
+   ;; a locked version of packages. If nil then Spacemacs will install the
+   ;; lastest version of packages from MELPA. (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -489,11 +498,6 @@ It should only modify the values of Spacemacs settings."
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
-   ;; The default package repository used if no explicit repository has been
-   ;; specified with an installed package.
-   ;; Not used for now. (default nil)
-   dotspacemacs-default-package-repository nil
-
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
    ;; %t - `projectile-project-name'
@@ -536,7 +540,7 @@ It should only modify the values of Spacemacs settings."
 (defun dotspacemacs/user-init ()
   ;; Set the Emacs customization file path. Must be done here in user-init.
   (setq custom-file "~/.spacemacs.d/custom.el")
-
+  (setq org-contacts-files   (list "~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
   (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
@@ -693,7 +697,7 @@ It should only modify the values of Spacemacs settings."
   (global-git-commit-mode t)
 
   (when (spacemacs/system-is-mac)
-    (spacemacs//set-monospaced-font "Fira Code" "Hiragino Sans GB" 17 20))
+    (spacemacs//set-monospaced-font "Fira Code" "Hiragino Sans GB" 18  22))
 
 
   (when (spacemacs/system-is-linux)

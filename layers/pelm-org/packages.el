@@ -218,9 +218,15 @@ unwanted space when exporting org-mode to html."
       (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                      (file+headline "~/.org-files/inbox.org" "Tasks")
                                      "* TODO %i%?")
-                                    ("T" "Tickler" entry
-                                     (file+headline "~/.org-files/tickler.org" "Tickler")
-                                     "* %i%? \n %U")))
+                                    ("c" "Contacts" entry (file "~/.org-files/contacts/contacts.org")
+                                     "* %(org-contacts-template-name)
+:PROPERTIES:
+:EMAIL: %(org-contacts-template-email)
+:PHONE:
+:WECHAT:
+:BIRTHDAY:
+:NOTE:
+:END:")))
 
       (setq org-agenda-custom-commands
             '(("c" todo ""
