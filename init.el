@@ -77,6 +77,11 @@ This function should only modify configuration layer settings."
      emacs-lisp
      ;;common-lisp
      plantuml
+     ;; (latex :variables
+     ;;        latex-build-command "LaTex"
+     ;;        latex-enable-folding t
+     ;;        latex-enable-magic t
+     ;;        latex-enable-auto-fill t)
      (org :variables
           org-want-todo-bindings t
           org-enable-github-support t
@@ -540,7 +545,7 @@ It should only modify the values of Spacemacs settings."
 (defun dotspacemacs/user-init ()
   ;; Set the Emacs customization file path. Must be done here in user-init.
   (setq custom-file "~/.spacemacs.d/custom.el")
-  (setq org-contacts-files   (list "~/.org-files/contacts/contacts.org"))
+  (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
   (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))

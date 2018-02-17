@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: chinese_org_pdf
+# key: cn
+# --
+#+LaTeX_HEADER: \usepackage{CJK}
+#+LaTeX_HEADER: \begin{CJK}{UTF8}{gbsn}

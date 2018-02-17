@@ -11,62 +11,7 @@
 
 ;;; Code:
 
-(defconst pelm-org-packages
-  '((org :location built-in)
-    ;;org-pomodoro
-    deft
-    org-brain
-    ;; org-tree-slide
-    ;; ox-reveal
-    ;; worf
-    ;; org-download
-    ))
-
-
-
-
-(defun pelm-org/post-init-org-brain()
-  :init
-  (setq org-brain-path "~/.org-brain")
-  :config
-  (defun org-brain-insert-resource-icon (link)
-    "Insert an icon, based on content of org-mode LINK."
-    (insert (format "%s "
-                    (cond ((string-prefix-p "http" link)
-                           (cond ((string-match "wikipedia\\.org" link)
-                                  (all-the-icons-faicon "wikipedia-w"))
-                                 ((string-match "github\\.com" link)
-                                  (all-the-icons-octicon "mark-github"))
-                                 ((string-match "vimeo\\.com" link)
-                                  (all-the-icons-faicon "vimeo"))
-                                 ((string-match "youtube\\.com" link)
-                                  (all-the-icons-faicon "youtube"))
-                                 (t
-                                  (all-the-icons-faicon "globe"))))
-                          ((string-prefix-p "brain:" link)
-                           (all-the-icons-fileicon "brain"))
-                          (t
-                           (all-the-icons-icon-for-file link))))))
-
-  (add-hook 'org-brain-after-resource-button-functions #'org-brain-insert-resource-icon)
-
-  (setq org-id-track-globally t)
-  (setq org-id-locations-file "~/.emacs.d/.cache/.org-id-locations")
-  (with-eval-after-load 'org
-    (progn
-      (push '("b" "Brain" plain (function org-brain-goto-end)
-              "* %i%?" :empty-lines 1)
-            org-capture-templates)))
-
-  (setq org-brain-visualize-default-choices 'all)
-  (setq org-brain-title-max-length 12))
-
-(defun pelm-org/post-init-org-pomodoro ()
-  (progn
-    ;; (add-hook 'org-pomodoro-finished-hook '(lambda () (pelm/growl-notification "Pomodoro Finished" "☕️ Have a break!" t)))
-    ;; (add-hook 'org-pomodoro-short-break-finished-hook '(lambda () (pelm/growl-notification "Short Break" "🐝 Ready to Go?" t)))
-    ;; (add-hook 'org-pomodoro-long-break-finished-hook '(lambda () (pelm/growl-notification "Long Break" " 💪 Ready to Go?" t)))
-    ))
+(defconst pelm-org-packages '((org :location built-in)))
 
 (defun pelm-org/post-init-org ()
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
@@ -91,8 +36,7 @@
       (setq org-refile-use-outline-path 'file)
       (setq org-outline-path-complete-in-steps nil)
       (setq org-refile-targets '(("~/.org-files/gtd.org" :maxlevel . 3)
-                                 ("~/.org-files/someday.org" :level . 1)
-                                 ("~/.org-files/tickler.org" :maxlevel . 2)))
+                                 ("~/.org-files/someday.org" :level . 1)))
 
       ;; config stuck project
       (setq org-stuck-projects
@@ -110,28 +54,56 @@
       (setq org-special-ctrl-a/e t)                                         ;; Use Ctrl-a/e in a smarter way for Org.
       (setq org-log-done t)
 
-      (setq org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+      (setq org-todo-keywords
+            '(
+              (sequence "IDEA(i)" "TODO(t)" "STARTED(s)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" )
+              (sequence "|" "CANCELED(c)" "DELEGATED(l)" "SOMEDAY(f)")))
 
-      ;; org-refile to find a task
-      (defun pelm-org--get-visible-buffers ()
-        (let* ((cur-mode 'org-mode))
-          (delq nil
-                (mapcar
-                 (lambda (buffer)
-                   (when (and (equal cur-mode (buffer-local-value 'major-mode buffer))
-                              (get-buffer-window buffer))
-                     `(,(buffer-file-name buffer) :maxlevel . 3)))
-                 (buffer-list)))))
+      (setq org-todo-keyword-faces
+            '(("IDEA" . (:foreground "GoldenRod" :weight bold))
+              ("NEXT" . (:foreground "IndianRed1" :weight bold))
+              ("STARTED" . (:foreground "OrangeRed" :weight bold))
+              ("WAITING" . (:foreground "coral" :weight bold))
+              ("CANCELED" . (:foreground "LimeGreen" :weight bold))
+              ("DELEGATED" . (:foreground "LimeGreen" :weight bold))
+              ("SOMEDAY" . (:foreground "LimeGreen" :weight bold))))
 
-      (defun pelm-org-goto-task ()
-        (interactive)
-        (if current-prefix-arg
-            (call-interactively #'org-refile)
-          (let* ((visible-org-files (pelm-org--get-visible-buffers))
-                 (org-refile-targets visible-org-files))
-            (call-interactively #'org-refile))))
+      (setq org-tag-persistent-alist
+            '((:startgroup . nil)
+              ("HOME" . ?h)
+              ("RESEARCH" . ?r)
+              ("TEACHING" . ?t)
+              (:endgroup . nil)
+              (:startgroup . nil)
+              ("OS" . ?o)
+              ("DEV" . ?d)
+              ("WWW" . ?w)
+              (:endgroup . nil)
+              (:startgroup . nil)
+              ("EASY" . ?e)
+              ("MEDIUM" . ?m)
+              ("HARD" . ?a)
+              (:endgroup . nil)
+              ("URGENT" . ?u)
+              ("KEY" . ?k)
+              ("BONUS" . ?b)
+              ("noexport" . ?x)))
 
-      (spacemacs/set-leader-keys "oj" 'pelm-org-goto-task)
+      (setq org-tag-faces
+            '(
+              ("HOME" . (:foreground "GoldenRod" :weight bold))
+              ("RESEARCH" . (:foreground "GoldenRod" :weight bold))
+              ("TEACHING" . (:foreground "GoldenRod" :weight bold))
+              ("OS" . (:foreground "IndianRed1" :weight bold))
+              ("DEV" . (:foreground "IndianRed1" :weight bold))
+              ("WWW" . (:foreground "IndianRed1" :weight bold))
+              ("URGENT" . (:foreground "Red" :weight bold))
+              ("KEY" . (:foreground "Red" :weight bold))
+              ("EASY" . (:foreground "OrangeRed" :weight bold))
+              ("MEDIUM" . (:foreground "OrangeRed" :weight bold))
+              ("HARD" . (:foreground "OrangeRed" :weight bold))
+              ("BONUS" . (:foreground "GoldenRod" :weight bold))
+              ("noexport" . (:foreground "LimeGreen" :weight bold))))
 
       ;; Change task state to STARTED when clocking in
       (setq org-clock-in-switch-to-state "STARTED")
@@ -156,17 +128,98 @@
 
       (require 'ob-sqlite)
 
+
+      ;; latex related setup
+(setq org-latex-create-formula-image-program 'imagemagick)
+(setq org-latex-date-format "%Y-%m-%d")
+(setq org-latex-default-class "ctexart")
+(setq org-latex-pdf-process
+      '(
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "rm -fr %b.out %b.log %b.tex auto"))
+(add-to-list 'org-latex-packages-alist '("" "CJKutf8" t))
+
+(setq org-format-latex-options
+      '(:foreground "#0c0c0c"
+                    :background "#ffffff"
+                    :scale 2.2
+                    :html-foreground "#0c0c0c" 
+                    :html-background "#ffffff"
+                    :html-scale 2.2
+                    :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+
+(setq org-structure-template-alist
+      (append '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+              org-structure-template-alist))
+
+;; 这里强制使用"_{下标}"来定义一个下标。"^{上标}"来定义一个上标。
+(setq org-export-with-sub-superscripts '{})
+(setq org-use-sub-superscripts '{})
+
+(setq eh-org-mathtoweb-file "~/.spacemacs.d/layers/pelm-org/vendor/mathtoweb.jar")
+(setq org-latex-to-mathml-convert-command
+      "java -jar %j -unicode -force -df %o %I"
+      org-latex-to-mathml-jar-file
+      eh-org-mathtoweb-file)
+
+ (add-to-list 'org-latex-classes '("ctexart" "\\documentclass[11pt]{ctexart}
+                                        [NO-DEFAULT-PACKAGES]
+                                        \\usepackage[utf8]{inputenc}
+                                        \\usepackage[T1]{fontenc}
+                                        \\usepackage{fixltx2e}
+                                        \\usepackage{graphicx}
+                                        \\usepackage{longtable}
+                                        \\usepackage{float}
+                                        \\usepackage{wrapfig}
+                                        \\usepackage{rotating}
+                                        \\usepackage[normalem]{ulem}
+                                        \\usepackage{amsmath}
+                                        \\usepackage{textcomp}
+                                        \\usepackage{marvosym}
+                                        \\usepackage{wasysym}
+                                        \\usepackage{amssymb}
+                                        \\usepackage{booktabs}
+                                        \\usepackage[colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
+                                        \\tolerance=1000
+                                        \\usepackage{listings}
+                                        \\usepackage{xcolor}
+                                        \\lstset{
+                                        %行号
+                                        numbers=left,
+                                        %背景框
+                                        framexleftmargin=10mm,
+                                        frame=none,
+                                        %背景色
+                                        %backgroundcolor=\\color[rgb]{1,1,0.76},
+                                        backgroundcolor=\\color[RGB]{245,245,244},
+                                        %样式
+                                        keywordstyle=\\bf\\color{blue},
+                                        identifierstyle=\\bf,
+                                        numberstyle=\\color[RGB]{0,192,192},
+                                        commentstyle=\\it\\color[RGB]{0,96,96},
+                                        stringstyle=\\rmfamily\\slshape\\color[RGB]{128,0,0},
+                                        %显示空格
+                                        showstringspaces=false
+                                        }
+                                        "
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
       (setenv "NODE_PATH"
               (concat
                (getenv "HOME") "/.npm-packages/lib/node_modules" ":"
                (getenv "HOME") "/.n/lib/node_modules" ":"
                "/usr/local/lib/node_modules" ":"
                (getenv "HOME") "/.org-files/node_modules"  ":"
-               (getenv "NODE_PATH")
-               ))
+               (getenv "NODE_PATH")))
 
       (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-      (add-hook 'org-mode-hook 'org-display-inline-images) 
+      (add-hook 'org-mode-hook 'org-display-inline-images)
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
@@ -212,8 +265,7 @@ unwanted space when exporting org-mode to html."
         (defun place-agenda-tags ()
           "Put the agenda tags by the right border of the agenda window."
           (setq org-agenda-tags-column (- 4 (window-width)))
-          (org-agenda-align-tags))
-        )
+          (org-agenda-align-tags)))
 
       (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                      (file+headline "~/.org-files/inbox.org" "Tasks")
@@ -270,6 +322,17 @@ unwanted space when exporting org-mode to html."
                ((org-agenda-format-date "")
                 (org-agenda-start-with-clockreport-mode nil)))
 
+              ("G" "GTD Block Agenda"
+               ((todo "STARTED")
+                (tags-todo "URGENT")
+                (todo "NEXT"))
+               ((org-agenda-prefix-format "[ ] %T: ")
+                (org-agenda-with-colors nil)
+                (org-agenda-compact-blocks t)
+                (org-agenda-remove-tags t)
+                (ps-number-of-columns 2)
+                (ps-landscape-mode t))
+               ("~/Desktop/next-actions.txt"))
 
               ("W" "Weekly Review"
                ((agenda "" ((org-agenda-ndays 7))) ;; review upcoming deadlines and appointments
@@ -290,20 +353,15 @@ unwanted space when exporting org-mode to html."
                ((org-agenda-compact-blocks t))) ;; options set here apply to the entire block
 
               ("C" "Calendar" agenda ""
-               ((org-agenda-ndays 7)                          ;; [1]
-                (org-agenda-start-on-weekday 0)               ;; [2]
+               ((org-agenda-ndays 7)
+                (org-agenda-start-on-weekday 0)
                 (org-agenda-time-grid nil)
-                (org-agenda-repeating-timestamp-show-all t)   ;; [3]
-                (org-agenda-entry-types '(:timestamp :sexp))))  ;; [4]
-              ))
+                (org-agenda-repeating-timestamp-show-all t)
+                (org-agenda-entry-types '(:timestamp :sexp))))))
 
       (add-hook 'org-after-todo-statistics-hook 'pelm/org-summary-todo)
-
       (define-key org-mode-map (kbd "s-p") 'org-priority)
-
-
-      (spacemacs/set-leader-keys-for-major-mode 'org-mode
-        "tl" 'org-toggle-link-display)
+      (spacemacs/set-leader-keys-for-major-mode 'org-mode "tl" 'org-toggle-link-display)
       (define-key evil-normal-state-map (kbd "C-c C-w") 'org-refile)
 
       ;; hack for org headline toc
@@ -387,32 +445,4 @@ holding contextual information."
 
       )))
 
-(defun pelm-org/post-init-ox-reveal ()
-  (setq org-reveal-root "file:///Users/guanghui/.emacs.d/reveal-js"))
-
-(defun pelm-org/init-org-tree-slide ()
-  (use-package org-tree-slide
-    :init
-    (spacemacs/set-leader-keys "oto" 'org-tree-slide-mode)))
-
-
-(defun pelm-org/init-org-download ()
-  (use-package org-download
-    :defer t
-    :init
-    (org-download-enable)))
-
-(defun pelm-org/init-worf ()
-  (use-package worf
-    :defer t
-    :init
-    (add-hook 'org-mode-hook 'worf-mode)))
-
-(defun pelm-org/post-init-deft ()
-  (progn
-    (setq deft-use-filter-string-for-filename t)
-    (spacemacs/set-leader-keys-for-major-mode 'deft-mode "q" 'quit-window)
-    (setq deft-recursive t)
-    (setq deft-extension "org")
-    (setq deft-directory deft-dir)))
 ;;; packages.el ends here
