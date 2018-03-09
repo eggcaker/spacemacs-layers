@@ -186,7 +186,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(pangu-spacing)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -255,8 +255,6 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-verbose-loading nil
 
    ;; Specify the startup banner. Default value is `official', it displays
-   ;; the official spacemacs logo. An integer value is the index of text
-   ;; banner, `random' chooses a random text banner in `core/banners'
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
@@ -284,7 +282,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(doom-one spacemacs-dark spacemacs-light)
+   dotspacemacs-themes '(spacemacs-dark spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `vim-powerline' and `vanilla'. The first three
@@ -544,6 +542,8 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-init ()
   ;; Set the Emacs customization file path. Must be done here in user-init.
+
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq custom-file "~/.spacemacs.d/custom.el")
   (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
