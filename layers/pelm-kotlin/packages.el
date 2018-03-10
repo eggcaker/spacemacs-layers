@@ -19,7 +19,7 @@
     :ensure t
     :defer t))
 
-(defun pelm-kotlin/init-kotlin-mode()
+(defun pelm-kotlin/post-init-kotlin-mode()
   (use-package kotlin-mode
     :defer t
     :init

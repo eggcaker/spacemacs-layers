@@ -114,7 +114,7 @@ This function should only modify configuration layer settings."
      ;;     gofmt-command "goimports"
      ;;     go-use-gometalinter t)
      java
-     ;; kotlin
+     kotlin
      ;;vimscript
      ;;nginx
      ;;lua
@@ -163,6 +163,7 @@ This function should only modify configuration layer settings."
      ;; pelm-lsp
      pelm-misc
      pelm-org
+     pelm-kotlin
      ;;pelm-org-trello
      pelm-contact
      ;;pelm-music

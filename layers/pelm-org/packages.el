@@ -230,6 +230,7 @@
          (sqlite . t)
          (dot . t)
          (js . t)
+         (kotlin . t)
          (org . t )
          (gnuplot . t)
          (clojure . t )
