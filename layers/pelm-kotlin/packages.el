@@ -24,7 +24,7 @@
     :defer t
     :init
     (setq  kotlin-tab-width 2)
-    :mode (("\\.kt\\'" . kotlin-mode))
+    :mode (("\\.kt[s]\\'" . kotlin-mode))
     :config
     (progn
       (spacemacs/set-leader-keys-for-major-mode 'kotlin-mode

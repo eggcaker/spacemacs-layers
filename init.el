@@ -36,6 +36,7 @@ This function should only modify configuration layer settings."
      ;; clojure
      ;; react
      bm
+     emoji
      csv
      treemacs
      ;; html
@@ -159,11 +160,13 @@ This function should only modify configuration layer settings."
      ;; play with
      ;;evernote
      gnus
+     pdf-tools
      ;; Personal Layers
      ;; pelm-lsp
      pelm-misc
      pelm-org
      pelm-kotlin
+     pelm-dart
      ;;pelm-org-trello
      pelm-contact
      ;;pelm-music
@@ -543,7 +546,7 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-init ()
   ;; Set the Emacs customization file path. Must be done here in user-init.
-
+  (setq ns-use-title-bar nil)
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq custom-file "~/.spacemacs.d/custom.el")
   (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
@@ -601,6 +604,7 @@ It should only modify the values of Spacemacs settings."
 
    magit-repository-directories '(
                                   "~/.spacemacs.d/"
+                                  "~/.emacs.d/"
                                   "~/src/work/pacer_android/"
                                   "~/.dotfiles"
                                   "~/.org-files/"
@@ -646,6 +650,11 @@ It should only modify the values of Spacemacs settings."
   (setq dotspacemacs-scratch-mode 'org-mode)
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
   (spacemacs/set-leader-keys "op" 'youdao-dictionary-play-voice-at-point)
+
+  (setq counsel-git-cmd "rg --files")
+
+  (setq counsel-rg-base-command
+        "rg -i -M 120 --no-heading --line-number --color never %s .")
 
   (setq gnus-secondary-select-methods
         '(
