@@ -185,7 +185,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+   dotspacemacs-additional-packages '(tiny key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -537,7 +537,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
-   dotspacemacs-zone-out-when-idle 120
+   dotspacemacs-zone-out-when-idle nil
 
    ;; Run `spacemacs/prettify-org-buffer' when
    ;; visiting README.org files of Spacemacs.
@@ -804,27 +804,6 @@ It should only modify the values of Spacemacs settings."
     ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
     )
 
-  (setq zone-programs [
-                       zone-pgm-jitter
-                       zone-pgm-putz-with-case
-                       zone-pgm-dissolve
-                       ;; zone-pgm-explode
-                       zone-pgm-whack-chars
-                       zone-pgm-rotate
-                       ;; zone-pgm-rotate-LR-lockstep
-                       ;; zone-pgm-rotate-RL-lockstep
-                       ;; zone-pgm-rotate-LR-variable
-                       ;; zone-pgm-rotate-RL-variable
-                       zone-pgm-drip
-                       zone-pgm-drip-fretfully
-                       zone-pgm-five-oclock-swan-dive
-                       zone-pgm-martini-swan-dive
-                       ;; zone-pgm-rat-race
-                       zone-pgm-paragraph-spaz
-                       zone-pgm-stress
-                       zone-pgm-stress-destress
-                       zone-pgm-random-life
-                       ])
 
 
   ;; test the key freq
@@ -837,7 +816,7 @@ It should only modify the values of Spacemacs settings."
           next-line))
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-
+  (tiny-setup-default)
   (evil-leader/set-key "aa" 'counsel-osx-app)
 
   ;; Load lab code

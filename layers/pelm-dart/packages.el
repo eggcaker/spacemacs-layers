@@ -22,7 +22,7 @@
 
 
 (defun pelm-dart/post-init-flycheck ()
-  (spacemacs/add-flycheck-hook 'dart-mode))
+  (spacemacs/enable-flycheck 'dart-mode))
 
 (defun pelm-dart/init-company-dart ()
   (use-package company-dart
@@ -40,8 +40,5 @@
     :config
     (progn
       (spacemacs/set-leader-keys
-        ;; (spacemacs/set-leader-keys-for-major-mode 'dart-mode
-        "mj" 'dart-jump-to-defn
-        "mf" 'dartfmt
-        "mi" 'dart-imports
-        "ms" 'dart-sort-members))))
+          "mj" 'dart-goto
+          "mf" 'dart-format))))
