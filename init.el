@@ -185,7 +185,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(tiny key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+   dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -816,7 +816,6 @@ It should only modify the values of Spacemacs settings."
           next-line))
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
-  (tiny-setup-default)
   (evil-leader/set-key "aa" 'counsel-osx-app)
 
   ;; Load lab code

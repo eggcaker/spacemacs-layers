@@ -2,10 +2,20 @@
 
 (setq pelm-misc-packages
     '(
+      tiny
       ;;youdao-dictionary
       ;;ledger-mode
       ;;discover-my-major
       ))
+
+(defun pelm-misc/init-tiny ()
+  (use-package tiny
+    :ensure t
+    :init
+    :config
+    (tiny-setup-default)))
+
+
 
 (defun pelm-misc/post-init-youdao-dictionary()
   (use-package youdao-dictionary
