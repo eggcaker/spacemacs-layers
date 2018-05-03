@@ -117,17 +117,14 @@ This function should only modify configuration layer settings."
      ;; csv
      osx
      ;; swift
+     ;;lsp
      ipython-notebook
      (python :variables
-             python-backend 'lsp
+             python-backend 'anaconda ;; 'lsp
              python-fill-column 110
              python-sort-imports-on-save t
              python-enable-yapf-format-on-save t)
-     ;;react
      evil-commentary
-     ;; (colors :variables
-     ;;         colors-enable-rainbow-identifiers nil )
-
      finance
      ;; (elfeed :variables
      ;;         url-queue-timeout 30
@@ -138,26 +135,18 @@ This function should only modify configuration layer settings."
      (restclient :variables
                  restclient-use-org t)
 
-     ;; search-engine
      ;; (mu4e :variables
      ;;       mu4e-account-alist t
      ;;       mu4e-installation-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e")
-     ;;fasd
      imenu-list
      ;;; just for fun
      ;; games
      ;; xkcd
-     ;;typing-games
-     ;;stack-exchange
-     ;; play with
-     ;;evernote
      gnus
      pdf-tools
      ;; Personal Layers
-     ;; pelm-lsp
      pelm-misc
      pelm-org
-     pelm-kotlin
      pelm-dart
      ;;pelm-org-trello
      pelm-contact
@@ -544,7 +533,7 @@ It should only modify the values of Spacemacs settings."
   (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
-  (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
+  (setq exec-path '("~/.pyenv/shims"  "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
   (setq-default
    ;; remove the 4m from shell
    system-uses-terminfo nil
@@ -642,11 +631,10 @@ It should only modify the values of Spacemacs settings."
   (setq dotspacemacs-scratch-mode 'org-mode)
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
   (spacemacs/set-leader-keys "op" 'youdao-dictionary-play-voice-at-point)
-
+  (setq python-indent-offset 2)
   (setq counsel-git-cmd "rg --files")
 
-  (setq counsel-rg-base-command
-        "rg -i -M 120 --no-heading --line-number --color never %s .")
+  (setq counsel-rg-base-command "rg -i -M 120 --no-heading --line-number --color never %s .")
 
   (setq gnus-secondary-select-methods
         '(
