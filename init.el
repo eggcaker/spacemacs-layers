@@ -96,15 +96,8 @@ This function should only modify configuration layer settings."
      ;;dockerfile
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
-
-     (shell :variables
-            shell-default-term-shell "/usr/local/bin/zsh"
-            shell-default-shell 'eshell
-            shell-enable-smart-eshell t
-            shell-default-height 30
-            shell-protect-eshell-prompt nil
-            shell-default-position 'right)
-     shell-scripts
+     shell
+     ;;shell-scripts
      syntax-checking
      version-control
      ;;jabber
@@ -124,9 +117,9 @@ This function should only modify configuration layer settings."
      ;; csv
      osx
      ;; swift
-     ;; ipython-notebook
-     org-ipython
+     ipython-notebook
      (python :variables
+             python-backend 'lsp
              python-fill-column 110
              python-sort-imports-on-save t
              python-enable-yapf-format-on-save t)
@@ -155,7 +148,6 @@ This function should only modify configuration layer settings."
      ;; games
      ;; xkcd
      ;;typing-games
-     ;;org-ipython
      ;;stack-exchange
      ;; play with
      ;;evernote
