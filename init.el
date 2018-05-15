@@ -150,6 +150,7 @@ This function should only modify configuration layer settings."
      pelm-dart
      ;;pelm-org-trello
      pelm-contact
+     ;; pelm-xonsh
      ;;pelm-music
      ;;pelm-blog
      ;;pelm-finance

@@ -11,7 +11,13 @@
 
 ;;; Code:
 
-(defconst pelm-org-packages '((org :location built-in)))
+(defconst pelm-org-packages '(
+                              (org :location built-in)
+                              ob-kotlin
+                              ))
+(defun pelm-org/init-ob-kotlin()
+  (use-package ob-kotlin
+    :defer t))
 
 (defun pelm-org/post-init-org ()
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
