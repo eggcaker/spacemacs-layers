@@ -31,7 +31,9 @@
                org-trello/help-describing-bindings
                )
     :init
+    (setq org-trello--config-file "~/.emacs.d/.cache/.trello/%s.el")
     ;; org-trello major mode for all .trello files
+
     (add-to-list 'auto-mode-alist '("\\.trello$" . org-mode))
 
     ;; add a hook function to check if this is trello file, then activate the org-trello minor mode.

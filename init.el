@@ -117,10 +117,9 @@ This function should only modify configuration layer settings."
      ;; csv
      osx
      ;; swift
-     ;;lsp
      ipython-notebook
      (python :variables
-             python-backend 'anaconda ;; 'lsp
+             python-backend 'anaconda  ;; 'lsp 
              python-fill-column 110
              python-sort-imports-on-save t
              python-enable-yapf-format-on-save t)
@@ -148,7 +147,7 @@ This function should only modify configuration layer settings."
      pelm-misc
      pelm-org
      pelm-dart
-     ;;pelm-org-trello
+     pelm-org-trello
      pelm-contact
      ;; pelm-xonsh
      ;;pelm-music
@@ -172,7 +171,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(pangu-spacing)
+   dotspacemacs-excluded-packages '(pangu-spacing exec-path-from-shell )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -606,10 +605,11 @@ It should only modify the values of Spacemacs settings."
    ;;spaceline-version-control-p nil
 
    ;; Shell
-   shell-default-term-shell "/usr/local/bin/zsh"
-   explicit-shell-file-name "/usr/local/bin/zsh"
-   shell-file-name "zsh"
+   shell-default-term-shell "~/.pyenv/shims/xonsh"
+   explicit-shell-file-name  "~/.pyenv/shims/xonsh"
+   shell-file-name  "/usr/local/bin/bash"
    explicit-bash.exe-args '("--noediting" "--login" "-i")
+   ;;exec-path-from-shell-shell-name "xonsh"
 
    ;; flycheck
    flycheck-jshintrc "~/.jshintrc"
@@ -630,6 +630,7 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-config ()
   (setq dotspacemacs-scratch-mode 'org-mode)
+  (setq calc-settings-file "~/.emacs.d/.cache/calc.el")
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
   (spacemacs/set-leader-keys "op" 'youdao-dictionary-play-voice-at-point)
   (setq python-indent-offset 2)
