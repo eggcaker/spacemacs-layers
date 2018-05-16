@@ -96,7 +96,8 @@ This function should only modify configuration layer settings."
      ;;dockerfile
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
-     shell
+     (shell :variables
+            shell-default-shell 'eshell)
      ;;shell-scripts
      syntax-checking
      version-control
@@ -533,7 +534,7 @@ It should only modify the values of Spacemacs settings."
   (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
-  (setq exec-path '("~/.pyenv/shims"  "/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
+  (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
   (setq-default
    ;; remove the 4m from shell
    system-uses-terminfo nil
@@ -604,13 +605,6 @@ It should only modify the values of Spacemacs settings."
    ;;spaceline-buffer-encoding-abbrev-p nil
    ;;spaceline-version-control-p nil
 
-   ;; Shell
-   shell-default-term-shell "~/.pyenv/shims/xonsh"
-   explicit-shell-file-name  "~/.pyenv/shims/xonsh"
-   shell-file-name  "/usr/local/bin/bash"
-   explicit-bash.exe-args '("--noediting" "--login" "-i")
-   ;;exec-path-from-shell-shell-name "xonsh"
-
    ;; flycheck
    flycheck-jshintrc "~/.jshintrc"
    flycheck-jscsrc "~/.jscsrc"
@@ -629,6 +623,7 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
+  (setq python-shell-interpreter "python")
   (setq dotspacemacs-scratch-mode 'org-mode)
   (setq calc-settings-file "~/.emacs.d/.cache/calc.el")
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
@@ -683,7 +678,6 @@ It should only modify the values of Spacemacs settings."
 
 
 
-  (setenv "SHELL" shell-file-name)
   (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
   (setq org-agenda-show-future-repeats nil)
 
