@@ -624,6 +624,8 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-config ()
   (setq python-shell-interpreter "python")
+  (setq python-shell-exec-path "/usr/local/bin/")
+  (setq ob-ipython-command "/usr/local/bin/jupyter")
   (setq dotspacemacs-scratch-mode 'org-mode)
   (setq calc-settings-file "~/.emacs.d/.cache/calc.el")
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
