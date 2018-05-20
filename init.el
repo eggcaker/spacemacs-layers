@@ -624,6 +624,7 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
+  (setq python-indent-guess-indent-offset nil)
   (evil-declare-change-repeat 'company-complete)
   (setq python-shell-interpreter "python")
   (setq python-shell-exec-path '("/usr/local/bin/"))
