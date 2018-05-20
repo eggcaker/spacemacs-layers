@@ -119,11 +119,12 @@ This function should only modify configuration layer settings."
      osx
      ;; swift
      ipython-notebook
-     (python :variables
-             python-backend 'anaconda  ;; 'lsp 
-             python-fill-column 110
-             python-sort-imports-on-save t
-             python-enable-yapf-format-on-save t)
+     pelm-elpy
+     ;; (python :variables
+     ;;         python-backend 'anaconda  ;; 'lsp
+     ;;         python-fill-column 110
+     ;;         python-sort-imports-on-save t
+     ;;         python-enable-yapf-format-on-save t)
      evil-commentary
      finance
      ;; (elfeed :variables
@@ -623,8 +624,10 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
+  (evil-declare-change-repeat 'company-complete)
   (setq python-shell-interpreter "python")
-  (setq python-shell-exec-path "/usr/local/bin/")
+  (setq python-shell-exec-path '("/usr/local/bin/"))
+  ;; (setq python-shell-virtualenv-root "/usr/local/Cellar/python3/3.6.5/")
   (setq ob-ipython-command "/usr/local/bin/jupyter")
   (setq dotspacemacs-scratch-mode 'org-mode)
   (setq calc-settings-file "~/.emacs.d/.cache/calc.el")
