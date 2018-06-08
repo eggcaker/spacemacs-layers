@@ -119,12 +119,12 @@ This function should only modify configuration layer settings."
      osx
      ;; swift
      ipython-notebook
-     pelm-elpy
-     ;; (python :variables
-     ;;         python-backend 'anaconda  ;; 'lsp
-     ;;         python-fill-column 110
-     ;;         python-sort-imports-on-save t
-     ;;         python-enable-yapf-format-on-save t)
+     ;;pelm-elpy
+     (python :variables
+            python-backend 'anaconda  ;; 'lsp
+              python-fill-column 110
+              python-sort-imports-on-save t
+              python-enable-yapf-format-on-save t)
      evil-commentary
      finance
      ;; (elfeed :variables
@@ -144,7 +144,6 @@ This function should only modify configuration layer settings."
      ;; games
      ;; xkcd
      gnus
-     pdf-tools
      ;; Personal Layers
      pelm-misc
      pelm-org
