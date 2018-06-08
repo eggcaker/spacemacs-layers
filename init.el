@@ -30,10 +30,13 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(react
+   '(octave
+     ruby
+     lua
+     react
      html
      ;; vimscript
-     ;; clojure
+     clojure
      ;; react
      bm
      emoji
@@ -97,7 +100,7 @@ This function should only modify configuration layer settings."
      yaml
      (ibuffer :variables ibuffer-group-buffers-by nil)
      (shell :variables
-            shell-default-shell 'eshell)
+            shell-default-shell 'term)
      ;;shell-scripts
      syntax-checking
      version-control
@@ -118,13 +121,13 @@ This function should only modify configuration layer settings."
      ;; csv
      osx
      ;; swift
-     ipython-notebook
+     ;; ipython-notebook
      ;;pelm-elpy
      (python :variables
-            python-backend 'anaconda  ;; 'lsp
-              python-fill-column 110
-              python-sort-imports-on-save t
-              python-enable-yapf-format-on-save t)
+             python-backend 'anaconda  ;; 'lsp
+             python-fill-column 110
+             python-sort-imports-on-save t
+             python-enable-yapf-format-on-save t)
      evil-commentary
      finance
      ;; (elfeed :variables
@@ -144,13 +147,14 @@ This function should only modify configuration layer settings."
      ;; games
      ;; xkcd
      gnus
+     search-engine
      ;; Personal Layers
      pelm-misc
      pelm-org
      pelm-dart
      pelm-org-trello
      pelm-contact
-     ;; pelm-xonsh
+     pelm-xonsh
      ;;pelm-music
      ;;pelm-blog
      ;;pelm-finance
@@ -287,10 +291,10 @@ It should only modify the values of Spacemacs settings."
    ;; quickly tweak the mode-line size to make separators look not too crappy.
 
    dotspacemacs-default-font '("Fira Code"
-                     :size 18
-                     :weight normal
-                     :width normal
-                     :powerline-scale 1.1)
+                               :size 18
+                               :weight normal
+                               :width normal
+                               :powerline-scale 1.1)
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
@@ -528,13 +532,16 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-init ()
   ;; Set the Emacs customization file path. Must be done here in user-init.
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (setq ns-use-title-bar nil)
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq custom-file "~/.spacemacs.d/custom.el")
   (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
-  (setq exec-path '("/usr/local/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.0.90/libexec/emacs/26.0.90/x86_64-apple-darwin17.3.0"))
+  (setenv "PATH" "/usr/local/bin:/usr/bin:~/.dotfiles/bin:/bin")
+  (setq exec-path '("/usr/local/bin" "~/.dotfiles/bin/" "/usr/bin" "/bin" "/usr/sbin" "/sbin" "/usr/local/Cellar/emacs-plus/26.1/libexec/emacs/26.1/x86_64-apple-darwin17.4.0"))
   (setq-default
    ;; remove the 4m from shell
    system-uses-terminfo nil
@@ -585,14 +592,10 @@ It should only modify the values of Spacemacs settings."
    magit-revert-buffers t
 
    magit-repository-directories '(
-                                  "~/.spacemacs.d/"
-                                  "~/.emacs.d/"
-                                  "~/src/work/pacer_android/"
-                                  "~/.dotfiles"
-                                  "~/.org-files/"
-                                  "~/src/personal/emacs.cc/"
-                                  ;;"~/src/work/mandian_server/"
-                                  )
+                                  ("~/.spacemacs.d/" . 0)
+                                  ("~/.emacs.d/" . 0)
+                                  ("~/src/work/pacer_android/" . 0)
+                                  ("~/.dotfiles" . 0))
 
    ;; Flycheck
    avy-all-windows 'all-frames
@@ -623,17 +626,19 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
+  (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   (setq python-indent-guess-indent-offset nil)
   (evil-declare-change-repeat 'company-complete)
+  (setq counsel-osx-app-location '("/Applications" "/Applications/Utilities"))
   (setq python-shell-interpreter "python")
+  (setq python-shell-interpreter-args "-i")
   (setq python-shell-exec-path '("/usr/local/bin/"))
-  ;; (setq python-shell-virtualenv-root "/usr/local/Cellar/python3/3.6.5/")
-  (setq ob-ipython-command "/usr/local/bin/jupyter")
+  ;; (setq ob-ipython-command "/usr/local/bin/jupyter")
   (setq dotspacemacs-scratch-mode 'org-mode)
   (setq calc-settings-file "~/.emacs.d/.cache/calc.el")
   (spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
   (spacemacs/set-leader-keys "op" 'youdao-dictionary-play-voice-at-point)
-  (setq python-indent-offset 2)
+  (setq python-indent-offset 4)
   (setq counsel-git-cmd "rg --files")
 
   (setq counsel-rg-base-command "rg -i -M 120 --no-heading --line-number --color never %s .")
@@ -751,7 +756,6 @@ It should only modify the values of Spacemacs settings."
 
   (evil-set-initial-state 'term-mode 'emacs)
   (evil-set-initial-state 'calculator-mode 'emacs)
-  (push 'term-mode evil-escape-excluded-major-modes)
   (evil-define-key 'emacs term-raw-map (kbd "C-c") 'term-send-raw)
   (setq org-confirm-babel-evaluate nil)
   (global-company-mode)
@@ -781,7 +785,7 @@ It should only modify the values of Spacemacs settings."
     (erc-tls :server "irc.gitter.im" :port "6697" :nick "eggcaker"
              :password pelm/gitter-pwd :full-name pelm/full-name)
     (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
-        :password pelm/irc-pwd :full-name pelm/full-name)
+         :password pelm/irc-pwd :full-name pelm/full-name)
     ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
     )
 
@@ -812,20 +816,20 @@ It should only modify the values of Spacemacs settings."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-trello-current-prefix-keybinding "C-c o")
- '(package-selected-packages
-   (quote
-    (org-trello request-deferred emms counsel-ebdb company-ebdb ebdb youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key wgrep web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toc-org symon string-inflection sql-indent spaceline-all-the-icons smex smeargle shell-pop reveal-in-osx-finder restart-emacs request rainbow-delimiters pyvenv pytest pyim pyenv-mode py-isort popwin plantuml-mode pippel pip-requirements persp-mode pcre2el pbcopy password-generator paradox pangu-spacing ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-mime org-journal org-download org-clock-convenience org-bullets org-brain open-junk-file ob-restclient ob-ipython ob-http neotree nameless mvn multi-term move-text mmm-mode meghanada maven-test-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint ledger-mode launchctl kotlin-mode keyfreq key-chord json-mode js2-refactor js-doc ivy-purpose ivy-hydra insert-shebang info+ indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag groovy-mode groovy-imports gradle-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flycheck-ledger flycheck-kotlin flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fill-column-indicator fancy-battery eyebrowse exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-embrace evil-ediff evil-commentary evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help ensime elisp-slime-nav elfeed-org editorconfig dumb-jump diminish diff-hl define-word dash-at-point cython-mode csv-mode counsel-projectile counsel-osx-app counsel-dash company-tern company-statistics company-shell company-restclient company-quickhelp company-emacs-eclim company-anaconda column-enforce-mode coffee-mode clean-aindent-mode buttercup browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
- '(tramp-syntax (quote default) nil (tramp)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(org-trello-current-prefix-keybinding "C-c o")
+   '(package-selected-packages
+     (quote
+      (org-trello request-deferred emms counsel-ebdb company-ebdb ebdb youdao-dictionary yasnippet-snippets yapfify yaml-mode xterm-color ws-butler winum which-key wgrep web-beautify volatile-highlights vmd-mode vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toc-org symon string-inflection sql-indent spaceline-all-the-icons smex smeargle shell-pop reveal-in-osx-finder restart-emacs request rainbow-delimiters pyvenv pytest pyim pyenv-mode py-isort popwin plantuml-mode pippel pip-requirements persp-mode pcre2el pbcopy password-generator paradox pangu-spacing ox-twbs ox-reveal ox-gfm overseer osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-mime org-journal org-download org-clock-convenience org-bullets org-brain open-junk-file ob-restclient ob-ipython ob-http neotree nameless mvn multi-term move-text mmm-mode meghanada maven-test-mode markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint ledger-mode launchctl kotlin-mode keyfreq key-chord json-mode js2-refactor js-doc ivy-purpose ivy-hydra insert-shebang info+ indent-guide importmagic ibuffer-projectile hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-purpose helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag groovy-mode groovy-imports gradle-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flycheck-pos-tip flycheck-ledger flycheck-kotlin flycheck-bashate flx-ido fish-mode find-by-pinyin-dired fill-column-indicator fancy-battery eyebrowse exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-search-highlight-persist evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-embrace evil-ediff evil-commentary evil-cleverparens evil-args evil-anzu eval-sexp-fu ess-R-data-view eshell-z eshell-prompt-extras esh-help ensime elisp-slime-nav elfeed-org editorconfig dumb-jump diminish diff-hl define-word dash-at-point cython-mode csv-mode counsel-projectile counsel-osx-app counsel-dash company-tern company-statistics company-shell company-restclient company-quickhelp company-emacs-eclim company-anaconda column-enforce-mode coffee-mode clean-aindent-mode buttercup browse-at-remote auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
+   '(tramp-syntax (quote default) nil (tramp)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )

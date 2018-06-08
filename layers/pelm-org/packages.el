@@ -229,24 +229,26 @@
       (org-babel-do-load-languages
        'org-babel-load-languages
        '(
-         (latex . t)
-         (R . t)
+         ;; (latex . t)
+         ;; (R . t)
          (shell . t)
          (calc . t)
          (sql . t )
          (sqlite . t)
-         (dot . t)
+         (lua . t)
+         ;; (dot . t)
          (js . t)
          (kotlin . t)
          (org . t )
          (gnuplot . t)
-         (clojure . t )
+         ;; (clojure . t )
          (restclient . t)
          (emacs-lisp . t)
-         (ipython . t)
+         ;; (ipython . t)
          (python . t)
          (plantuml . t)
-         (ditaa . t)))
+         ;; (ditaa . t)
+         ))
 
 
       (require 'ox-md nil t)

@@ -30,9 +30,8 @@
 ;;; Code:
 
 (defconst pelm-xonsh-packages
-  '(xonsh-mode :location (recipe
-                          :fetcher github
-                          :repo "eggcaker/xonsh-mode")))
+  '(
+    (xonsh-mode :location (recipe :fetcher github :repo "eggcaker/xonsh-mode"))))
 
 
 (defun pelm-xonsh/init-xonsh-mode()
