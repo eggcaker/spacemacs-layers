@@ -247,7 +247,7 @@
          ;; (ipython . t)
          (python . t)
          (plantuml . t)
-         ;; (ditaa . t)
+         (ditaa . t)
          ))
 
 

@@ -112,6 +112,7 @@ This function should only modify configuration layer settings."
      ;;     gofmt-command "goimports"
      ;;     go-use-gometalinter t)
      java
+     julia
      kotlin
      ;;vimscript
      ;;nginx
