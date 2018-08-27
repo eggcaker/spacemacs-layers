@@ -75,7 +75,13 @@ This function should only modify configuration layer settings."
                  js2-basic-offset 2
                  js-indent-level 2
                  tern-command '("node" "/usr/local/bin/tern"))
-     erc
+     (erc :variables
+          erc-server-list
+          '(
+            ("irc.gitter.im" "#syl20bnr/spacemacs" )
+            ("irc.gitter.im" "#magit/magit" )
+            ("freenode\\.net" "#org-mode")
+            ))
      ;;vinegar
      ;; twitter
      emacs-lisp
@@ -163,7 +169,7 @@ This function should only modify configuration layer settings."
      ;;spotify
      ;;slack
      ;;pelm-ibuffer
-     pelm-erc
+     ;; pelm-erc
      ;; pelm-mail
      ;;pelm-slack
      )
@@ -613,15 +619,7 @@ It should only modify the values of Spacemacs settings."
    flycheck-jshintrc "~/.jshintrc"
    flycheck-jscsrc "~/.jscsrc"
    flycheck-eslintrc "~/.eslintrc"
-
-   ;; IRC
-   erc-autojoin-channels-alist
-   '(
-     ("irc.gitter.im" "#syl20bnr/spacemacs" )
-     ("irc.gitter.im" "#magit/magit" )
-     ("freenode\\.net" "#org-mode")
-     )
-
+   
    ;; Theme modifications
    theming-modifications '()
    ))
@@ -778,19 +776,6 @@ It should only modify the values of Spacemacs settings."
           (file "~/.org-files/refile.org")
           "*  %?\n %(cfw:org-capture-day)"))
   (setq yas-indent-line (quote none)) ;; do not auto indent snippet
-
-  ;; IRC
-  (spacemacs|define-custom-layout "@ERC"
-    :binding "E"
-    :body
-    (erc-tls :server "irc.gitter.im" :port "6697" :nick "eggcaker"
-             :password pelm/gitter-pwd :full-name pelm/full-name)
-    (erc :server "irc.freenode.net" :port "6667" :nick "eggcaker"
-         :password pelm/irc-pwd :full-name pelm/full-name)
-    ;;(erc :server "localhost" :port "6667" :nick "eggcaker" :password "" :full-name "eggcaker") ;; local irc
-    )
-
-
 
   ;; test the key freq
   (setq keyfreq-excluded-commands
