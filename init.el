@@ -93,6 +93,7 @@ This function should only modify configuration layer settings."
      ;;        latex-enable-magic t
      ;;        latex-enable-auto-fill t)
      (org :variables
+          org-enable-trello-support t
           org-want-todo-bindings t
           org-enable-github-support t
           org-enable-org-journal-support t
@@ -159,7 +160,7 @@ This function should only modify configuration layer settings."
      pelm-misc
      pelm-org
      pelm-dart
-     pelm-org-trello
+     ;; pelm-org-trello
      pelm-contact
      pelm-xonsh
      ;;pelm-music
@@ -288,7 +289,7 @@ It should only modify the values of Spacemacs settings."
    ;; to create your own spaceline theme. Value can be a symbol or list with\
    ;; additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.3)
+   dotspacemacs-mode-line-theme '(doom :separator wave :separator-scale 1.3)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
