@@ -53,7 +53,7 @@ This function should only modify configuration layer settings."
      ;;octave
      ;;nginx
      ;;octave
-     ess
+     ;; ess
      sql
      ;;docker
      ;;vimscript
@@ -118,8 +118,8 @@ This function should only modify configuration layer settings."
      ;;     go-tab-width 2
      ;;     gofmt-command "goimports"
      ;;     go-use-gometalinter t)
-     java
-     julia
+     ;; java
+     ;; julia
      kotlin
      ;;vimscript
      ;;nginx
@@ -137,7 +137,7 @@ This function should only modify configuration layer settings."
              python-sort-imports-on-save t
              python-enable-yapf-format-on-save t)
      evil-commentary
-     finance
+     ;; finance
      ;; (elfeed :variables
      ;;         url-queue-timeout 30
      ;;         elfeed-enable-web-interface nil
@@ -154,14 +154,14 @@ This function should only modify configuration layer settings."
      ;;; just for fun
      ;; games
      ;; xkcd
-     gnus
-     search-engine
+     ;; gnus
+     ;; search-engine
      ;; Personal Layers
      pelm-misc
      pelm-org
-     pelm-dart
+     ;; pelm-dart
      ;; pelm-org-trello
-     pelm-contact
+     ;; pelm-contact
      pelm-xonsh
      ;;pelm-music
      ;;pelm-blog
