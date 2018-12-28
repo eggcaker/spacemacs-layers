@@ -13,8 +13,14 @@
 
 (defconst pelm-org-packages '(
                               (org :location built-in)
-                              ob-kotlin
-                              ))
+                              orgtbl-aggregate
+                              ob-kotlin))
+
+
+(defun pelm-org/init-orgtabl-aggregate()
+  (use-package orgtbl-aggregate
+    :defer t))
+
 (defun pelm-org/init-ob-kotlin()
   (use-package ob-kotlin
     :defer t))
