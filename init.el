@@ -626,7 +626,7 @@ It should only modify the values of Spacemacs settings."
    ))
 
 (defun dotspacemacs/user-config ()
-  (setq ob-kotlin:kotlinc "kscript")
+  (setq calendar-week-start-day 1)
   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   (setq python-indent-guess-indent-offset nil)
   (evil-declare-change-repeat 'company-complete)
