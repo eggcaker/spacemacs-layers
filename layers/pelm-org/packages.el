@@ -17,9 +17,15 @@
                               ob-kotlin))
 
 
-(defun pelm-org/init-orgtabl-aggregate()
+(defun pelm-org/init-orgtbl-aggregate()
   (use-package orgtbl-aggregate
-    :defer t))
+    :defer t
+    :init
+    (progn
+      (spacemacs/set-leader-keys-for-major-mode 'org-mode
+        "id" 'org-insert-dblock
+        ))
+    ))
 
 (defun pelm-org/init-ob-kotlin()
   (use-package ob-kotlin
