@@ -168,9 +168,21 @@
                     :html-scale 2.2
                     :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
-;; (setq org-structure-template-alist
-;;       (append '(("e" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
-;;               org-structure-template-alist))
+(setq org-structure-template-alist
+      (quote
+       (
+        ("e" . "src emacs-lisp")
+        ("n" . "notes")
+        ("a" . "export ascii")
+        ("c" . "center")
+        ("C" . "comment")
+        ("E" . "export")
+        ("k" . "src kotlin")
+        ("h" . "export html")
+        ("l" . "export latex")
+        ("q" . "quote")
+        ("s" . "src")
+        ("v" . "verse"))))
 
 ;; 这里强制使用"_{下标}"来定义一个下标。"^{上标}"来定义一个上标。
 (setq org-export-with-sub-superscripts '{})
