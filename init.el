@@ -627,6 +627,13 @@ It should only modify the values of Spacemacs settings."
 
 (defun dotspacemacs/user-config ()
   (setq projectile-enable-caching t)
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-globally-ignored-file-suffixes
+        '("#" "~" ".swp" ".o" ".so" ".exe" ".dll" ".elc" ".pyc" ".jar" "*.class"))
+  (setq projectile-globally-ignored-directories
+        '(".git" "node_modules" "__pycache__" ".vs"))
+  (setq projectile-globally-ignored-files '("TAGS" "tags" ".DS_Store"))
+
   (setq calendar-week-start-day 1)
   (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
   (setq python-indent-guess-indent-oftpfset nil)
