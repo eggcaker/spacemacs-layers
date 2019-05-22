@@ -131,8 +131,10 @@ This function should only modify configuration layer settings."
      ;; swift
      ;; ipython-notebook
      ;;pelm-elpy
+     lsp
+     dap
      (python :variables
-             python-backend 'anaconda  ;; 'lsp
+             python-backend  'lsp ;; 'anaconda  ;; 'lsp
              python-fill-column 110
              python-sort-imports-on-save t
              python-enable-yapf-format-on-save t)
