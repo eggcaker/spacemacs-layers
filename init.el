@@ -123,6 +123,11 @@ This function should only modify configuration layer settings."
      ;; java
      ;; julia
      kotlin
+     (dart :variables
+           dart-sdk-path "~/src/tools/flutter/bin/cache/dart-sdk/"
+           dart-enable-analysis-server t
+           dart-format-on-save t)
+
      ;;vimscript
      ;;nginx
      ;;lua
@@ -164,7 +169,6 @@ This function should only modify configuration layer settings."
      twitter
      pelm-misc
      pelm-org
-     ;; pelm-dart
      ;; pelm-org-trello
      ;; pelm-contact
      pelm-xonsh
@@ -674,6 +678,7 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  (setq twittering-display-remaining t)
   (setq twittering-use-master-password t)
   (setq projectile-enable-caching t)
   (setq projectile-indexing-method 'alien)
