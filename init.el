@@ -76,7 +76,9 @@ This function should only modify configuration layer settings."
      (javascript :variables
                  js2-basic-offset 2
                  js-indent-level 2
-                 tern-command '("node" "/usr/local/bin/tern"))
+                 node-add-modules-path t
+                 javascript-repl 'node
+                 javascript-backend 'lsp)
      (erc :variables
           erc-server-list
           '(
@@ -188,7 +190,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(key-chord  all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+   dotspacemacs-additional-packages '(key-chord   prettier-js all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -678,6 +680,9 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil)
+  (setq js2-strict-missing-semi-warning nil)
   (setq twittering-display-remaining t)
   (setq twittering-use-master-password t)
   (setq projectile-enable-caching t)
