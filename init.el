@@ -32,11 +32,13 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(octave
+   '(rust
+     octave
      ruby
      lua
      react
      html
+     perl6
      ;; vimscript
      clojure
      ;; react
