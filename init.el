@@ -589,6 +589,11 @@ See the header of this file for more information."
   (spacemacs/load-spacemacs-env))
 
 (defun dotspacemacs/user-init ()
+  (setq configuration-layer-elpa-archives
+        '(("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+          ("org-cn"   . "http://mirrors.cloud.tencent.com/elpa/org/")
+          ("gnu-cn"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
+
   ;; Set the Emacs customization file path. Must be done here in user-init.
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
@@ -682,6 +687,7 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-strict-missing-semi-warning nil)
