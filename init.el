@@ -168,7 +168,7 @@ This function should only modify configuration layer settings."
      ;; games
      ;; xkcd
      ;; gnus
-     ;; search-engine
+     search-engine
      ;; Personal Layers
      twitter
      pelm-misc
@@ -687,7 +687,7 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-
+  (setq engine/browser-function 'eww-browse-url)
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-strict-missing-semi-warning nil)
