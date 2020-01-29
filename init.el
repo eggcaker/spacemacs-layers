@@ -192,7 +192,7 @@ This function should only modify configuration layer settings."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(key-chord   prettier-js all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
+   dotspacemacs-additional-packages '(key-chord  pamparam prettier-js all-the-icons ox-reveal nameless groovy-mode keyfreq org-clock-convenience buttercup editorconfig evil-embrace counsel-osx-app)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -687,6 +687,9 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  (setq explicit-shell-file-name "/usr/local/bin/zsh")
+  (setq shell-file-name "/usr/local/bin/zsh")
+
   (setq engine/browser-function 'eww-browse-url)
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
@@ -773,8 +776,9 @@ dump."
 
   (global-git-commit-mode t)
 
+  ;;Fira Code
   (when (spacemacs/system-is-mac)
-    (spacemacs//set-monospaced-font "Fira Code" "Hiragino Sans GB" 18  22))
+    (spacemacs//set-monospaced-font "JetBrains Mono" "Hiragino Sans GB" 18  22))
 
 
   (when (spacemacs/system-is-linux)
