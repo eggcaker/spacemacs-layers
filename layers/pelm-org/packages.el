@@ -53,8 +53,8 @@
       (setq org-export-babel-evaluate nil)
       (setq org-refile-use-outline-path 'file)
       (setq org-outline-path-complete-in-steps nil)
-      (setq org-refile-targets '(("~/.org-files/gtd.org" :maxlevel . 3)
-                                 ("~/.org-files/someday.org" :level . 1)))
+      (setq org-refile-targets '(("~/.org-notes/gtd.org" :maxlevel . 3)
+                                 ("~/.org-notes/someday.org" :level . 1)))
 
       ;; config stuck project
       (setq org-stuck-projects
@@ -245,7 +245,7 @@
                (getenv "HOME") "/.npm-packages/lib/node_modules" ":"
                (getenv "HOME") "/.n/lib/node_modules" ":"
                "/usr/local/lib/node_modules" ":"
-               (getenv "HOME") "/.org-files/node_modules"  ":"
+               (getenv "HOME") "/.org-notes/node_modules"  ":"
                (getenv "NODE_PATH")))
 
       (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
@@ -303,9 +303,9 @@ unwanted space when exporting org-mode to html."
           (org-agenda-align-tags)))
 
       (setq org-capture-templates '(("t" "Todo [inbox]" entry
-                                     (file+headline "~/.org-files/inbox.org" "Tasks")
+                                     (file+headline "~/.org-notes/inbox.org" "Tasks")
                                      "* TODO %i%?")
-                                    ("c" "Contacts" entry (file "~/.org-files/contacts/contacts.org")
+                                    ("c" "Contacts" entry (file "~/.org-notes/gtd/contacts.org")
                                      "* %(org-contacts-template-name)
 :PROPERTIES:
 :EMAIL: %(org-contacts-template-email)

@@ -600,7 +600,7 @@ See the header of this file for more information."
   (setq ns-use-title-bar nil)
   (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (setq custom-file "~/.spacemacs.d/custom.el")
-  (setq org-contacts-files   '("~/.org-files/contacts/contacts.org"))
+  (setq org-contacts-files   '("~/.org-notes/contacts/contacts.org"))
   (setq standard-indent 2)
   (setenv "LANG" "en_US.UTF-8")
   (setenv "PATH" "/usr/local/bin:/usr/bin:~/.dotfiles/bin:/bin")
@@ -849,12 +849,12 @@ dump."
   (setq org-bullets-bullet-list '("☯" "☰" "☵" "☶" "☳" "☴" "☲" "☷" "☱" ))
   (setq ledger-post-amount-alignment-column 68)
   (setq org-clock-persist-file "~/.emacs.d/.cache/org-clock-save.el")
-  (setq org-gcal-file-alist '(("eggcaker@gmail.com" . "~/.org-files/google.org")))
+  (setq org-gcal-file-alist '(("eggcaker@gmail.com" . "~/.org-notes/google.org")))
   (setq org-refile-targets (quote ((nil :maxlevel . 9)
                                    (org-agenda-files :maxlevel . 9))))
   (setq cfw:org-capture-template
         '("c" "calfw2org" entry
-          (file "~/.org-files/refile.org")
+          (file "~/.org-notes/refile.org")
           "*  %?\n %(cfw:org-capture-day)"))
   (setq yas-indent-line (quote none)) ;; do not auto indent snippet
 

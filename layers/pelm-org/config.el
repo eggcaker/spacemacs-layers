@@ -48,8 +48,8 @@
   "deft org files locaiton")
 
 (setq-default
- org-agenda-dir "~/.org-files"
- deft-dir "~/.org-files")
+ org-agenda-dir "~/.org-notes/gtd/"
+ deft-dir "~/.org-notes")
 
 (defconst pelm-org-completed-date-regexp
   (concat "\\("
