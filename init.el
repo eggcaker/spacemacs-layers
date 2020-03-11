@@ -93,11 +93,11 @@ This function should only modify configuration layer settings."
      emacs-lisp
      ;;common-lisp
      plantuml
-     ;; (latex :variables
-     ;;        latex-build-command "LaTex"
-     ;;        latex-enable-folding t
-     ;;        latex-enable-magic t
-     ;;        latex-enable-auto-fill t)
+     (latex :variables
+             latex-build-command "XeTex"
+             latex-enable-folding t
+             latex-enable-magic t
+             latex-enable-auto-fill t)
      (org :variables
           org-enable-trello-support t
           org-want-todo-bindings t
@@ -690,6 +690,7 @@ dump."
   (setq explicit-shell-file-name "/usr/local/bin/zsh")
   (setq shell-file-name "/usr/local/bin/zsh")
 
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (setq engine/browser-function 'eww-browse-url)
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
