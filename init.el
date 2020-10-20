@@ -40,7 +40,7 @@ This function should only modify configuration layer settings."
      html
      perl6
      ;; vimscript
-     clojure
+     (clojure +lsp)
      ;; react
      bm
      emoji
