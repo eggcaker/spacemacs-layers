@@ -32,18 +32,20 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
-     octave
-     ruby
+   '(
+     ;;rust
+     ;;octave
+     ;;ruby
      lua
      react
      html
-     perl6
+     (sh +powershell)
+     ;;perl6
      ;; vimscript
      (clojure +lsp)
      ;; react
-     bm
-     emoji
+     ;;bm
+     ;;emoji
      csv
      treemacs
      ;; html
